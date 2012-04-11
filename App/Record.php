@@ -7,7 +7,7 @@ abstract class Record extends IterateableList {
     protected $_oStorage = null;
     protected $_oDatabase = null;
     protected $_sCollectionName = null;
-    private $_oCollection = null;
+    protected $_oCollection = null;
 
     public function __construct(\MongoDb $oDatabase) {
         $this->_oDatabase = $oDatabase;
