@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/bootstrap.php');
 
+use Kickipedia2\Models\Entry;
 
 dispatch('/', function() {
     return 'Hello World!';
