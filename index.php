@@ -14,11 +14,12 @@ dispatch('/entry/:id', function() {
     $database = $connection->selectDB('kickipedia2');
     $entry = new Entry($database);
 
-    $entry->load('4f85c8da9200ceb806000020');
+    $entry->load($id);
 
     $loader = new \Twig_Loader_Filesystem(__DIR__ .'/Kickipedia2/views');
     $twig = new \Twig_Environment($loader, array(
       'cache' => __DIR__ .'/cache',
+      'auto_reload' => true
     ));
 
     echo $twig->render('index.html.twig', array('entry' => $entry));
