@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace MongoAppKit;
 
-abstract class IterateableList implements \Countable, \Iterator {
+abstract class IterateableList implements \Countable, \Iterator, \ArrayAccess {
     protected $_aProperties = array();
 
     public function assign(array $aProperties) {
@@ -47,5 +47,21 @@ abstract class IterateableList implements \Countable, \Iterator {
     
     public function valid() {
         return (bool)$this->current();
-    }       
+    }
+
+    public function offsetSet($key, $value) {
+        $this->setProperty($key, $value);
+    }
+    
+    public function offsetExists($key) {
+        return isset($this->_aProperties[$key]);
+    }
+    
+    public function offsetUnset($key) {
+        $this->removeProperty($key);
+    }
+    
+    public function offsetGet($key) {
+        return $this->getProperty($key);
+    }    
 }

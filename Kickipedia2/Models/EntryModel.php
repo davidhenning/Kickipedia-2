@@ -2,8 +2,8 @@
 
 namespace Kickipedia2\Models;
 
-use App\Record;
+use MongoAppKit\Record;
 
-class Entry extends Record {
+class EntryModel extends Record {
     protected $_sCollectionName = 'entry';
 }

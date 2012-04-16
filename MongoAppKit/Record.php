@@ -1,16 +1,17 @@
 <?php
 
-namespace App;
+namespace MongoAppKit;
+
+use MongoAppKit\Storage;
 
 abstract class Record extends IterateableList {
 
-    protected $_oStorage = null;
     protected $_oDatabase = null;
     protected $_sCollectionName = null;
     protected $_oCollection = null;
 
-    public function __construct(\MongoDb $oDatabase) {
-        $this->_oDatabase = $oDatabase;
+    public function __construct() {
+        $this->_oDatabase = Storage::getInstance()->getDatabase();
         
         if($this->_sCollectionName !== null) {
             $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
