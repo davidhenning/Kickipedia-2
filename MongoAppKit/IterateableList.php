@@ -2,28 +2,9 @@
 
 namespace MongoAppKit;
 
-abstract class IterateableList implements \Countable, \Iterator, \ArrayAccess {
-    protected $_aProperties = array();
+use MongoAppKit\ArrayList;
 
-    public function assign(array $aProperties) {
-        $this->_aProperties = $aProperties;
-    }
-
-    public function getProperty($key) {
-        if(array_key_exists($key, $this->_aProperties)) {
-                return $this->_aProperties[$key];
-        }
-        
-        throw new \OutOfBoundsException("Index '{$key}' does not exist");
-    }
-
-    public function setProperty($key, $value) {
-        $this->_aProperties[$key] = $value;
-    }
-
-    public function removeProperty($key) {
-        unset($this->_aProperties[$key]);
-    }
+abstract class IterateableList extends ArrayList implements \Countable, \Iterator, \ArrayAccess {
 
     public function count() {
         return count($this->_aProperties);
@@ -63,5 +44,6 @@ abstract class IterateableList implements \Countable, \Iterator, \ArrayAccess {
     
     public function offsetGet($key) {
         return $this->getProperty($key);
-    }    
+    }
+    
 }

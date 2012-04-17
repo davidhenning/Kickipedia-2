@@ -11,7 +11,7 @@ abstract class Record extends IterateableList {
     protected $_oCollection = null;
 
     public function __construct() {
-        $this->_oDatabase = Storage::getInstance()->getDatabase();
+        $this->_oDatabase = $this->getStorage()->getDatabase();
         
         if($this->_sCollectionName !== null) {
             $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
