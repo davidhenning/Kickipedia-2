@@ -2,7 +2,7 @@
 
 namespace MongoAppKit;
 
-abstract class View {
+abstract class View extends Base {
     
     protected $_sTemplateName = null;
     protected $_aTemplateData = array();
@@ -26,8 +26,7 @@ abstract class View {
         $loader = new \Twig_Loader_Filesystem(getBasePath() .'\Kickipedia2\Templates');
         $twig = new \Twig_Environment($loader, array(
           'cache' => getBasePath() .'/tmp',
-          'auto_reload' => true,
-          'debug' => true
+          'auto_reload' => $this->getConfig()->getProperty('TemplateDebugMode')
         ));
 
         echo $twig->render($this->_sTemplateName, $this->_aTemplateData);

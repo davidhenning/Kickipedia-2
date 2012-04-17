@@ -1,5 +1,6 @@
 {
     "MongoServer": "localhost",
     "MongoDatabase": "kickipedia2",
-    "EncryptionKey": "Aeng3Eicaequeileis0senongooqu9in"
+    "EncryptionKey": "Aeng3Eicaequeileis0senongooqu9in",
+    "TemplateDebugMode": true
 }
