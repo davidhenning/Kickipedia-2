@@ -64,6 +64,14 @@ abstract class Record extends IterateableList {
         $this->_getCollection()->save($this->_aProperties);
     }
 
+    public function updateProperties($aProperties) {
+        if(!empty($aProperties)) {
+            foreach($aProperties as $property => $value) {
+                $this->setProperty($property, $value);
+            }
+        }
+    }
+
     public function remove() {
         $this->_getCollection()->remove(array('_id' => $this->_aProperties['_id']));
     }

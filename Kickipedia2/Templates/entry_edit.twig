@@ -1,0 +1,20 @@
+<form action="{{ formAction }}" method="post">
+    <fieldset>
+        <legend>Eintrag bearbeiten</legend>
+        <ul>
+            <li>
+                <label for="name">Name:</label>
+                <input type="text" name="entry[name]" value="{{ entry.name }}">
+            </li>
+            <li>
+                <label for="name">Grund:</label>
+                <input type="text" name="entry[reason]" value="{{ entry.reason }}">
+            </li>
+            <li>
+                <label for="name">IP:</label>
+                <input type="text" name="entry[ip]" value="{{ entry.ip }}">
+            </li>
+            <input type="submit" value="Bearbeiten">          
+        </ul>
+    </fieldset>
+</form>
