@@ -16,3 +16,8 @@
   # forces the rewrite engine to append a query string part of the
   # substitution string to the existing string, instead of replacing it.
 </IfModule>
+
+<Files config.json>
+  Order allow,deny
+  Deny from all
+</Files>
