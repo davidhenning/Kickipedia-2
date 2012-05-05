@@ -18,7 +18,7 @@ abstract class RecordCollection extends IterateableList {
 
     public function findAll() {
         $aData = array();
-        $oCursor = $this->_oCollection->find(array(), array('_id' => true));
+        $oCursor = $this->_oCollection->find(array(), array('_id' => true))->sort(array('createdOn' => -1));
 
         if($oCursor === null) {
             throw new \Exception("Document id '{$sId}' does not exist!");
