@@ -3,6 +3,12 @@
         <legend>Eintrag bearbeiten</legend>
         <ul>
             <li>
+                Erstellt: {{ entry.createdOn|date("d.m.Y H:i:s") }}
+            </li>
+            <li>
+                Zuletzt aktualisiert: {{ entry.updatedOn|date("d.m.Y H:i:s") }}
+            </li>
+            <li>
                 <label for="name">Name:</label>
                 <input type="text" name="entry[name]" value="{{ entry.name }}">
             </li>
