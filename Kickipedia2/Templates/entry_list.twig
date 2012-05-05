@@ -3,12 +3,14 @@
         <th>Datum:</th>
         <th>Name:</th>
         <th>IP:</th>
+        <th>Grund:</th>
     </tr>
     {% for entry in entries %}
         <tr>
             <th>{{ entry.createdOn|date("d.m.Y H:i:s") }}</th>
             <th>{{ entry.name }}</th>
             <th>{{ entry.ip }}</th>
+            <th>{{ entry.reason }}</th>
         </tr>
     {% endfor %}
 </table>
