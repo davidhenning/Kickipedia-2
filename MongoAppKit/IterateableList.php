@@ -2,8 +2,6 @@
 
 namespace MongoAppKit;
 
-use MongoAppKit\ArrayList;
-
 abstract class IterateableList extends ArrayList implements \Countable, \Iterator, \ArrayAccess {
 
     public function count() {

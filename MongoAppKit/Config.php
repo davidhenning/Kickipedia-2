@@ -2,8 +2,6 @@
 
 namespace MongoAppKit;
 
-use MongoAppKit\ArrayList;
-
 class Config extends ArrayList {
 
     public function __construct() {

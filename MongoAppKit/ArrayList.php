@@ -2,8 +2,6 @@
 
 namespace MongoAppKit;
 
-use MongoAppKit\Base;
-
 abstract class ArrayList extends Base {
     
     protected $_aProperties = array();

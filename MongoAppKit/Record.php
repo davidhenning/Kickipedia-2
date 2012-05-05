@@ -2,8 +2,6 @@
 
 namespace MongoAppKit;
 
-use MongoAppKit\Storage;
-
 abstract class Record extends IterateableList {
 
     protected $_oDatabase = null;
