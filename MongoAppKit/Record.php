@@ -9,12 +9,16 @@ abstract class Record extends IterateableList {
     protected $_oCollection = null;
     protected $_aPropertyConfig = array();
 
-    public function __construct() {
+    public function __construct($sId = null) {
         $this->_oDatabase = $this->getStorage()->getDatabase();
         
         if($this->_sCollectionName !== null) {
             $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
             $this->_loadRecordConfig();
+        }
+
+        if($sId !== null) {
+            $this->load($sId);
         }
     }
 
