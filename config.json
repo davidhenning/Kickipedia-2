@@ -2,5 +2,63 @@
     "MongoServer": "localhost",
     "MongoDatabase": "kickipedia2",
     "EncryptionKey": "Aeng3Eicaequeileis0senongooqu9in",
-    "TemplateDebugMode": true
+    "TemplateDebugMode": true,
+    "Fields": {
+        "entry": {
+            "_id": {
+                "type": "id"
+            },
+
+            "createdOn": {
+                "type": "date",
+                "index": {
+                    "use": true
+                }
+            },
+
+            "updatedOn": {
+                "type": "date"
+            },
+
+            "type": {
+                "index": {
+                    "use": true
+                }
+            },
+            
+            "name": {
+                "encrypt": true,
+                "index": {
+                    "use": true
+                }
+            },
+
+            "reason": {
+                "encrypt": true,
+                "index": {
+                    "use": true
+                }
+            },
+
+            "ip": {
+                "encrypt": true,
+                "index": {
+                    "use": true
+                }
+            },
+
+            "url": {
+                "index": {
+                    "use": true
+                }
+            },
+
+            "comment": {
+                "encrypt": true,
+                "index": {
+                    "use": true
+                }
+            }
+        }
+    }
 }
