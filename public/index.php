@@ -2,7 +2,7 @@
 
 $time = microtime(true);
 
-require_once(__DIR__ . '/bootstrap.php');
+require_once(__DIR__ . '/../bootstrap.php');
 
 use Kickipedia2\Controllers\EntryActions;
 
