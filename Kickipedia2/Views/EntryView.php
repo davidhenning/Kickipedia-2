@@ -11,9 +11,9 @@ class EntryView extends View {
     protected $_sId = null;
 
     public function render() {
-        $entry = new EntryModel();
-        $entry->load($this->getId());  
-        $this->_aTemplateData['entry'] = $entry;
+        $oEntry = new EntryModel();
+        $oEntry->load($this->getId());  
+        $this->_aTemplateData['entry'] = $oEntry;
 
         parent::render();
     }

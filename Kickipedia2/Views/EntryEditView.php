@@ -11,18 +11,18 @@ class EntryEditView extends View {
     protected $_sId = null;
 
     public function render() {
-        $entry = new EntryRecord();
-        $entry->load($this->getId());  
-        $this->_aTemplateData['entry'] = $entry;
+        $oEntry = new EntryRecord();
+        $oEntry->load($this->getId());  
+        $this->_aTemplateData['entry'] = $oEntry;
         $this->_aTemplateData['formAction'] = url_for('entry', $this->getId(), 'update');
 
         parent::render();
     }
 
     public function update($aData) {
-        $entry = new EntryRecord();
-        $entry->load($this->getId()); 
-        $entry->updateProperties($aData);
-        $entry->save();     
+        $oEntry = new EntryRecord();
+        $oEntry->load($this->getId()); 
+        $oEntry->updateProperties($aData);
+        $oEntry->save();     
     }
 }

@@ -14,26 +14,26 @@ class EntryActions {
     }
 
     public function showEntry() {
-        $id = params('id');
+        $sId = params('id');
 
-        $view = new EntryView($id);
-        $view->render();
+        $oView = new EntryView($sId);
+        $oView->render();
     }
 
     public function editEntry() {
-        $id = params('id');
+        $sId = params('id');
 
-        $view = new EntryEditView($id);
-        $view->render();        
+        $oView = new EntryEditView($sId);
+        $oView->render();        
     }
 
     public function updateEntry() {
-        $id = params('id');
+        $sId = params('id');
         $entryData = $_POST['entry'];
 
-        $view = new EntryEditView($id);
-        $view->update($entryData);
+        $oView = new EntryEditView($sId);
+        $oView->update($entryData);
 
-        redirect_to('entry', $id, 'edit');
+        redirect_to('entry', $sId, 'edit');
     }
 }

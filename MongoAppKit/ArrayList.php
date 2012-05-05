@@ -12,20 +12,20 @@ abstract class ArrayList extends Base {
         $this->_aProperties = $aProperties;
     }
 
-    public function getProperty($key) {
-        if(array_key_exists($key, $this->_aProperties)) {
-            return $this->_aProperties[$key];
+    public function getProperty($sKey) {
+        if(array_key_exists($sKey, $this->_aProperties)) {
+            return $this->_aProperties[$sKey];
         }
         
-        throw new \OutOfBoundsException("Index '{$key}' does not exist");
+        throw new \OutOfBoundsException("Index '{$sKey}' does not exist");
     }
 
-    public function setProperty($key, $value) {
-        $this->_aProperties[$key] = $value;
+    public function setProperty($sKey, $value) {
+        $this->_aProperties[$sKey] = $value;
     }
 
-    public function removeProperty($key) {
-        unset($this->_aProperties[$key]);
+    public function removeProperty($sKey) {
+        unset($this->_aProperties[$sKey]);
     }  
 
 }

@@ -30,20 +30,20 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
         return (bool)$this->current();
     }
 
-    public function offsetSet($key, $value) {
-        $this->setProperty($key, $value);
+    public function offsetSet($sKey, $value) {
+        $this->setProperty($sKey, $value);
     }
     
-    public function offsetExists($key) {
-        return isset($this->_aProperties[$key]);
+    public function offsetExists($sKey) {
+        return isset($this->_aProperties[$sKey]);
     }
     
-    public function offsetUnset($key) {
-        $this->removeProperty($key);
+    public function offsetUnset($sKey) {
+        $this->removeProperty($sKey);
     }
     
-    public function offsetGet($key) {
-        return $this->getProperty($key);
+    public function offsetGet($sKey) {
+        return $this->getProperty($sKey);
     }
     
 }

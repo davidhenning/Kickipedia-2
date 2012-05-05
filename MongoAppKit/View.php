@@ -8,9 +8,9 @@ abstract class View extends Base {
     protected $_aTemplateData = array();
     protected $_sId = null;
 
-    public function __construct($id = null) {
-        if($id !== null) {
-            $this->setId($id);
+    public function __construct($sId = null) {
+        if($sId !== null) {
+            $this->setId($sId);
         }
     }
 
@@ -18,8 +18,8 @@ abstract class View extends Base {
         return $this->_sId;
     }
 
-    public function setId($id) {
-        $this->_sId = $id;
+    public function setId($sId) {
+        $this->_sId = $sId;
     }
 
     public function render() {

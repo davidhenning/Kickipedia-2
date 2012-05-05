@@ -32,30 +32,30 @@ abstract class Record extends IterateableList {
         $aPreparedProperties = array();
 
         if(!empty($this->_aPropertyConfig)) {
-            foreach($this->_aPropertyConfig as $property => $options) {
-                $value = (isset($this->_aProperties[$property])) ? $this->_aProperties[$property] : null;
-                $aPreparedProperties[$property] = $this->_setPropertyOptions($property, $value, $options);
+            foreach($this->_aPropertyConfig as $sProperty => $aOptions) {
+                $value = (isset($this->_aProperties[$sProperty])) ? $this->_aProperties[$sProperty] : null;
+                $aPreparedProperties[$sProperty] = $this->_setPropertyOptions($sProperty, $value, $aOptions);
             }
         }
 
         return $aPreparedProperties;
     }
 
-    protected function _setPropertyOptions($property, $value, $options) {
-         if(!empty($options)) {
-            if(isset($options['type'])) {
-                if($options['type'] === 'date') {
-                    if(!$value instanceof \MongoDate || $property == 'updatedOn') {
+    protected function _setPropertyOptions($sProperty, $value, $aOptions) {
+         if(!empty($aOptions)) {
+            if(isset($aOptions['type'])) {
+                if($aOptions['type'] === 'date') {
+                    if(!$value instanceof \MongoDate || $sProperty == 'updatedOn') {
                         $value = new \MongoDate();
                     }                 
                 }          
             }
 
-            if(isset($options['index']['use']) && $options['index']['use'] === true) {
-                $this->_getCollection()->ensureIndex($property);
+            if(isset($aOptions['index']['use']) && $aOptions['index']['use'] === true) {
+                $this->_getCollection()->ensureIndex($sProperty);
             }
 
-            if(isset($options['encrypt'])) {
+            if(isset($aOptions['encrypt'])) {
                 // for future use       
             }
         }
@@ -71,8 +71,8 @@ abstract class Record extends IterateableList {
         return $this->_oCollection;
     }
 
-    public function getProperty($key) {
-        $value = parent::getProperty($key);
+    public function getProperty($sKey) {
+        $value = parent::getProperty($sKey);
 
         if($value instanceof \MongoDate) {
             $value = $value->sec;
@@ -81,12 +81,12 @@ abstract class Record extends IterateableList {
         return $value;
     }
 
-    public function setProperty($key, $value) {
-        if($key === '_id') {
+    public function setProperty($sKey, $value) {
+        if($sKey === '_id') {
             throw new \Exception('Manual change of id property is prohibited!');
         }
         
-        return parent::setProperty($key, $value);
+        return parent::setProperty($sKey, $value);
     }
 
     public function _getCollectionName() {
@@ -106,17 +106,17 @@ abstract class Record extends IterateableList {
 
     public function updateProperties($aProperties) {
         if(!empty($aProperties)) {
-            foreach($aProperties as $property => $value) {
-                $this->setProperty($property, $value);
+            foreach($aProperties as $sProperty => $value) {
+                $this->setProperty($sProperty, $value);
             }
         }
     }
 
-    public function load($id) {
-        $aData = $this->_getCollection()->findOne(array('_id' => new \MongoId($id)));
+    public function load($sId) {
+        $aData = $this->_getCollection()->findOne(array('_id' => new \MongoId($sId)));
         
         if($aData === null) {
-            throw new \Exception("Document id '{$id}' does not exist!");
+            throw new \Exception("Document id '{$sId}' does not exist!");
         }
 
         $this->_aProperties = $aData;
