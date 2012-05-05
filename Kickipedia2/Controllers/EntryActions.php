@@ -40,6 +40,6 @@ class EntryActions {
         $oView = new EntryEditView($sId);
         $oView->update($entryData);
 
-        redirect_to('entry', $sId, 'edit');
+        redirect_to('entry', 'list');
     }
 }
