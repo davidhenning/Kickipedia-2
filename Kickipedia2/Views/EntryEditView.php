@@ -3,7 +3,7 @@
 namespace Kickipedia2\Views;
 
 use MongoAppKit\View;
-use Kickipedia2\Models\EntryModel;
+use Kickipedia2\Models\EntryRecord;
 
 class EntryEditView extends View {
     
@@ -11,7 +11,7 @@ class EntryEditView extends View {
     protected $_sId = null;
 
     public function render() {
-        $entry = new EntryModel();
+        $entry = new EntryRecord();
         $entry->load($this->getId());  
         $this->_aTemplateData['entry'] = $entry;
         $this->_aTemplateData['formAction'] = url_for('entry', $this->getId(), 'update');
@@ -20,7 +20,7 @@ class EntryEditView extends View {
     }
 
     public function update($aData) {
-        $entry = new EntryModel();
+        $entry = new EntryRecord();
         $entry->load($this->getId()); 
         $entry->updateProperties($aData);
         $entry->save();     
