@@ -14,7 +14,7 @@ abstract class ArrayList extends Base {
 
     public function getProperty($key) {
         if(array_key_exists($key, $this->_aProperties)) {
-                return $this->_aProperties[$key];
+            return $this->_aProperties[$key];
         }
         
         throw new \OutOfBoundsException("Index '{$key}' does not exist");
