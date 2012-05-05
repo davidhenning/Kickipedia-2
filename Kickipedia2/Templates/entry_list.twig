@@ -7,10 +7,10 @@
     </tr>
     {% for entry in entries %}
         <tr>
-            <th>{{ entry.createdOn|date("d.m.Y H:i:s") }}</th>
-            <th>{{ entry.name }}</th>
-            <th>{{ entry.ip }}</th>
-            <th>{{ entry.reason }}</th>
+            <td>{{ entry.createdOn|date("d.m.Y H:i:s") }}</td>
+            <td><a href="/entry/{{ entry._id }}/edit">{{ entry.name }}</a></td>
+            <td>{{ entry.ip }}</td>
+            <td>{{ entry.reason }}</td>
         </tr>
     {% endfor %}
 </table>
