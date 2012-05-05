@@ -9,13 +9,58 @@ abstract class Record extends IterateableList {
     protected $_oDatabase = null;
     protected $_sCollectionName = null;
     protected $_oCollection = null;
+    protected $_aPropertyConfig = array();
 
     public function __construct() {
         $this->_oDatabase = $this->getStorage()->getDatabase();
         
         if($this->_sCollectionName !== null) {
             $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
+            $this->_loadRecordConfig();
         }
+    }
+
+    protected function _loadRecordConfig() {
+        $aPropertyConfig = $this->getConfig()->getProperty('Fields');
+
+        if(isset($aPropertyConfig[$this->_sCollectionName]) && count($aPropertyConfig[$this->_sCollectionName]) > 0) {
+            $this->_aPropertyConfig = $aPropertyConfig[$this->_sCollectionName];
+        }
+    }
+
+    protected function _getPreparedProperties() {
+        $aPreparedProperties = array();
+
+        if(!empty($this->_aPropertyConfig)) {
+            foreach($this->_aPropertyConfig as $property => $options) {
+                $value = (isset($this->_aProperties[$property])) ? $this->_aProperties[$property] : null;
+                $aPreparedProperties[$property] = $this->_setPropertyOptions($property, $value, $options);
+            }
+        }
+
+        return $aPreparedProperties;
+    }
+
+    protected function _setPropertyOptions($property, $value, $options) {
+         if(!empty($options)) {
+            if(isset($options['type'])) {
+                if($options['type'] === 'date') {
+                    if(!$value instanceof \MongoDate || $property == 'updatedOn') {
+                        $value = new \MongoDate();
+                    }                 
+                }          
+            }
+
+            if(isset($options['index']['use']) && $options['index']['use'] === true) {
+                $this->_getCollection()->ensureIndex($property);
+            }
+
+            if(isset($options['encrypt'])) {
+                // for future use       
+            }
+        }
+
+        return $value; 
     }
 
     protected function _getCollection() {
@@ -24,6 +69,16 @@ abstract class Record extends IterateableList {
         }
 
         return $this->_oCollection;
+    }
+
+    public function getProperty($key) {
+        $value = parent::getProperty($key);
+
+        if($value instanceof \MongoDate) {
+            $value = $value->sec;
+        }
+
+        return $value;
     }
 
     public function setProperty($key, $value) {
@@ -49,6 +104,14 @@ abstract class Record extends IterateableList {
         }
     }
 
+    public function updateProperties($aProperties) {
+        if(!empty($aProperties)) {
+            foreach($aProperties as $property => $value) {
+                $this->setProperty($property, $value);
+            }
+        }
+    }
+
     public function load($id) {
         $aData = $this->_getCollection()->findOne(array('_id' => new \MongoId($id)));
         
@@ -61,15 +124,8 @@ abstract class Record extends IterateableList {
 
     public function save() {
         $this->_setId();
-        $this->_getCollection()->save($this->_aProperties);
-    }
-
-    public function updateProperties($aProperties) {
-        if(!empty($aProperties)) {
-            foreach($aProperties as $property => $value) {
-                $this->setProperty($property, $value);
-            }
-        }
+        $aPreparedProperties = $this->_getPreparedProperties();
+        $this->_getCollection()->save($aPreparedProperties);
     }
 
     public function remove() {
