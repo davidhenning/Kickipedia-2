@@ -17,10 +17,15 @@ abstract class RecordCollection extends IterateableList {
     }
 
     public function findAll() {
-        $aData = $this->_getCollection()->find();
-        
-        if($aData === null) {
+        $aData = array();
+        $oCursor = $this->_oCollection->find(array(), array('_id' => true));
+
+        if($oCursor === null) {
             throw new \Exception("Document id '{$sId}' does not exist!");
+        }
+
+        foreach($oCursor as $oLine) {
+            $aData[] = new $this->_sRecordClass($oLine['_id']->{'$id'});
         }
 
         $this->_aProperties = $aData;
