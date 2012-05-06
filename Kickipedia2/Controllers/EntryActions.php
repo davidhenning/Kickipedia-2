@@ -23,10 +23,9 @@ class EntryActions {
         
         if($iPage > 0) {
             $oView->setPage($iPage);
-
         }
 
-        $oView->setPerPage(10);
+        $oView->setPerPage(100);
 
         $oView->render();    
     }
