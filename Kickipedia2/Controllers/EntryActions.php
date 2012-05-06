@@ -2,7 +2,7 @@
 
 namespace Kickipedia2\Controllers;
 
-use Kickipedia2\Views\EntryList;
+use Kickipedia2\Views\EntryListView;
 use Kickipedia2\Views\EntryView;
 use Kickipedia2\Views\EntryEditView;
 
@@ -17,7 +17,7 @@ class EntryActions {
     }
 
     public function showList() {
-        $oView = new EntryList();
+        $oView = new EntryListView();
  
         $iPage = (int)params('page');
         

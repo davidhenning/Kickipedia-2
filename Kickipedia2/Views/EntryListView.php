@@ -5,7 +5,7 @@ namespace Kickipedia2\Views;
 use MongoAppKit\View;
 use Kickipedia2\Models\EntryRecordCollection;
 
-class EntryList extends View {
+class EntryListView extends View {
     
     protected $_sTemplateName = 'entry_list.twig';
     protected $_sId = null;
