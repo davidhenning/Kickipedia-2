@@ -1,9 +1,22 @@
 {% include 'header.twig' with {'title': 'Liste'} %}
 
+{% set pagination %}
+    {% if pages %}
+        <div class="pages">
+            {% for page in pages %}
+                <a {% if page.active == true %}class="active"{% endif %} href="{{ page.url }}">{{ page.nr }}</a> 
+                {% if loop.last == false %}&middot;{% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endset %}
+
 <ul class="types">
     <li><a href="/entry/list/type/1">Type 1</a></li>
     <li><a href="/entry/list/type/2">Type 2</a></li>
 </ul>
+
+{{ pagination }}
 
 <table>
     <tr>
@@ -22,14 +35,6 @@
     {% endfor %}
 </table>
 
-
-{% if pages %}
-    <div class="pages">
-        {% for page in pages %}
-            <a {% if page.active == true %}class="active"{% endif %} href="{{ page.url }}">{{ page.nr }}</a> 
-            {% if loop.last == false %}&middot;{% endif %}
-        {% endfor %}
-    </div>
-{% endif %}
+{{ pagination }}
 
 {% include 'footer.twig' %}
