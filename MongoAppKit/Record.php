@@ -93,7 +93,7 @@ abstract class Record extends IterateableList {
     }
 
     protected function _setId() {
-        if(!$this->_aProperties['_id'] instanceof \MongoId) {
+        if(!isset($this->_aProperties['_id']) || !$this->_aProperties['_id'] instanceof \MongoId) {
             $this->_aProperties['_id'] = new \MongoId();
         }
     }
