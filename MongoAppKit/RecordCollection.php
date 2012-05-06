@@ -25,8 +25,8 @@ abstract class RecordCollection extends IterateableList {
         $this->_setPropertiesFromCursor($oCursor);
     }
 
-    public function findByPage($iPage = 1, $iPerPage = 50) {
-        $oCursor = $this->_getDefaultCursor();
+    public function findByPage($iPage = 1, $iPerPage = 50, $oCursorOverride = null) {
+        $oCursor = ($oCursorOverride !== null && $oCursorOverride instanceof \MongoCursor) ? $oCursorOverride : $this->_getDefaultCursor();
         $oCursor->limit($iPerPage);
 
         $iSkip = ($iPage - 1) * $iPerPage;
