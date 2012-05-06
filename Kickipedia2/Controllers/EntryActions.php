@@ -11,6 +11,8 @@ class EntryActions {
     public function __construct() {
         dispatch('/entry/list', array($this, 'showList'));
         dispatch('/entry/list/:page', array($this, 'showList'));
+        dispatch('/entry/list/type/:type', array($this, 'showList'));
+        dispatch('/entry/list/type/:type/:page', array($this, 'showList'));
         dispatch('/entry/:id', array($this, 'showEntry'));
         dispatch('/entry/:id/edit', array($this, 'editEntry'));
         dispatch_post('/entry/:id/update', array($this, 'updateEntry'));
@@ -20,9 +22,14 @@ class EntryActions {
         $oView = new EntryListView();
  
         $iPage = (int)params('page');
+        $iType = (int)params('type');
         
         if($iPage > 0) {
             $oView->setPage($iPage);
+        }
+
+        if($iType > 0) {
+            $oView->setType($iType);
         }
 
         $oView->setPerPage(100);

@@ -40,9 +40,11 @@ abstract class View extends Base {
 
         if($iPages > 0) {
             for($i = 1; $i <= $iPages; $i++) {
+
+
                 $aPage = array(
                     'nr' => $i,
-                    'url' => "{$this->_sPaginationBaseUrl}/{$i}"
+                    'url' => $this->_createPageUrl($i)
                 );
 
                 if($i === $this->_iPage) {
@@ -54,6 +56,16 @@ abstract class View extends Base {
         }
 
         return $aPages;
+    }
+
+    protected function _createPageUrl($iPage) {
+        $sUrl = "{$this->_sPaginationBaseUrl}/";
+        
+        if(!empty($this->_sPaginationAddiotionalUrl)) {
+            $sUrl .= "{$this->_sPaginationAddiotionalUrl}/";
+        }
+
+        return $sUrl . $iPage;
     }
 
     public function render() {
