@@ -7,6 +7,9 @@ abstract class View extends Base {
     protected $_sTemplateName = null;
     protected $_aTemplateData = array();
     protected $_sId = null;
+    protected $_iPerPage = 50;
+    protected $_iPage = 1;
+    protected $_sPaginationBaseUrl = '';
 
     public function __construct($sId = null) {
         if($sId !== null) {
@@ -20,6 +23,37 @@ abstract class View extends Base {
 
     public function setId($sId) {
         $this->_sId = $sId;
+    }
+
+    public function setPerPage($iPerPage) {
+        $this->_iPerPage = $iPerPage;
+    }
+
+    public function setPage($iPage) {
+        $this->_iPage = $iPage;
+    }
+
+    protected function _getPagination($iTotalRecords) {
+        $aPages = array();
+
+        $iPages = ceil($iTotalRecords / $this->_iPerPage);
+
+        if($iPages > 0) {
+            for($i = 1; $i <= $iPages; $i++) {
+                $aPage = array(
+                    'nr' => $i,
+                    'url' => "{$this->_sPaginationBaseUrl}/{$i}"
+                );
+
+                if($i === $this->_iPage) {
+                    $aPage['active'] = true;
+                }
+
+                $aPages[] = $aPage;
+            }
+        }
+
+        return $aPages;
     }
 
     public function render() {

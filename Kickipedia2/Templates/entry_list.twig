@@ -14,3 +14,13 @@
         </tr>
     {% endfor %}
 </table>
+
+
+{% if pages %}
+    <div class="pages">
+        {% for page in pages %}
+            <a {% if page.active == true %}class="active"{% endif %} href="{{ page.url }}">{{ page.nr }}</a> 
+            {% if loop.last == false %}&middot;{% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
