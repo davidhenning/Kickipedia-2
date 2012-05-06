@@ -26,6 +26,12 @@
                 }
             },
             
+            "user": {
+                "index": {
+                    "use": true
+                }
+            },           
+
             "name": {
                 "encrypt": true,
                 "index": {
