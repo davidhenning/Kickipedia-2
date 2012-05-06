@@ -83,14 +83,6 @@ abstract class Record extends IterateableList {
         return $value;
     }
 
-    public function setProperty($sKey, $value) {
-        if($sKey === '_id') {
-            throw new \Exception('Manual change of id property is prohibited!');
-        }
-        
-        return parent::setProperty($sKey, $value);
-    }
-
     public function _getCollectionName() {
         return $this->_sCollectionName;
     }
