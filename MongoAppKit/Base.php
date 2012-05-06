@@ -10,7 +10,7 @@ abstract class Base {
 
     public function getConfig() {
         if($this->_oConfig === null) {
-            $this->_oConfig = new Config();
+            $this->_oConfig = Config::getInstance();
         }
 
         return $this->_oConfig;
@@ -18,9 +18,9 @@ abstract class Base {
 
     public function getStorage() {
         if($this->_oStorage === null) {
-            $this->_oStorage = new Storage($this->getConfig());
+            $this->_oStorage = Storage::getInstance($this->getConfig());
         }
-
+        
         return $this->_oStorage;       
     }
 
