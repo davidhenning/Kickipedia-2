@@ -10,6 +10,7 @@ abstract class View extends Base {
     protected $_iPerPage = 50;
     protected $_iPage = 1;
     protected $_sPaginationBaseUrl = '';
+    protected $_sPaginationAdditionalUrl = '';
 
     public function __construct($sId = null) {
         if($sId !== null) {
@@ -35,13 +36,10 @@ abstract class View extends Base {
 
     protected function _getPagination($iTotalRecords) {
         $aPages = array();
-
         $iPages = ceil($iTotalRecords / $this->_iPerPage);
 
         if($iPages > 0) {
             for($i = 1; $i <= $iPages; $i++) {
-
-
                 $aPage = array(
                     'nr' => $i,
                     'url' => $this->_createPageUrl($i)
@@ -61,8 +59,8 @@ abstract class View extends Base {
     protected function _createPageUrl($iPage) {
         $sUrl = "{$this->_sPaginationBaseUrl}/";
         
-        if(!empty($this->_sPaginationAddiotionalUrl)) {
-            $sUrl .= "{$this->_sPaginationAddiotionalUrl}/";
+        if(!empty($this->_sPaginationAdditionalUrl)) {
+            $sUrl .= "{$this->_sPaginationAdditionalUrl}/";
         }
 
         return $sUrl . $iPage;

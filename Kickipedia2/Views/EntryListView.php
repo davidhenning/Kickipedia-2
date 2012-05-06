@@ -9,7 +9,6 @@ class EntryListView extends View {
     
     protected $_sTemplateName = 'entry_list.twig';
     protected $_sPaginationBaseUrl = '/entry/list';
-    protected $_sPaginationAddiotionalUrl = '';
     protected $_iType = null;
 
     public function setType($iType) {
@@ -20,7 +19,7 @@ class EntryListView extends View {
         $oEntryRecordCollection = new EntryRecordCollection();
 
         if($this->_iType !== null) {
-            $this->_sPaginationAddiotionalUrl = "type/{$this->_iType}";
+            $this->_sPaginationAdditionalUrl = "type/{$this->_iType}";
             $oEntryRecordCollection->findByType($this->_iType, $this->_iPage, $this->_iPerPage);
         } else {
             $oEntryRecordCollection->findByPage($this->_iPage, $this->_iPerPage);
