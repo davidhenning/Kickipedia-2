@@ -4,3 +4,81 @@
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
 @import "compass/reset";
+
+html {
+    font-family: Helvetica, Arial, sans-serif;
+    background: #EBEBEB;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+
+    > header {
+        padding: 0 20px;
+
+        background-image: linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
+        background-image: -o-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
+        background-image: -moz-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
+        background-image: -webkit-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
+        background-image: -ms-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
+
+        height: 100px;
+
+        h1 {
+            height: 69px;
+            color: #FFFFFF;
+            font-size: 40px;
+            font-weight: bold;
+        }  
+    }
+
+}
+
+#mainNavigation {
+    background-image: linear-gradient(bottom, #294667 16%, #649ED7 90%);
+    background-image: -o-linear-gradient(bottom, #294667 16%, #649ED7 90%);
+    background-image: -moz-linear-gradient(bottom, #294667 16%, #649ED7 90%);
+    background-image: -webkit-linear-gradient(bottom, #294667 16%, #649ED7 90%);
+    background-image: -ms-linear-gradient(bottom, #294667 16%, #649ED7 90%);
+
+    font-size: 12px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    width: 400px;
+
+    a {
+        color: #FFFFFF;
+    }
+
+    ul {
+        width: auto;
+    }
+
+    li {
+        display: inline-block;
+        padding: 9px 10px;
+        font-weight: bold;
+        border-right: 1px solid #2F2F2F;
+
+        &:first-child {
+            border-top-left-radius: 5px;
+        }
+
+        &:last-child{
+            border-top-right-radius: 5px;
+            border-right: none;
+        }
+
+        &:hover {
+            background: #FEFEFE;
+            a {
+                color: #0F3273;
+            }
+        }
+    }
+
+
+}

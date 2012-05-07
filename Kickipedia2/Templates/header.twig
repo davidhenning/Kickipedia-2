@@ -2,6 +2,20 @@
 <html>
     <head>
         <title>Kickipedia | {{ title|default('Home') }} </title>
-        <link rel="stylesheet" href="/assets/css/style.css" />
+        <link href="/assets/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
     </head>
     <body>
+        <header>
+            <h1>Kickipedia</h1>
+            <nav id="mainNavigation">
+                {% spaceless %}
+                    <ul>
+                        <li><a href="/home">Dashboard</a></li>
+                        <li><a href="/entry/new">Neu</a></li>
+                        <li><a href="/entry/list">&Uuml;bersicht</a></li>
+                        <li><a href="/stats">Statistik</a></li>
+                        <li><a href="/profile">Profil</a></li>
+                    </ul>
+                {% endspaceless %}
+            </nav>
+        </header>
