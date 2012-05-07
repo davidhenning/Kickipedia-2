@@ -2,7 +2,7 @@
 
 {% set pagination %}
     {% if pages %}
-        <div class="pages">
+        <div id="pagination">
             {% for page in pages %}
                 <a {% if page.active == true %}class="active"{% endif %} href="{{ page.url }}">{{ page.nr }}</a> 
                 {% if loop.last == false %}&middot;{% endif %}
@@ -11,7 +11,7 @@
     {% endif %}
 {% endset %}
 
-<nav id="types">
+<nav id="typeNavigation">
     <ul>
         <li><a href="/entry/list/type/1">Type 1</a></li>
         <li><a href="/entry/list/type/2">Type 2</a></li>
@@ -20,7 +20,7 @@
 
 {{ pagination }}
 
-<table>
+<table id="entryList">
     <tr>
         <th>Datum:</th>
         <th>Name:</th>

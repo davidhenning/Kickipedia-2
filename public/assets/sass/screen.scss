@@ -28,22 +28,16 @@ body {
         height: 100px;
 
         h1 {
+            width: 200px;
             height: 69px;
-            color: #FFFFFF;
-            font-size: 40px;
-            font-weight: bold;
+            text-indent: -999em;
+            background: url(../images/logo.png) no-repeat left 16px;
         }  
     }
 
 }
 
 #mainNavigation {
-    background-image: linear-gradient(bottom, #294667 16%, #649ED7 90%);
-    background-image: -o-linear-gradient(bottom, #294667 16%, #649ED7 90%);
-    background-image: -moz-linear-gradient(bottom, #294667 16%, #649ED7 90%);
-    background-image: -webkit-linear-gradient(bottom, #294667 16%, #649ED7 90%);
-    background-image: -ms-linear-gradient(bottom, #294667 16%, #649ED7 90%);
-
     font-size: 12px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -58,6 +52,12 @@ body {
     }
 
     li {
+        background-image: linear-gradient(bottom, #294667 19%, #4779B3 90%);
+        background-image: -o-linear-gradient(bottom, #294667 19%, #4779B3 90%);
+        background-image: -moz-linear-gradient(bottom, #294667 19%, #4779B3 90%);
+        background-image: -webkit-linear-gradient(bottom, #294667 19%, #4779B3 90%);
+        background-image: -ms-linear-gradient(bottom, #294667 19%, #4779B3 90%);
+
         display: inline-block;
         padding: 9px 10px;
         font-weight: bold;
