@@ -7,6 +7,7 @@ use Kickipedia2\Models\EntryRecordCollection;
 
 class EntryListView extends View {
     
+    protected $_sAppName = 'Kickipedia2';
     protected $_sTemplateName = 'entry_list.twig';
     protected $_sPaginationBaseUrl = '/entry/list';
     protected $_iType = null;

@@ -4,6 +4,7 @@ namespace MongoAppKit;
 
 abstract class View extends Base {
     
+    protected $_sAppName = '';
     protected $_sTemplateName = null;
     protected $_aTemplateData = array();
     protected $_sId = null;
@@ -67,7 +68,7 @@ abstract class View extends Base {
     }
 
     public function render() {
-        $loader = new \Twig_Loader_Filesystem(getBasePath() .'\Kickipedia2\Templates');
+        $loader = new \Twig_Loader_Filesystem(getBasePath() ."\\{$this->_sAppName}\Templates");
         $twig = new \Twig_Environment($loader, array(
           'cache' => getBasePath() .'/tmp',
           'auto_reload' => $this->getConfig()->getProperty('TemplateDebugMode')

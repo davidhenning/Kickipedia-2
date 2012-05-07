@@ -7,6 +7,7 @@ use Kickipedia2\Models\EntryRecord;
 
 class EntryView extends View {
     
+    protected $_sAppName = 'Kickipedia2';
     protected $_sTemplateName = 'entry.twig';
     protected $_sId = null;
 
