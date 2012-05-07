@@ -2,3 +2,4 @@
 *.sublime-project
 /test.php
 cache/*
+public/assets/.sass-cache/*
