@@ -7,7 +7,7 @@ abstract class Record extends IterateableList {
     protected $_oDatabase = null;
     protected $_sCollectionName = null;
     protected $_oCollection = null;
-    protected $_aPropertyConfig = array();
+    protected $_aRecordConfig = array();
 
     public function __construct($sId = null) {
         $this->_oDatabase = $this->getStorage()->getDatabase();
@@ -26,15 +26,15 @@ abstract class Record extends IterateableList {
         $aPropertyConfig = $this->getConfig()->getProperty('Fields');
 
         if(isset($aPropertyConfig[$this->_sCollectionName]) && count($aPropertyConfig[$this->_sCollectionName]) > 0) {
-            $this->_aPropertyConfig = $aPropertyConfig[$this->_sCollectionName];
+            $this->_aRecordConfig = $aPropertyConfig[$this->_sCollectionName];
         }
     }
 
     protected function _getPreparedProperties() {
         $aPreparedProperties = array();
 
-        if(!empty($this->_aPropertyConfig)) {
-            foreach($this->_aPropertyConfig as $sProperty => $aOptions) {
+        if(!empty($this->_aRecordConfig)) {
+            foreach($this->_aRecordConfig as $sProperty => $aOptions) {
                 $value = (isset($this->_aProperties[$sProperty])) ? $this->_aProperties[$sProperty] : null;
                 $aPreparedProperties[$sProperty] = $this->_setPropertyOptions($sProperty, $value, $aOptions);
             }
