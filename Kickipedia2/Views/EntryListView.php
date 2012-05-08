@@ -32,7 +32,7 @@ class EntryListView extends View {
     public function render() {
         $oEntryRecordCollection = $this->_getEntryRecordCollection();
         $this->_aTemplateData['entries'] = $oEntryRecordCollection;
-        $this->_aTemplateData['pages'] = $this->_getPagination($oEntryRecordCollection->getTotalRecords());
+        $this->_aTemplateData['pagination'] = $this->_getPagination($oEntryRecordCollection->getTotalRecords());
 
         parent::render();
     }

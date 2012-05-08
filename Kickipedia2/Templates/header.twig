@@ -6,16 +6,26 @@
     </head>
     <body>
         <header>
-            <h1>Kickipedia</h1>
-            <nav id="mainNavigation">
-                {% spaceless %}
-                    <ul>
-                        <li><a href="/home">Dashboard</a></li>
-                        <li><a href="/entry/new">Neu</a></li>
-                        <li><a href="/entry/list">&Uuml;bersicht</a></li>
-                        <li><a href="/stats">Statistik</a></li>
-                        <li><a href="/profile">Profil</a></li>
-                    </ul>
-                {% endspaceless %}
-            </nav>
+            <div class="centered">
+                <h1>Kickipedia</h1>
+                <nav class="home">
+                    {% spaceless %}
+                        <ul>
+                            <li><a href="/home">Home</a></li>
+                        </ul>
+                    {% endspaceless %}
+                </nav>
+                <nav class="menu">
+                    {% spaceless %}
+                        <ul>
+                            <li><a href="/home">Dashboard</a></li>
+                            <li><a href="/entry/new">Neu</a></li>
+                            <li><a href="/entry/list">&Uuml;bersicht</a></li>
+                            <li><a href="/stats">Statistik</a></li>
+                            <li><a href="/profile">Profil</a></li>
+                        </ul>
+                    {% endspaceless %}
+                </nav>
+            </div>
         </header>
+        <div id="content" class="centered">

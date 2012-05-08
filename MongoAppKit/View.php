@@ -36,8 +36,22 @@ abstract class View extends Base {
     }
 
     protected function _getPagination($iTotalRecords) {
-        $aPages = array();
         $iPages = ceil($iTotalRecords / $this->_iPerPage);
+        $aPages = array(
+            'pages' => array(),
+            'currentPage' => $this->_iPage,
+            'totalPages' => $iPages  
+        );
+
+        if($this->_iPage > 1) {
+            $aPages['prevPageUrl'] = $this->_createPageUrl($this->_iPage - 1);
+            $aPages['firstPageUrl'] = $this->_createPageUrl(1);
+        }
+
+        if($this->_iPage < $iPages) {
+            $aPages['nextPageUrl'] = $this->_createPageUrl($this->_iPage + 1);
+            $aPages['lastPageUrl'] = $this->_createPageUrl($iPages);
+        }
 
         if($iPages > 0) {
             for($i = 1; $i <= $iPages; $i++) {
@@ -50,7 +64,7 @@ abstract class View extends Base {
                     $aPage['active'] = true;
                 }
 
-                $aPages[] = $aPage;
+                $aPages['pages'][] = $aPage;
             }
         }
 
