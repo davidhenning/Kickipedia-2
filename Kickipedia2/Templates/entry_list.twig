@@ -6,9 +6,11 @@
     <nav class="types">
         {% spaceless %}
             <ul>
-                <li><a href="/entry/list/type/1">Sperrungen</a></li>
-                <li><a href="/entry/list/type/2">Verwarnungen</a></li>
-                <li><a href="/entry/list/type/3">abgelaufene Verwarnungen</a></li>
+                {% for type in types %}
+                    <li {% if type.active == true %}class="active"{% endif %}>
+                        <a href="{{ type.url }}">{{ type.name }}</a>
+                    </li>
+                {% endfor %}
             </ul>
         {% endspaceless %}
     </nav>
@@ -16,7 +18,7 @@
 <div id="content">
     {{ tools.paginationSnippet(pagination, 'top') }}
 
-    <table id="entryList">
+    <table id="entryList" data-module="modules/entry/list">
         <tr>
             <th class="tools"></th>
             <th class="date">Datum:</th>

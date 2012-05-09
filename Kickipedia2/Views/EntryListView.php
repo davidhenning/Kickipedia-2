@@ -10,7 +10,7 @@ class EntryListView extends View {
     protected $_sAppName = 'Kickipedia2';
     protected $_sTemplateName = 'entry_list.twig';
     protected $_sPaginationBaseUrl = '/entry/list';
-    protected $_iType = null;
+    protected $_iType = 1;
 
     public function setType($iType) {
         $this->_iType = $iType;
@@ -29,9 +29,31 @@ class EntryListView extends View {
         return $oEntryRecordCollection;
     }
 
+    protected function _getTypes() {
+        $aRawTypes = array('1' => 'Sperrungen', '2' => 'Verwarnungen', '3' => 'abgelaufene Verwarnungen');
+        $aTypes = array();
+
+        foreach($aRawTypes as $sId => $sName) {
+            $aType = array(
+                'id' => $sId,
+                'name' => $sName,
+                'url' => "{$this->_sPaginationBaseUrl}/type/{$sId}"
+            );
+
+            if($this->_iType == $sId) {
+                $aType['active'] = true;
+            }
+
+            $aTypes[] = $aType;
+        }
+
+        return $aTypes;
+    }
+
     public function render() {
-        $oEntryRecordCollection = $this->_getEntryRecordCollection();
+        $oEntryRecordCollection = $this->_getEntryRecordCollection();  
         $this->_aTemplateData['entries'] = $oEntryRecordCollection;
+        $this->_aTemplateData['types'] = $this->_getTypes();
         $this->_aTemplateData['pagination'] = $this->_getPagination($oEntryRecordCollection->getTotalRecords());
 
         parent::render();
