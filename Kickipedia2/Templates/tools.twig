@@ -1,0 +1,35 @@
+{% macro paginationSnippet(pagination, position) %}
+    {% if pagination.totalPages > 0 %}
+        {% set pageLimiter = 3 %}
+        {% spaceless %}
+            <ul class="pagination {{ position }}">          
+                <li class="info">
+                    Seite {{ pagination.currentPage }} von {{ pagination.totalPages }}
+                </li>
+                {% if pagination.firstPageUrl and pagination.currentPage - pageLimiter > 0 %}
+                    <li><a href="{{ pagination.firstPageUrl }}">&laquo;</a></li>
+                {% endif %}
+
+                {% if pagination.prevPageUrl %}
+                    <li><a href="{{ pagination.prevPageUrl }}">&lt;</a></li>
+                {% endif %}
+
+                {% for page in pagination.pages %}
+                    {% if page.nr > (pagination.currentPage - pageLimiter) and page.nr < (pagination.currentPage + pageLimiter) %}
+                        <li {% if page.active == true %}class="active"{% endif %}>
+                            <a href="{{ page.url }}">{{ page.nr }}</a> 
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.nextPageUrl %}
+                    <li><a href="{{ pagination.nextPageUrl }}">&gt;</a></li>
+                {% endif %}
+
+                {% if pagination.lastPageUrl and (pagination.totalPages - pageLimiter) >= pagination.currentPage %}
+                    <li><a href="{{ pagination.lastPageUrl }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        {% endspaceless %}
+    {% endif %}
+{% endmacro %}

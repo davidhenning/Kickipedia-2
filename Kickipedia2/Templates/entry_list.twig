@@ -1,67 +1,48 @@
 {% include 'header.twig' with {'title': 'Liste'} %}
+{% import 'tools.twig' as tools %}
 
-{% set paginationSnippet %}
-    {% if pagination.totalPages > 0 %}
-        {% set pageLimiter = 3 %}
+<header>
+    <h2>&Uuml;bersicht</h2>
+    <nav class="types">
         {% spaceless %}
-            <ul class="pagination">          
-                <li class="info">
-                    Seite {{ pagination.currentPage }} von {{ pagination.totalPages }}
-                </li>
-                {% if pagination.firstPageUrl and pagination.currentPage - pageLimiter > 0 %}
-                    <li><a href="{{ pagination.firstPageUrl }}">&laquo;</a></li>
-                {% endif %}
-
-                {% if pagination.prevPageUrl %}
-                    <li><a href="{{ pagination.prevPageUrl }}">&lt;</a></li>
-                {% endif %}
-
-                {% for page in pagination.pages %}
-                    {% if page.nr > (pagination.currentPage - pageLimiter) and page.nr < (pagination.currentPage + pageLimiter) %}
-                        <li {% if page.active == true %}class="active"{% endif %}>
-                            <a href="{{ page.url }}">{{ page.nr }}</a> 
-                        </li>
-                    {% endif %}
-                {% endfor %}
-
-                {% if pagination.nextPageUrl %}
-                    <li><a href="{{ pagination.nextPageUrl }}">&gt;</a></li>
-                {% endif %}
-
-                {% if pagination.lastPageUrl and (pagination.totalPages - pageLimiter) >= pagination.currentPage %}
-                    <li><a href="{{ pagination.lastPageUrl }}">&raquo;</a></li>
-                {% endif %}
+            <ul>
+                <li><a href="/entry/list/type/1">Sperrungen</a></li>
+                <li><a href="/entry/list/type/2">Verwarnungen</a></li>
+                <li><a href="/entry/list/type/3">abgelaufene Verwarnungen</a></li>
             </ul>
         {% endspaceless %}
-    {% endif %}
-{% endset %}
+    </nav>
+</header>
+<div id="content">
+    {{ tools.paginationSnippet(pagination, 'top') }}
 
-<nav id="typeNavigation">
-    <ul>
-        <li><a href="/entry/list/type/1">Type 1</a></li>
-        <li><a href="/entry/list/type/2">Type 2</a></li>
-    </ul>
-</nav>
-
-{{ paginationSnippet }}
-
-<table id="entryList">
-    <tr>
-        <th>Datum:</th>
-        <th>Name:</th>
-        <th>IP:</th>
-        <th>Grund:</th>
-    </tr>
-    {% for entry in entries %}
+    <table id="entryList">
         <tr>
-            <td>{{ entry.createdOn|date("d.m.Y") }}</td>
-            <td><a href="/entry/{{ entry._id }}/edit">{{ entry.name }}</a></td>
-            <td>{{ entry.ip }}</td>
-            <td>{{ entry.reason }}</td>
+            <th class="tools"></th>
+            <th class="date">Datum:</th>
+            <th class="name">Name:</th>
+            <th class="ip">IP:</th>
+            <th class="reason">Grund:</th>
         </tr>
-    {% endfor %}
-</table>
+        {% for entry in entries %}
+            <tr>
+                <td>
+                    {% spaceless %}
+                        <ul class="tools">
+                            <li><a class="edit" href="/entry/{{ entry._id }}/edit">Bearbeiten</a></li>
+                            <li><a class="delete" href="/entry/{{ entry._id }}/delete">L&ouml;schen</a></li>
+                        </ul>
+                    {% endspaceless %}
+                </td>
+                <td>{{ entry.createdOn|date("d.m.Y") }}</td>
+                <td><a href="/entry/{{ entry._id }}/edit">{{ entry.name }}</a></td>
+                <td>{{ entry.ip }}</td>
+                <td>{{ entry.reason }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 
-{{ paginationSnippet }}
+    {{ tools.paginationSnippet(pagination, 'bottom') }}
+</div>
 
 {% include 'footer.twig' %}
