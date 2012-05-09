@@ -25,7 +25,7 @@ class EntryActions {
         $iType = (int)params('type');
         
         if($iPage > 0) {
-            $oView->setPage($iPage);
+            $oView->setCurrentPage($iPage);
         }
 
         if($iType > 0) {

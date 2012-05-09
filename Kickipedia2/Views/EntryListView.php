@@ -21,9 +21,9 @@ class EntryListView extends View {
 
         if($this->_iType !== null) {
             $this->_sPaginationAdditionalUrl = "type/{$this->_iType}";
-            $oEntryRecordCollection->findByType($this->_iType, $this->_iPage, $this->_iPerPage);
+            $oEntryRecordCollection->findByType($this->_iType, $this->_iCurrentPage, $this->_iPerPage);
         } else {
-            $oEntryRecordCollection->findByPage($this->_iPage, $this->_iPerPage);
+            $oEntryRecordCollection->findByPage($this->_iCurrentPage, $this->_iPerPage);
         }
 
         return $oEntryRecordCollection;

@@ -9,7 +9,7 @@ abstract class View extends Base {
     protected $_aTemplateData = array();
     protected $_sId = null;
     protected $_iPerPage = 50;
-    protected $_iPage = 1;
+    protected $_iCurrentPage = 1;
     protected $_sPaginationBaseUrl = '';
     protected $_sPaginationAdditionalUrl = '';
 
@@ -31,25 +31,25 @@ abstract class View extends Base {
         $this->_iPerPage = $iPerPage;
     }
 
-    public function setPage($iPage) {
-        $this->_iPage = $iPage;
+    public function setCurrentPage($iPage) {
+        $this->_iCurrentPage = $iPage;
     }
 
     protected function _getPagination($iTotalRecords) {
         $iPages = ceil($iTotalRecords / $this->_iPerPage);
         $aPages = array(
             'pages' => array(),
-            'currentPage' => $this->_iPage,
+            'currentPage' => $this->_iCurrentPage,
             'totalPages' => $iPages  
         );
 
-        if($this->_iPage > 1) {
-            $aPages['prevPageUrl'] = $this->_createPageUrl($this->_iPage - 1);
+        if($this->_iCurrentPage > 1) {
+            $aPages['prevPageUrl'] = $this->_createPageUrl($this->_iCurrentPage - 1);
             $aPages['firstPageUrl'] = $this->_createPageUrl(1);
         }
 
-        if($this->_iPage < $iPages) {
-            $aPages['nextPageUrl'] = $this->_createPageUrl($this->_iPage + 1);
+        if($this->_iCurrentPage < $iPages) {
+            $aPages['nextPageUrl'] = $this->_createPageUrl($this->_iCurrentPage + 1);
             $aPages['lastPageUrl'] = $this->_createPageUrl($iPages);
         }
 
@@ -60,7 +60,7 @@ abstract class View extends Base {
                     'url' => $this->_createPageUrl($i)
                 );
 
-                if($i === $this->_iPage) {
+                if($i === $this->_iCurrentPage) {
                     $aPage['active'] = true;
                 }
 
