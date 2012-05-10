@@ -9,7 +9,7 @@ define(['jquery'], function($) {
             var row = $(this).parents('tr');
 
             if(window.confirm('Eintrag wirklich löschen?') === true) {
-                $.delete($(this).attr('href'), function(dat, status) {
+                $.delete($(this).attr('href'), function(data, status) {
                     if(status == 'success') {
                         row.fadeOut(400, function() {
                             $(this).remove();
