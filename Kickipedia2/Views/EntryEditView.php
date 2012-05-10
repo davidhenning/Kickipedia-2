@@ -26,4 +26,10 @@ class EntryEditView extends View {
         $oEntry->updateProperties($aData);
         $oEntry->save();     
     }
+
+    public function delete() {
+        $oEntry = new EntryRecord();
+        $oEntry->load($this->getId()); 
+        $oEntry->delete();     
+    }    
 }
