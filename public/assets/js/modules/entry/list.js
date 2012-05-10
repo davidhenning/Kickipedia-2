@@ -5,8 +5,11 @@ define(['jquery'], function($) {
 
     exports.init = function(element) {
         $('.tools a.delete', element).click(function(e) {
-            e.preventDefault();
-            alert('Delete?');
+            if(window.confirm('Eintrag wirklich löschen?') === false) {
+                e.preventDefault();
+            }
+
+            // delete with ajax
         });
     }
 
