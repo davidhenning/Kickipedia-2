@@ -15,7 +15,9 @@ class EntryActions {
         dispatch('/entry/list/type/:type/:page', array($this, 'showList'));
         dispatch('/entry/:id', array($this, 'showEntry'));
         dispatch('/entry/:id/edit', array($this, 'editEntry'));
+        
         dispatch_post('/entry/:id/update', array($this, 'updateEntry'));
+        dispatch_delete('/entry/:id/delete', array($this, 'deleteEntry'));
     }
 
     public function showList() {
@@ -59,5 +61,11 @@ class EntryActions {
         $oView->update($entryData);
 
         redirect_to('entry', 'list');
+    }
+
+    public function deleteEntry() {
+        $sId = params('id');
+        $oView = new EntryEditView($sId);
+        $oView->delete();
     }
 }
