@@ -5,11 +5,18 @@ define(['jquery'], function($) {
 
     exports.init = function(element) {
         $('.tools a.delete', element).click(function(e) {
-            if(window.confirm('Eintrag wirklich löschen?') === false) {
-                e.preventDefault();
-            }
+            e.preventDefault();
+            var row = $(this).parents('tr');
 
-            // delete with ajax
+            if(window.confirm('Eintrag wirklich löschen?') === true) {
+                $.delete($(this).attr('href'), function(dat, status) {
+                    if(status == 'success') {
+                        row.fadeOut(400, function() {
+                            $(this).remove();
+                        });
+                    }
+                });
+            }          
         });
     }
 
