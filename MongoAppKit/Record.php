@@ -36,14 +36,14 @@ abstract class Record extends IterateableList {
         if(!empty($this->_aRecordConfig)) {
             foreach($this->_aRecordConfig as $sProperty => $aOptions) {
                 $value = (isset($this->_aProperties[$sProperty])) ? $this->_aProperties[$sProperty] : null;
-                $aPreparedProperties[$sProperty] = $this->_setPropertyOptions($sProperty, $value, $aOptions);
+                $aPreparedProperties[$sProperty] = $this->_prepareProperty($sProperty, $value, $aOptions);
             }
         }
 
         return $aPreparedProperties;
     }
 
-    protected function _setPropertyOptions($sProperty, $value, $aOptions) {
+    protected function _prepareProperty($sProperty, $value, $aOptions) {
          if(!empty($aOptions)) {
             if(isset($aOptions['type'])) {
                 if($aOptions['type'] === 'date') {
