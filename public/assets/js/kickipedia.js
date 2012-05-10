@@ -4,13 +4,14 @@
     var requireConfig = {
             paths: {
                 'jquery': 'libs/jquery/jquery-1.7.2',
-                'moduleloader': 'libs/core/moduleloader'
+                'moduleloader': 'libs/core/moduleloader',
+                'jqhttp': 'libs/jquery/jquery-http-1.0.0'
             }
         };
 
     require.config(requireConfig);
 
-    require(['jquery', 'moduleloader'], function(jQuery, moduleloader){
+    require(['jquery', 'moduleloader', 'jqhttp'], function(jQuery, moduleloader){
         jQuery.noConflict();
         moduleloader.load();
     });
