@@ -82,7 +82,7 @@ abstract class View extends Base {
     }
 
     public function render() {
-        $loader = new \Twig_Loader_Filesystem(getBasePath() ."\\{$this->_sAppName}\Templates");
+        $loader = new \Twig_Loader_Filesystem(getBasePath() ."/{$this->_sAppName}/Templates");
         $twig = new \Twig_Environment($loader, array(
           'cache' => getBasePath() .'/tmp',
           'auto_reload' => $this->getConfig()->getProperty('TemplateDebugMode')
