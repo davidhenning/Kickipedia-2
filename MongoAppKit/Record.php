@@ -122,7 +122,7 @@ abstract class Record extends IterateableList {
         $this->_getCollection()->save($aPreparedProperties);
     }
 
-    public function remove() {
+    public function delete() {
         $this->_getCollection()->remove(array('_id' => $this->_aProperties['_id']));
     }
 }
