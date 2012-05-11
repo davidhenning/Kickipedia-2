@@ -10,26 +10,31 @@ class EntryEditView extends View {
     protected $_sAppName = 'Kickipedia2';
     protected $_sTemplateName = 'entry_edit.twig';
     protected $_sId = null;
+    protected $_oEntry = null;
 
     public function render() {
-        $oEntry = new EntryRecord();
-        $oEntry->load($this->getId());  
-        $this->_aTemplateData['entry'] = $oEntry;
+        $this->_oEntry = new EntryRecord();
+        $this->_oEntry->load($this->getId());  
+        $this->_aTemplateData['entry'] = $this->_oEntry;
         $this->_aTemplateData['formAction'] = url_for('entry', $this->getId(), 'update');
 
         parent::render();
     }
 
     public function update($aData) {
-        $oEntry = new EntryRecord();
-        $oEntry->load($this->getId()); 
-        $oEntry->updateProperties($aData);
-        $oEntry->save();     
+        $this->_oEntry = new EntryRecord();
+        $this->_oEntry->load($this->getId()); 
+        $this->_oEntry->updateProperties($aData);
+        $this->_oEntry->save();  
     }
 
     public function delete() {
-        $oEntry = new EntryRecord();
-        $oEntry->load($this->getId()); 
-        $oEntry->delete();     
-    }    
+        $this->_oEntry = new EntryRecord();
+        $this->_oEntry->load($this->getId()); 
+        $this->_oEntry->delete();     
+    }
+
+    public function getTypeId() {
+        return $this->_oEntry->getProperty('type');
+    }  
 }

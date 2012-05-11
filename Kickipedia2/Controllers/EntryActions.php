@@ -60,7 +60,7 @@ class EntryActions {
         $oView = new EntryEditView($sId);
         $oView->update($entryData);
 
-        redirect_to('entry', 'list');
+        redirect_to('entry', 'list', 'type', $oView->getTypeId());
     }
 
     public function deleteEntry() {
