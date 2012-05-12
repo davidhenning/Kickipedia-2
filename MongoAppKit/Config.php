@@ -1,7 +1,5 @@
 <?php
 
-namespace MongoAppKit;
-
 /**
  * Class Config
  *
@@ -11,6 +9,8 @@ namespace MongoAppKit;
  * 
  * @package MongoAppKit
  */
+
+namespace MongoAppKit;
 
 class Config extends ArrayList {
 
