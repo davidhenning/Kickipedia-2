@@ -19,21 +19,21 @@ abstract class Base {
      * @var Config
     */
 
-    private $_oConfig = null;
+    protected $_oConfig = null;
 
     /**
      * Storage object
      * @var Storage
     */
 
-    private $_oStorage = null;
+    protected $_oStorage = null;
  
     /**
      * Session object
      * @var Session
     */
 
-    private $_oSession = null;
+    protected $_oSession = null;
 
     /**
      * Returns Config object
