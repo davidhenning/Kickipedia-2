@@ -1,4 +1,13 @@
-<h1>View Entry: {{ entry._id }} </h1>
-{% for key, name in entry %}
-    <p>{{ key }}: {{ name }}</p> 
-{% endfor %}
+{% include 'header.twig' with {'title': 'Liste'} %}
+{% import 'tools.twig' as tools %}
+
+<header>
+    <h2>Eintrag {{ entry._id }} </h2>
+</header>
+<div id="content">
+    {% for key, name in entry %}
+        <p>{{ key }}: {{ name }}</p> 
+    {% endfor %}
+</div>
+
+{% include 'footer.twig' %}
