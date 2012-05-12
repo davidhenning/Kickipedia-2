@@ -6,7 +6,7 @@
     <nav class="types">
         {% spaceless %}
             <ul>
-                {% for type in types %}
+                {% for type in view.getTypes() %}
                     <li {% if type.active == true %}class="active"{% endif %}>
                         <a href="{{ type.url }}">{{ type.name }}</a>
                     </li>
@@ -16,7 +16,7 @@
     </nav>
 </header>
 <div id="content">
-    {{ tools.paginationSnippet(pagination, 'top') }}
+    {{ tools.paginationSnippet(view.getPagination(), 'top') }}
 
     <table id="entryList" data-module="modules/entry/list">
         <tr>
@@ -26,25 +26,25 @@
             <th class="ip">IP:</th>
             <th class="reason">Grund:</th>
         </tr>
-        {% for entry in entries %}
+        {% for entry in view.getDocuments() %}
             <tr>
                 <td>
                     {% spaceless %}
                         <ul class="tools">
-                            <li><a class="edit" href="/entry/{{ entry._id }}/edit">Bearbeiten</a></li>
-                            <li><a class="delete" href="/entry/{{ entry._id }}/delete">L&ouml;schen</a></li>
+                            <li><a class="edit" href="{{ entry.getEditUrl() }}">Bearbeiten</a></li>
+                            <li><a class="delete" href="{{ entry.getDeleteUrl() }}">L&ouml;schen</a></li>
                         </ul>
                     {% endspaceless %}
                 </td>
                 <td>{{ entry.createdOn|date("d.m.Y") }}</td>
-                <td><a href="/entry/{{ entry._id }}/edit">{{ entry.name }}</a></td>
+                <td>{{ entry.name }}</td>
                 <td>{{ entry.ip }}</td>
                 <td>{{ entry.reason }}</td>
             </tr>
         {% endfor %}
     </table>
 
-    {{ tools.paginationSnippet(pagination, 'bottom') }}
+    {{ tools.paginationSnippet(view.getPagination(), 'bottom') }}
 </div>
 
 {% include 'footer.twig' %}
