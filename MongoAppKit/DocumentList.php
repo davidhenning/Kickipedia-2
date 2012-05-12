@@ -2,13 +2,13 @@
 
 namespace MongoAppKit;
 
-abstract class RecordCollection extends IterateableList {
+abstract class DocumentList extends IterateableList {
     protected $_oDatabase = null;
     protected $_sCollectionName = null;
     protected $_oCollection = null;
-    protected $_sRecordClass = null;
-    protected $_iRecords = 0;
-    protected $_iTotalRecords = 0;
+    protected $_sDocumentClass = null;
+    protected $_iDocuments = 0;
+    protected $_iTotalDocuments = 0;
     protected $_sCustomSortField = null;
     protected $_sCustomSortOrder = null;
 
@@ -38,8 +38,8 @@ abstract class RecordCollection extends IterateableList {
         $this->_setPropertiesFromCursor($oCursor);       
     }
 
-    public function getTotalRecords() {
-        return $this->_iTotalRecords;
+    public function getTotalDocuments() {
+        return $this->_iTotalDocuments;
     }
 
     protected function _getDefaultCursor($aWhere = null, $aFields = null) {
@@ -85,13 +85,13 @@ abstract class RecordCollection extends IterateableList {
         }
 
         foreach($oCursor as $oLine) {
-            $oRecord = new $this->_sRecordClass();
-            $oRecord->updateProperties($oLine);
-            $aData[] = $oRecord;
+            $oDocument = new $this->_sDocumentClass();
+            $oDocument->updateProperties($oLine);
+            $aData[] = $oDocument;
         }
 
-        $this->_iRecords = $oCursor->count(true);
-        $this->_iTotalRecords = $oCursor->count();
+        $this->_iDocuments = $oCursor->count(true);
+        $this->_iTotalDocuments = $oCursor->count();
         $this->_aProperties = $aData;
     }
 }
