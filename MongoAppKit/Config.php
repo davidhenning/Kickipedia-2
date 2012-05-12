@@ -2,9 +2,30 @@
 
 namespace MongoAppKit;
 
+/**
+ * Class Config
+ *
+ * Reads and stores data from a the config file and provides object access via Singleton pattern
+ * 
+ * @author David Henning <madcat.me@gmail.com>
+ * 
+ * @package MongoAppKit
+*/
+
 class Config extends ArrayList {
 
+    /**
+     * Config object
+     * @var Config
+    */
+
     private static $_oInstance = null;
+
+    /**
+     * Return instance of class Config
+     *
+     * @return Config
+    */
 
     public static function getInstance() {
         if(self::$_oInstance === null) {
@@ -13,6 +34,10 @@ class Config extends ArrayList {
 
         return self::$_oInstance;
     }
+
+    /**
+     * Reads config file and assigns the config data
+    */
 
     private function __construct() {
 
@@ -26,6 +51,10 @@ class Config extends ArrayList {
         $configData = json_decode($configFileJsonData, true);
         $this->assign($configData);
     }
+
+    /**
+     * Prohibited cloning of the class object (Singleton pattern)
+    */
 
     public function __clone() {
         return null;
