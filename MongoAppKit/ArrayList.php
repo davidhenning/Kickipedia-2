@@ -35,7 +35,7 @@ abstract class ArrayList extends Base {
      * Returns value of given property name or throws an exception if the property does not exist 
      *
      * @param string $sKey
-     * @return mixed value of given property name
+     * @return mixed
      * @throws OutOfBoundsException
     */
 
