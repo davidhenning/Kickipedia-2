@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Record
+ * Class Document
  *
- * Small implementation of ActiveRecord pattern for MongoDB
+ * Small implementation of ActiveRecord pattern for MongoDB documents
  * 
  * @author David Henning <madcat.me@gmail.com>
  * 
@@ -12,7 +12,7 @@
 
 namespace MongoAppKit;
 
-abstract class Record extends IterateableList {
+abstract class Document extends IterateableList {
 
     /**
      * MongoDB object
@@ -153,7 +153,7 @@ abstract class Record extends IterateableList {
     }
 
     /**
-     * Returns id of current record
+     * Returns id of current document
      *
      * @return string
     */
@@ -164,7 +164,7 @@ abstract class Record extends IterateableList {
     }
 
     /**
-     * Sets id of current record if none exists
+     * Sets id of current document if none exists
     */
 
     protected function _setId() {
@@ -188,7 +188,7 @@ abstract class Record extends IterateableList {
     }
 
     /**
-     * Loads record from given id
+     * Loads documend from given id
      *
      * @param string $sId
     */
@@ -204,7 +204,7 @@ abstract class Record extends IterateableList {
     }
 
     /**
-     * Saves record properties into the selected MongoDB collection
+     * Saves document properties into the selected MongoDB collection
     */
 
     public function save() {
@@ -214,7 +214,7 @@ abstract class Record extends IterateableList {
     }
 
     /**
-     * Deletes current record from the selected MongoDB collection
+     * Deletes current document from the selected MongoDB collection
     */
 
     public function delete() {
