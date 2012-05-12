@@ -152,16 +152,32 @@ abstract class Record extends IterateableList {
         return $value;
     }
 
+    /**
+     * Returns id of current record
+     *
+     * @return string
+    */
+
     public function getId() {
         $this->_setId();
         return $this->_aProperties['_id']->{'$id'};
     }
+
+    /**
+     * Sets id of current record if none exists
+    */
 
     protected function _setId() {
         if(!isset($this->_aProperties['_id']) || !$this->_aProperties['_id'] instanceof \MongoId) {
             $this->_aProperties['_id'] = new \MongoId();
         }
     }
+
+    /**
+     * Updates properties with from given array
+     *
+     * @param array $aProperties
+    */
 
     public function updateProperties($aProperties) {
         if(!empty($aProperties)) {
@@ -170,6 +186,12 @@ abstract class Record extends IterateableList {
             }
         }
     }
+
+    /**
+     * Loads record from given id
+     *
+     * @param string $sId
+    */
 
     public function load($sId) {
         $aData = $this->_getCollection()->findOne(array('_id' => new \MongoId($sId)));
@@ -181,11 +203,19 @@ abstract class Record extends IterateableList {
         $this->_aProperties = $aData;
     }
 
+    /**
+     * Saves record properties into the selected MongoDB collection
+    */
+
     public function save() {
         $this->_setId();
         $aPreparedProperties = $this->_getPreparedProperties();
         $this->_getCollection()->save($aPreparedProperties);
     }
+
+    /**
+     * Deletes current record from the selected MongoDB collection
+    */
 
     public function delete() {
         $this->_getCollection()->remove(array('_id' => $this->_aProperties['_id']));
