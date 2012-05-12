@@ -1,17 +1,80 @@
 <?php
 
+/**
+ * Class View
+ *
+ * Basic view functions
+ * 
+ * @author David Henning <madcat.me@gmail.com>
+ * 
+ * @package MongoAppKit
+ */
+
 namespace MongoAppKit;
 
 abstract class View extends Base {
+
+    /**
+     * Name of the App built with MongoAppKit (used template path)
+     * @var string
+     */
     
     protected $_sAppName = '';
+ 
+    /**
+     * Name of the template to render
+     * @var string
+     */
+
     protected $_sTemplateName = null;
+
+    /**
+     * Template data for rendering
+     * @var array
+     */
+
     protected $_aTemplateData = array();
+
+    /**
+     * Id of the view related document
+     * @var string
+     */
+
     protected $_sId = null;
+
+    /**
+     * Documents per page
+     * @var integer
+     */
+
     protected $_iPerPage = 50;
+
+    /**
+     * Current page
+     * @var integer
+     */
+
     protected $_iCurrentPage = 1;
+
+    /**
+     * Base path for generated urls
+     * @var string
+     */
+
     protected $_sPaginationBaseUrl = '';
+
+    /**
+     * Additional path for generated urls
+     * @var MongoDB
+     */
+
     protected $_sPaginationAdditionalUrl = '';
+
+    /**
+     * Sets id if given
+     *
+     * @param string $sId
+     */
 
     public function __construct($sId = null) {
         if($sId !== null) {
@@ -19,41 +82,79 @@ abstract class View extends Base {
         }
     }
 
+    /**
+     * Returns id
+     *
+     * @return string
+     */
+
     public function getId() {
         return $this->_sId;
     }
+
+    /**
+     * Sets id
+     *
+     * @param string $sId
+     */
 
     public function setId($sId) {
         $this->_sId = $sId;
     }
 
+    /**
+     * Sets count of documents per page
+     *
+     * @param integer $iPerPage
+     */
+
     public function setPerPage($iPerPage) {
         $this->_iPerPage = $iPerPage;
     }
+
+    /**
+     * Sets current page number
+     *
+     * @param integer $iPage
+     */
 
     public function setCurrentPage($iPage) {
         $this->_iCurrentPage = $iPage;
     }
 
-    protected function _getPagination($iTotalRecords) {
+    /**
+     * Create and returns array with all pagination data
+     *
+     * @param integer $iTotalRecords
+     * @return array
+     */
+
+    protected function _getPagination($iTotalRecords) {     
+        // compute total pages
         $iPages = ceil($iTotalRecords / $this->_iPerPage);
+        
+        // init array of the pagination
         $aPages = array(
             'pages' => array(),
             'currentPage' => $this->_iCurrentPage,
             'totalPages' => $iPages  
         );
 
+        // set URL to previous page and first page
         if($this->_iCurrentPage > 1) {
             $aPages['prevPageUrl'] = $this->_createPageUrl($this->_iCurrentPage - 1);
             $aPages['firstPageUrl'] = $this->_createPageUrl(1);
         }
 
+        // set URL to next page and last page
         if($this->_iCurrentPage < $iPages) {
             $aPages['nextPageUrl'] = $this->_createPageUrl($this->_iCurrentPage + 1);
             $aPages['lastPageUrl'] = $this->_createPageUrl($iPages);
         }
 
         if($iPages > 0) {
+            
+            // set pages with number, url and active state
             for($i = 1; $i <= $iPages; $i++) {
                 $aPage = array(
                     'nr' => $i,
@@ -71,6 +172,13 @@ abstract class View extends Base {
         return $aPages;
     }
 
+    /**
+     * Creates and returns a page url for given page number
+     *
+     * @param integer $iPage
+     * @return string
+     */
+
     protected function _createPageUrl($iPage) {
         $sUrl = "{$this->_sPaginationBaseUrl}/";
         
@@ -81,13 +189,19 @@ abstract class View extends Base {
         return $sUrl . $iPage;
     }
 
-    public function render() {
+    /**
+     * Loads Twig and starts page rendering
+     */
+
+    public function render() {     
+        // load Twig
         $loader = new \Twig_Loader_Filesystem(getBasePath() ."/{$this->_sAppName}/Templates");
         $twig = new \Twig_Environment($loader, array(
           'cache' => getBasePath() .'/tmp',
           'auto_reload' => $this->getConfig()->getProperty('TemplateDebugMode')
         ));
 
+        // render given template with given data
         echo $twig->render($this->_sTemplateName, $this->_aTemplateData);
     }
 }

@@ -8,7 +8,7 @@
  * @author David Henning <madcat.me@gmail.com>
  * 
  * @package MongoAppKit
-*/
+ */
 
 namespace MongoAppKit;
 
@@ -17,7 +17,7 @@ abstract class ArrayList extends Base {
     /**
      * Stores properties
      * @var array
-    */
+     */
 
     protected $_aProperties = array();
 
@@ -25,7 +25,7 @@ abstract class ArrayList extends Base {
      * Imports an array 
      *
      * @param array $aProperties
-    */
+     */
 
     public function assign(array $aProperties) {
         $this->_aProperties = $aProperties;
@@ -37,7 +37,7 @@ abstract class ArrayList extends Base {
      * @param string $sKey
      * @return mixed
      * @throws OutOfBoundsException
-    */
+     */
 
     public function getProperty($sKey) {
         if(array_key_exists($sKey, $this->_aProperties)) {
@@ -52,7 +52,7 @@ abstract class ArrayList extends Base {
      *
      * @param string $sKey
      * @param mixed $value
-    */
+     */
 
     public function setProperty($sKey, $value) {
         $this->_aProperties[$sKey] = $value;
@@ -62,7 +62,7 @@ abstract class ArrayList extends Base {
      * Removes a property
      *
      * @param string $sKey
-    */
+     */
 
     public function removeProperty($sKey) {
         unset($this->_aProperties[$sKey]);

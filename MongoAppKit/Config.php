@@ -10,14 +10,14 @@ namespace MongoAppKit;
  * @author David Henning <madcat.me@gmail.com>
  * 
  * @package MongoAppKit
-*/
+ */
 
 class Config extends ArrayList {
 
     /**
      * Config object
      * @var Config
-    */
+     */
 
     private static $_oInstance = null;
 
@@ -25,7 +25,7 @@ class Config extends ArrayList {
      * Return instance of class Config
      *
      * @return Config
-    */
+     */
 
     public static function getInstance() {
         if(self::$_oInstance === null) {
@@ -37,7 +37,7 @@ class Config extends ArrayList {
 
     /**
      * Reads config file and assigns the config data
-    */
+     */
 
     private function __construct() {
 
@@ -53,8 +53,8 @@ class Config extends ArrayList {
     }
 
     /**
-     * Prohibited cloning of the class object (Singleton pattern)
-    */
+     * Prohibit cloning of the class object (Singleton pattern)
+     */
 
     public function __clone() {
         return null;

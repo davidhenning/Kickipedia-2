@@ -8,7 +8,7 @@
  * @author David Henning <madcat.me@gmail.com>
  * 
  * @package MongoAppKit
-*/
+ */
 
 namespace MongoAppKit;
 
@@ -17,21 +17,21 @@ abstract class Base {
     /**
      * Config object
      * @var Config
-    */
+     */
 
     protected $_oConfig = null;
 
     /**
      * Storage object
      * @var Storage
-    */
+     */
 
     protected $_oStorage = null;
  
     /**
      * Session object
      * @var Session
-    */
+     */
 
     protected $_oSession = null;
 
@@ -39,7 +39,7 @@ abstract class Base {
      * Returns Config object
      *
      * @return Config
-    */
+     */
 
     public function getConfig() {
         if($this->_oConfig === null) {
@@ -53,7 +53,7 @@ abstract class Base {
      * Returns Storage object
      *
      * @return Storage
-    */
+     */
 
     public function getStorage() {
         if($this->_oStorage === null) {
@@ -67,7 +67,7 @@ abstract class Base {
      * Returns Session object
      *
      * @return Session
-    */
+     */
 
     public function getSession() {
         if($this->_oSession === null) {

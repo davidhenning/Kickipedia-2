@@ -8,7 +8,7 @@
  * @author David Henning <madcat.me@gmail.com>
  * 
  * @package MongoAppKit
-*/
+ */
 
 namespace MongoAppKit;
 
@@ -18,7 +18,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      * Returns count of object properties
      *
      * @return int
-    */
+     */
 
     public function count() {
         return count($this->_aProperties);
@@ -28,7 +28,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      * Resets internal pointer of properties to first item
      *
      * @return mixed
-    */
+     */
 
     public function rewind() {
         return reset($this->_aProperties);
@@ -38,7 +38,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      * Advances the internal pointer of properties by one and returns the value
      *
      * @return mixed
-    */
+     */
 
     public function next() {
         return next($this->_aProperties);
@@ -48,7 +48,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      * Returns the key (property name) of the current pointer position
      *
      * @return mixed
-    */
+     */
     
     public function key() {
         return key($this->_aProperties);
@@ -58,7 +58,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      * Returns the value of the current pointer position
      *
      * @return mixed
-    */
+     */
 
     public function current() {
         return current($this->_aProperties);
@@ -68,7 +68,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      * Returns if the current position is valid
      *
      * @return bool
-    */
+     */
     
     public function valid() {
         return (bool)$this->current();
@@ -79,7 +79,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      *
      * @param string $sKey
      * @param mixed $value
-    */
+     */
 
     public function offsetSet($sKey, $value) {
         $this->setProperty($sKey, $value);
@@ -90,7 +90,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      *
      * @param string $sKey
      * @return bool
-    */
+     */
     
     public function offsetExists($sKey) {
         return isset($this->_aProperties[$sKey]);
@@ -100,7 +100,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      * Removes a property
      *
      * @param string $sKey
-    */
+     */
     
     public function offsetUnset($sKey) {
         $this->removeProperty($sKey);
@@ -111,7 +111,7 @@ abstract class IterateableList extends ArrayList implements \Countable, \Iterato
      *
      * @param string $sKey
      * @return mixed
-    */   
+     */   
 
     public function offsetGet($sKey) {
         return $this->getProperty($sKey);
