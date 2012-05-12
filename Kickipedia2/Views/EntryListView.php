@@ -3,7 +3,7 @@
 namespace Kickipedia2\Views;
 
 use MongoAppKit\View;
-use Kickipedia2\Models\EntryRecordCollection;
+use Kickipedia2\Models\EntryDocumentList;
 
 class EntryListView extends View {
     
@@ -16,17 +16,17 @@ class EntryListView extends View {
         $this->_iType = $iType;
     }
 
-    protected function _getEntryRecordCollection() {
-        $oEntryRecordCollection = new EntryRecordCollection();
+    protected function _getEntryDocumentList() {
+        $oEntryDocumentList = new EntryDocumentList();
 
         if($this->_iType !== null) {
             $this->_sPaginationAdditionalUrl = "type/{$this->_iType}";
-            $oEntryRecordCollection->findByType($this->_iType, $this->_iCurrentPage, $this->_iPerPage);
+            $oEntryDocumentList->findByType($this->_iType, $this->_iCurrentPage, $this->_iPerPage);
         } else {
-            $oEntryRecordCollection->findByPage($this->_iCurrentPage, $this->_iPerPage);
+            $oEntryDocumentList->findByPage($this->_iCurrentPage, $this->_iPerPage);
         }
 
-        return $oEntryRecordCollection;
+        return $oEntryDocumentList;
     }
 
     protected function _getTypes() {
@@ -51,10 +51,10 @@ class EntryListView extends View {
     }
 
     public function render() {
-        $oEntryRecordCollection = $this->_getEntryRecordCollection();  
-        $this->_aTemplateData['entries'] = $oEntryRecordCollection;
+        $oEntryDocumentList = $this->_getEntryDocumentList();  
+        $this->_aTemplateData['entries'] = $oEntryDocumentList;
         $this->_aTemplateData['types'] = $this->_getTypes();
-        $this->_aTemplateData['pagination'] = $this->_getPagination($oEntryRecordCollection->getTotalRecords());
+        $this->_aTemplateData['pagination'] = $this->_getPagination($oEntryDocumentList->getTotalDocuments());
 
         parent::render();
     }

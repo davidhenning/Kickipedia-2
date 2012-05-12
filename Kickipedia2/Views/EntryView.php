@@ -3,7 +3,7 @@
 namespace Kickipedia2\Views;
 
 use MongoAppKit\View;
-use Kickipedia2\Models\EntryRecord;
+use Kickipedia2\Models\EntryDocument;
 
 class EntryView extends View {
     
@@ -12,7 +12,7 @@ class EntryView extends View {
     protected $_sId = null;
 
     public function render() {
-        $oEntry = new EntryRecord();
+        $oEntry = new EntryDocument();
         $oEntry->load($this->getId());  
         $this->_aTemplateData['entry'] = $oEntry;
 
