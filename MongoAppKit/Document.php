@@ -40,10 +40,10 @@ abstract class Document extends IterateableList {
      * @var array
     */
 
-    protected $_aRecordConfig = array();
+    protected $_aCollectionConfig = array();
 
     /**
-     * Accesses database, sets current Collection, loads config data for collection and loads record data if an record id is given
+     * Accesses database, sets current Collection, loads config data for collection and loads document data if an document id is given
      *
      * @param string $sId
     */
@@ -53,7 +53,7 @@ abstract class Document extends IterateableList {
         
         if($this->_sCollectionName !== null) {
             $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
-            $this->_loadRecordConfig();
+            $this->_loadCollectionConfig();
         }
 
         if($sId !== null) {
@@ -65,11 +65,11 @@ abstract class Document extends IterateableList {
      * Loads collection config from config object and stores it interally
     */
 
-    protected function _loadRecordConfig() {
+    protected function _loadCollectionConfig() {
         $aPropertyConfig = $this->getConfig()->getProperty('Fields');
 
         if(isset($aPropertyConfig[$this->_sCollectionName]) && count($aPropertyConfig[$this->_sCollectionName]) > 0) {
-            $this->_aRecordConfig = $aPropertyConfig[$this->_sCollectionName];
+            $this->_aCollectionConfig = $aPropertyConfig[$this->_sCollectionName];
         }
     }
 
@@ -80,10 +80,10 @@ abstract class Document extends IterateableList {
     protected function _getPreparedProperties() {
         $aPreparedProperties = array();
 
-        if(!empty($this->_aRecordConfig)) {
-            foreach($this->_aRecordConfig as $sProperty => $aOptions) {
+        if(!empty($this->_aCollectionConfig)) {
+            foreach($this->_aCollectionConfig as $sProperty => $aFieldConfig) {
                 $value = (isset($this->_aProperties[$sProperty])) ? $this->_aProperties[$sProperty] : null;
-                $aPreparedProperties[$sProperty] = $this->_prepareProperty($sProperty, $value, $aOptions);
+                $aPreparedProperties[$sProperty] = $this->_prepareProperty($sProperty, $value, $aFieldConfig);
             }
         }
 
@@ -95,24 +95,24 @@ abstract class Document extends IterateableList {
      *
      * @param string $sProperty
      * @param mixed $value
-     * @param $aOptions
+     * @param $aFieldConfig
     */
 
-    protected function _prepareProperty($sProperty, $value, $aOptions) {
-         if(!empty($aOptions)) {
-            if(isset($aOptions['type'])) {
-                if($aOptions['type'] === 'date') {
+    protected function _prepareProperty($sProperty, $value, $aFieldConfig) {
+         if(!empty($aFieldConfig)) {
+            if(isset($aFieldConfig['type'])) {
+                if($aFieldConfig['type'] === 'date') {
                     if(!$value instanceof \MongoDate || $sProperty == 'updatedOn') {
                         $value = new \MongoDate();
                     }                 
                 }          
             }
 
-            if(isset($aOptions['index']['use']) && $aOptions['index']['use'] === true) {
+            if(isset($aFieldConfig['index']['use']) && $aFieldConfig['index']['use'] === true) {
                 $this->_getCollection()->ensureIndex($sProperty);
             }
 
-            if(isset($aOptions['encrypt'])) {
+            if(isset($aFieldConfig['encrypt'])) {
                 // for future use       
             }
         }
