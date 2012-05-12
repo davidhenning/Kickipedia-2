@@ -152,10 +152,6 @@ abstract class Record extends IterateableList {
         return $value;
     }
 
-    public function _getCollectionName() {
-        return $this->_sCollectionName;
-    }
-
     public function getId() {
         $this->_setId();
         return $this->_aProperties['_id']->{'$id'};
