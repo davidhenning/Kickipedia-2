@@ -2,7 +2,7 @@
 
 namespace Kickipedia2\Models;
 
-use MongoAppKit\Document;
+use MongoAppKit\Documents\Document;
 
 class EntryDocument extends Document {
     protected $_sCollectionName = 'entry';

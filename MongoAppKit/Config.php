@@ -12,6 +12,8 @@
 
 namespace MongoAppKit;
 
+use MongoAppKit\Lists\ArrayList;
+
 class Config extends ArrayList {
 
     /**

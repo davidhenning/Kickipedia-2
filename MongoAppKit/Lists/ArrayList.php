@@ -10,7 +10,9 @@
  * @package MongoAppKit
  */
 
-namespace MongoAppKit;
+namespace MongoAppKit\Lists;
+
+use MongoAppKit\Base;
 
 abstract class ArrayList extends Base {
  

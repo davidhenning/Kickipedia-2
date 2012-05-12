@@ -10,7 +10,9 @@
  * @package MongoAppKit
  */
 
-namespace MongoAppKit;
+namespace MongoAppKit\Documents;
+
+use MongoAppKit\Lists\IterateableList;
 
 abstract class Document extends IterateableList {
 
