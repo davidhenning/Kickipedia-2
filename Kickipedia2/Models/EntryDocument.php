@@ -8,14 +8,14 @@ class EntryDocument extends Document {
     protected $_sCollectionName = 'entry';
 
     public function getUrl() {
-        return "entry/{$this->getId()}";
+        return "/entry/{$this->getId()}";
     }
 
     public function getEditUrl() {
-        return "entry/{$this->getId()}/edit";
+        return "/entry/{$this->getId()}/edit";
     }
 
     public function getDeleteUrl() {
-        return "entry/{$this->getId()}/delete";
+        return "/entry/{$this->getId()}/delete";
     }
 }
