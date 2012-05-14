@@ -13,9 +13,12 @@ class EntryActions {
         dispatch('/entry/list/:page', array($this, 'showList'));
         dispatch('/entry/list/type/:type', array($this, 'showList'));
         dispatch('/entry/list/type/:type/:page', array($this, 'showList'));
+        
+        dispatch('/entry/new', array($this, 'newEntry'));
+
         dispatch('/entry/:id', array($this, 'showEntry'));
         dispatch('/entry/:id/edit', array($this, 'editEntry'));
-        
+               
         dispatch_post('/entry/:id/update', array($this, 'updateEntry'));
         dispatch_delete('/entry/:id/delete', array($this, 'deleteEntry'));
     }
@@ -46,6 +49,11 @@ class EntryActions {
         $oView->render();
     }
 
+    public function newEntry() {
+        $oView = new EntryEditView();
+        $oView->render(); 
+    }
+
     public function editEntry() {
         $sId = params('id');
 
@@ -60,7 +68,13 @@ class EntryActions {
         $oView = new EntryEditView($sId);
         $oView->update($entryData);
 
-        redirect_to('entry', 'list', 'type', $oView->getTypeId());
+        try {
+            $iTypeId = $oView->getTypeId();
+        } catch(\Exception $e) {
+            $iTypeId = null;
+        }
+
+        redirect_to('entry', 'list', 'type', $iTypeId);
     }
 
     public function deleteEntry() {
