@@ -29,7 +29,8 @@
             "type": {
                 "index": {
                     "use": true
-                }
+                },
+                "typeCast": "int"
             },
             
             "user": {

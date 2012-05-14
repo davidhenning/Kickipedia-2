@@ -125,6 +125,23 @@ abstract class Document extends IterateableList {
             if(isset($aFieldConfig['encrypt'])) {
                 // for future use       
             }
+
+            if(isset($aFieldConfig['typeCast'])) {
+                switch($aFieldConfig['typeCast']) {
+                    case 'int':
+                        $value = (int)$value;
+                        break;
+                    case 'float':
+                        $value = (float)$value;
+                        break;                        
+                    case 'bool':
+                        $value = (bool)$value;
+                        break;  
+                    case 'string':
+                        $value = (string)$value;
+                        break;  
+                }
+            }           
         }
 
         return $value; 
