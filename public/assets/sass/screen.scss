@@ -63,7 +63,7 @@ body {
             width: 200px;
             height: 69px;
             text-indent: -999em;
-            background: url(../images/logo.png) no-repeat left 16px;
+            background: inline-image("logo.png") no-repeat left 16px;
         }
 
         nav {
@@ -98,11 +98,11 @@ body {
                 a {
                     text-indent: -999em;
                     width: 14px;
-                    background: url(../images/home.png) no-repeat center center;        
+                    background: inline-image("home.png") no-repeat center center;        
                 }
 
                 &:hover a {
-                    background-image: url(../images/home_hl.png);
+                    background-image: inline-image("home_hl.png");
                 }
             }            
         }
@@ -132,15 +132,15 @@ body {
                 margin-right: 20px;
                 
                 &.github {
-                    background: url(../images/github.png) no-repeat left top;
+                    background: inline-image("github.png") no-repeat left top;
                 }
                 
                 &.facebook {
-                    background: url(../images/facebook.png) no-repeat left top;
+                    background: inline-image("facebook.png") no-repeat left top;
                 }
                 
                 &.googleplus {
-                    background: url(../images/googleplus.png) no-repeat left top;
+                    background: inline-image("googleplus.png") no-repeat left top;
                 }
             }
         }
@@ -311,11 +311,11 @@ body {
             background-repeat: none;
             
             &.edit {
-                background: url(../images/button_edit.png);
+                background: inline-image("button_edit.png");
             }
 
             &.delete {
-                background: url(../images/button_delete.png);
+                background: inline-image("button_delete.png");
             }        
         }
     }
