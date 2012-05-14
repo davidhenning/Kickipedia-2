@@ -147,43 +147,45 @@ abstract class View extends Base {
             // compute total pages
             $iPages = ceil($this->_iTotalDocuments / $this->_iPerPage);
             
-            // init array of the pagination
-            $aPages = array(
-                'pages' => array(),
-                'currentPage' => $this->_iCurrentPage,
-                'totalPages' => $iPages  
-            );
+            if($iPages > 1) {
+                // init array of the pagination
+                $aPages = array(
+                    'pages' => array(),
+                    'currentPage' => $this->_iCurrentPage,
+                    'totalPages' => $iPages  
+                );
 
-            // set URL to previous page and first page
-            if($this->_iCurrentPage > 1) {
-                $aPages['prevPageUrl'] = $this->_createPageUrl($this->_iCurrentPage - 1);
-                $aPages['firstPageUrl'] = $this->_createPageUrl(1);
-            }
-
-            // set URL to next page and last page
-            if($this->_iCurrentPage < $iPages) {
-                $aPages['nextPageUrl'] = $this->_createPageUrl($this->_iCurrentPage + 1);
-                $aPages['lastPageUrl'] = $this->_createPageUrl($iPages);
-            }
-
-            if($iPages > 0) {
-                
-                // set pages with number, url and active state
-                for($i = 1; $i <= $iPages; $i++) {
-                    $aPage = array(
-                        'nr' => $i,
-                        'url' => $this->_createPageUrl($i)
-                    );
-
-                    if($i === $this->_iCurrentPage) {
-                        $aPage['active'] = true;
-                    }
-
-                    $aPages['pages'][] = $aPage;
+                // set URL to previous page and first page
+                if($this->_iCurrentPage > 1) {
+                    $aPages['prevPageUrl'] = $this->_createPageUrl($this->_iCurrentPage - 1);
+                    $aPages['firstPageUrl'] = $this->_createPageUrl(1);
                 }
-            }
 
-            $this->_aPagination = $aPages;
+                // set URL to next page and last page
+                if($this->_iCurrentPage < $iPages) {
+                    $aPages['nextPageUrl'] = $this->_createPageUrl($this->_iCurrentPage + 1);
+                    $aPages['lastPageUrl'] = $this->_createPageUrl($iPages);
+                }
+
+                if($iPages > 0) {
+                    
+                    // set pages with number, url and active state
+                    for($i = 1; $i <= $iPages; $i++) {
+                        $aPage = array(
+                            'nr' => $i,
+                            'url' => $this->_createPageUrl($i)
+                        );
+
+                        if($i === $this->_iCurrentPage) {
+                            $aPage['active'] = true;
+                        }
+
+                        $aPages['pages'][] = $aPage;
+                    }
+                }
+
+                $this->_aPagination = $aPages;
+            }
         }
 
         return $this->_aPagination;
