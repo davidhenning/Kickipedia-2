@@ -37,7 +37,7 @@ class EntryListView extends View {
 
     public function getTypes() {
         if($this->_aTypes === null) {
-            $aRawTypes = array('1' => 'Sperrungen', '2' => 'Verwarnungen', '3' => 'abgelaufene Verwarnungen');
+            $aRawTypes = $this->getConfig()->getProperty('EntryTypes');
             $aTypes = array();
 
             foreach($aRawTypes as $sId => $sName) {

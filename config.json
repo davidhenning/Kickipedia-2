@@ -3,6 +3,12 @@
     "MongoDatabase": "kickipedia2",
     "EncryptionKey": "Aeng3Eicaequeileis0senongooqu9in",
     "TemplateDebugMode": true,
+    "EntryTypes": {
+        "1": "Sperrungen",
+        "2": "Verwarnungen",
+        "3": "gelöschte Verwarnungen",
+        "4": "Bans"
+    },
     "Fields": {
         "entry": {
             "_id": {
