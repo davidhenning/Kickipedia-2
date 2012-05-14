@@ -14,8 +14,14 @@ class EntryEditView extends View {
 
     public function render() {
         $this->_oEntry = new EntryDocument();
-        $this->_oEntry->load($this->getId());  
+        $sId = $this->getId();
+
+        if(!empty($sId)) {
+            $this->_oEntry->load($sId);
+        }
+
         $this->_aTemplateData['entry'] = $this->_oEntry;
+        $this->_aTemplateData['types'] = $this->getConfig()->getProperty('EntryTypes');
         $this->_aTemplateData['formAction'] = url_for('entry', $this->getId(), 'update');
 
         parent::render();
