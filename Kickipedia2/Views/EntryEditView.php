@@ -23,7 +23,12 @@ class EntryEditView extends View {
 
     public function update($aData) {
         $this->_oEntry = new EntryDocument();
-        $this->_oEntry->load($this->getId()); 
+        $sId = $this->getId();
+
+        if(!empty($sId)) {
+            $this->_oEntry->load($sId);
+        }
+            
         $this->_oEntry->updateProperties($aData);
         $this->_oEntry->save();  
     }
