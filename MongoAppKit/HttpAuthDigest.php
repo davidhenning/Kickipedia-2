@@ -1,15 +1,55 @@
 <?php
 
+/**
+ * Class HttpAuthDigest
+ *
+ * Authentication via HTTP Digest
+ * 
+ * @author David Henning <madcat.me@gmail.com>
+ * 
+ * @package MongoAppKit
+ */
+
+
 namespace MongoAppKit;
 
 use MongoAppKit\Exceptions\HttpException;
 
 class HttpAuthDigest extends Base {
 
+    /**
+     * Digest string from client
+     * @var string
+     */
+
     protected $_sDigest = null;
+
+    /**
+     * Parsed digest array
+     * @var array
+     */
+
     protected $_aDigest = null;
+
+    /**
+     * Realm name
+     * @var string
+     */
+
     protected $_sRealm = null;
+
+    /**
+     * Nonce
+     * @var string
+     */
+
     protected $_sNonce = null;
+
+    /**
+     * Opaque
+     * @var string
+     */
+
     protected $_sOpaque = null;
 
     public function __construct($sRealm, $sDigest) {
@@ -35,7 +75,7 @@ class HttpAuthDigest extends Base {
             "response"  => 1
         );
 
-        $sNecessaryParts = implode ("|", array_keys($aNecessaryParts));
+        $sNecessaryParts = implode("|", array_keys($aNecessaryParts));
         $aDigest = array();
 
         preg_match_all('@(' . $sNecessaryParts . ')=(?:([\'"])([^\2]+?)\2|([^\s,]+))@', $this->_sDigest, $aMatches, PREG_SET_ORDER);
