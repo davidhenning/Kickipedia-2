@@ -43,7 +43,8 @@ class EntryListView extends BaseView {
     protected function _renderJSON() {
         $aOutput = array(
             'header' => array(
-                'status' => 200
+                'status' => 200,
+                'documentType' => $this->_iType
             )
         );
 
