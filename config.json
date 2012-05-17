@@ -28,6 +28,44 @@
         "4": "Bans"
     },
     "Fields": {
+        "user": {
+            "_id": {
+                "type": "id"
+            },
+
+            "createdOn": {
+                "type": "date",
+                "index": {
+                    "use": true
+                }
+            },
+
+            "updatedOn": {
+                "type": "date"
+            },
+
+            "lastLogin": {
+                "type": "date"
+            },  
+
+            "name": {
+                "index": {
+                    "use": true
+                }
+            },
+
+            "password": {
+                "type": "password"
+            },
+
+            "token": {
+                "index": {
+                    "use": true
+                }
+            },
+
+            "email": {}
+        },
         "entry": {
             "_id": {
                 "type": "id"
