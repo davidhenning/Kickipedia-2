@@ -9,7 +9,13 @@ use MongoAppKit\HttpAuthDigest;
 use MongoAppKit\Exceptions\HttpException;
 
 try {
-    $oAuth = new HttpAuthDigest('Kickipedia2', $_SERVER['PHP_AUTH_DIGEST']);
+    $sDigest = $_SERVER['PHP_AUTH_DIGEST'];
+
+    if(empty($sDigest) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+        $sDigest = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+    }
+        
+    $oAuth = new HttpAuthDigest('Kickipedia2', $sDigest);
     $oAuth->sendAuthenticationHeader();
 
     $aUsers = array(
