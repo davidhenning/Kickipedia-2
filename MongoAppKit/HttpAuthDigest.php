@@ -17,7 +17,7 @@ class HttpAuthDigest extends Base {
         $this->_sDigest = $sDigest;
 
         $this->_sNonce = uniqid();
-        $this->_sOpaque = md5($this->realm);
+        $this->_sOpaque = md5($sRealm);
     }
 
     protected function _parseDigest() {
