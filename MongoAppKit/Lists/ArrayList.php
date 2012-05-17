@@ -50,6 +50,26 @@ abstract class ArrayList extends Base {
     }
 
     /**
+     * Returns all properties as array
+     *
+     * @return array
+     */
+
+    public function getProperties() {
+        // get all property names
+        $aProperties = array_keys($this->_aProperties);
+        $aValues = array();
+
+        if(!empty($aProperties)) {
+            foreach($aProperties as $sProperty) {
+                $aValues[$sProperty] = $this->getProperty($sProperty);
+            }
+        }
+
+        return $aValues;
+    }
+
+    /**
      * Sets a property and its value
      *
      * @param string $sKey
@@ -68,6 +88,5 @@ abstract class ArrayList extends Base {
 
     public function removeProperty($sKey) {
         unset($this->_aProperties[$sKey]);
-    }  
-
+    }
 }

@@ -5,20 +5,21 @@ namespace Kickipedia2\Controllers;
 use Kickipedia2\Views\EntryListView;
 use Kickipedia2\Views\EntryView;
 use Kickipedia2\Views\EntryEditView;
+use Kickipedia2\Views\EntryNewView;
 
 class EntryActions {
 
     public function __construct() {
-        dispatch('/entry/list', array($this, 'showList'));
-        dispatch('/entry/list/:page', array($this, 'showList'));
-        dispatch('/entry/list/type/:type', array($this, 'showList'));
-        dispatch('/entry/list/type/:type/:page', array($this, 'showList'));
+        dispatch_get('/entry/new', array($this, 'newEntry'));
+        dispatch_get('/entry/list', array($this, 'showList'));
+        dispatch_get('/entry/list/:page', array($this, 'showList'));
+        dispatch_get('/entry/list/type/:type', array($this, 'showList'));
+        dispatch_get('/entry/list/type/:type/:page', array($this, 'showList'));
         
-        dispatch('/entry/new', array($this, 'newEntry'));
-
-        dispatch('/entry/:id', array($this, 'showEntry'));
-        dispatch('/entry/:id/edit', array($this, 'editEntry'));
+        dispatch_get('/entry/:id', array($this, 'showEntry'));
+        dispatch_get('/entry/:id/edit', array($this, 'editEntry'));
                
+        dispatch_post('/entry/insert', array($this, 'updateEntry'));
         dispatch_post('/entry/:id/update', array($this, 'updateEntry'));
         dispatch_delete('/entry/:id/delete', array($this, 'deleteEntry'));
     }
@@ -39,6 +40,10 @@ class EntryActions {
 
         $oView->setPerPage(100);
 
+        if(isset($_GET['output'])) {
+            $oView->setOutputMethod($_GET['output']);
+        }
+
         $oView->render();    
     }
 
@@ -50,7 +55,7 @@ class EntryActions {
     }
 
     public function newEntry() {
-        $oView = new EntryEditView();
+        $oView = new EntryNewView();
         $oView->render(); 
     }
 

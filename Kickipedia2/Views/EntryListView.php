@@ -5,15 +5,13 @@ namespace Kickipedia2\Views;
 use MongoAppKit\View;
 use Kickipedia2\Models\EntryDocumentList;
 
-class EntryListView extends View {
+class EntryListView extends BaseView {
     
     protected $_sAppName = 'Kickipedia2';
     protected $_sTemplateName = 'entry_list.twig';
     protected $_sPaginationBaseUrl = '/entry/list';
-    protected $_iType = 1;
     protected $_oDocuments = null;
-    protected $_aTypes = null;
-
+    
     public function setType($iType) {
         $this->_iType = $iType;
     }
@@ -35,35 +33,20 @@ class EntryListView extends View {
         return $this->_oDocuments;
     }
 
-    public function getTypes() {
-        if($this->_aTypes === null) {
-            $aRawTypes = $this->getConfig()->getProperty('EntryTypes');
-            $aTypes = array();
-
-            foreach($aRawTypes as $sId => $sName) {
-                $aType = array(
-                    'id' => $sId,
-                    'name' => $sName,
-                    'url' => "{$this->_sPaginationBaseUrl}/type/{$sId}"
-                );
-
-                if($this->_iType == $sId) {
-                    $aType['active'] = true;
-                }
-
-                $aTypes[] = $aType;
-            }
-
-            $this->_aTypes = $aTypes;          
-        }
-
-        return $aTypes;
-    }
-
     public function render() {
         $this->_iTotalDocuments = $this->getDocuments()->getTotalDocuments(); 
         $this->_aTemplateData['view'] = $this;
 
         parent::render();
+    }
+
+    protected function _renderJSON() {
+        $aOutput = array();
+
+        foreach($this->getDocuments() as $oDocument) {
+            $aOutput[] = $oDocument->getProperties();
+        }
+
+        echo json_encode($aOutput);
     }
 }

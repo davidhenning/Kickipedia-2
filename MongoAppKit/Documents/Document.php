@@ -178,6 +178,11 @@ abstract class Document extends IterateableList {
             $value = $value->sec;
         }
 
+        // get id of MongoId object
+        if($value instanceof \MongoId) {
+            $value = $value->{'$id'};
+        }
+
         return $value;
     }
 

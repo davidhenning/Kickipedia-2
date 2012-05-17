@@ -85,6 +85,14 @@ abstract class View extends Base {
     protected $_aPagination = null;
 
     /**
+     * Output method
+     * @var string
+     */
+
+    protected $_sOutputMethod = 'template';
+
+
+    /**
      * Sets id if given
      *
      * @param string $sId
@@ -114,6 +122,16 @@ abstract class View extends Base {
 
     public function setId($sId) {
         $this->_sId = $sId;
+    }
+
+    /**
+     * Sets output method
+     *
+     * @param string $sId
+     */
+
+    public function setOutputMethod($sOutputMethod) {
+        $this->_sOutputMethod = $sOutputMethod;
     }
 
     /**
@@ -212,7 +230,18 @@ abstract class View extends Base {
      * Loads Twig and starts page rendering
      */
 
-    public function render() {     
+    public function render() {
+        if($this->_sOutputMethod == 'template') {
+            $this->_renderTwig();
+        } elseif($this->_sOutputMethod == 'json') {
+            header('Content-type: application/json');
+            $this->_renderJSON();
+        } else {
+            $this->_renderTwig();
+        }
+    }
+
+    protected function _renderTwig() {
         // load Twig
         $loader = new \Twig_Loader_Filesystem(getBasePath() ."/{$this->_sAppName}/Templates");
         $twig = new \Twig_Environment($loader, array(
@@ -222,5 +251,9 @@ abstract class View extends Base {
 
         // render given template with given data
         echo $twig->render($this->_sTemplateName, $this->_aTemplateData);
+    }
+
+    protected function _renderJSON() {
+        echo json_encode($this->_aTemplateData);
     }
 }

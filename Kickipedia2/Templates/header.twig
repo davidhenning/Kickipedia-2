@@ -19,11 +19,11 @@
                 <nav class="menu">
                     {% spaceless %}
                         <ul>
-                            <li><a href="/home">Dashboard</a></li>
-                            <li><a href="/entry/new">Neu</a></li>
-                            <li><a href="/entry/list">&Uuml;bersicht</a></li>
-                            <li><a href="/stats">Statistik</a></li>
-                            <li><a href="/profile">Profil</a></li>
+                            {% for type in view.getNavigation() %}
+                                <li {% if type.active == true %}class="active"{% endif %}>
+                                    <a href="{{ type.route }}">{{ type.name }}</a>
+                                </li>
+                            {% endfor %}
                         </ul>
                     {% endspaceless %}
                 </nav>

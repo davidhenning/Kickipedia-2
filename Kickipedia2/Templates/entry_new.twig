@@ -2,10 +2,10 @@
 {% import 'tools.twig' as tools %}
 
 <header>
-    <h2>Eintrag bearbeiten</h2>
+    <h2>Neuer Eintrag</h2>
 </header>
 <div id="content">
-    {% include 'entry_form.twig' with {'formAction': view.getUpdateUrl(), 'document': view.getDocument()} %}
+    {% include 'entry_form.twig' with {'formAction': view.getInsertUrl()} %}
 </div>
 
 {% include 'footer.twig' %}

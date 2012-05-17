@@ -5,11 +5,10 @@ namespace Kickipedia2\Views;
 use MongoAppKit\View;
 use Kickipedia2\Models\EntryDocument;
 
-class EntryView extends View {
+class EntryView extends BaseView {
     
     protected $_sAppName = 'Kickipedia2';
     protected $_sTemplateName = 'entry.twig';
-    protected $_sId = null;
 
     public function render() {
         $oEntry = new EntryDocument();
