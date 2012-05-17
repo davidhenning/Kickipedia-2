@@ -9,7 +9,7 @@ use MongoAppKit\HttpAuthDigest;
 use MongoAppKit\Exceptions\HttpException;
 
 try {
-    $sDigest = $_SERVER['PHP_AUTH_DIGEST'];
+    $sDigest = (isset($_SERVER['PHP_AUTH_DIGEST'])) ? $_SERVER['PHP_AUTH_DIGEST'] : null;
 
     if(empty($sDigest) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
         $sDigest = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
@@ -34,8 +34,6 @@ try {
     echo $e->getMessage();
     exit();
 }
-
-
 
 $entryActions = new EntryActions();
 
