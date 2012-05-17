@@ -10,18 +10,26 @@ use Kickipedia2\Views\EntryNewView;
 class EntryActions {
 
     public function __construct() {
+        // PUT actions for REST service
+        dispatch_put('/entry', array($this, 'updateEntry'));
+        dispatch_put('/entry/:id', array($this, 'updateEntry'));
+        
+        // DELETE actions for REST service
+        dispatch_delete('/entry/:id', array($this, 'deleteEntry'));
+
+        // POST actions
+        dispatch_post('/entry/insert', array($this, 'updateEntry'));
+        dispatch_post('/entry/:id/update', array($this, 'updateEntry'));
+        dispatch_post('/entry/:id/delete', array($this, 'deleteEntry')); 
+
+        // GET actions
         dispatch_get('/entry/new', array($this, 'newEntry'));
         dispatch_get('/entry/list', array($this, 'showList'));
         dispatch_get('/entry/list/:page', array($this, 'showList'));
         dispatch_get('/entry/list/type/:type', array($this, 'showList'));
-        dispatch_get('/entry/list/type/:type/:page', array($this, 'showList'));
-        
+        dispatch_get('/entry/list/type/:type/:page', array($this, 'showList'));      
         dispatch_get('/entry/:id', array($this, 'showEntry'));
         dispatch_get('/entry/:id/edit', array($this, 'editEntry'));
-               
-        dispatch_post('/entry/insert', array($this, 'updateEntry'));
-        dispatch_post('/entry/:id/update', array($this, 'updateEntry'));
-        dispatch_delete('/entry/:id/delete', array($this, 'deleteEntry'));
     }
 
     public function showList() {

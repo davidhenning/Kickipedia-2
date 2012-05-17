@@ -32,7 +32,7 @@
                     {% spaceless %}
                         <ul class="tools">
                             <li><a class="edit" href="{{ entry.getEditUrl() }}">Bearbeiten</a></li>
-                            <li><a class="delete" href="{{ entry.getDeleteUrl() }}">L&ouml;schen</a></li>
+                            <li><a class="delete" data-rest-action="{{ entry.getUrl() }}" href="{{ entry.getDeleteUrl() }}">L&ouml;schen</a></li>
                         </ul>
                     {% endspaceless %}
                 </td>
