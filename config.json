@@ -3,6 +3,24 @@
     "MongoDatabase": "kickipedia2",
     "EncryptionKey": "Aeng3Eicaequeileis0senongooqu9in",
     "TemplateDebugMode": true,
+    "NavItems": [
+        {
+            "name": "Neu",
+            "route": "/entry/new"
+        },
+        {
+            "name": "Übersicht",
+            "route": "/entry/list"
+        },
+        {
+            "name": "Statistik",
+            "route": "/entry/stats"
+        },
+        {
+            "name": "Profil",
+            "route": "/entry/profile"
+        }        
+    ],
     "EntryTypes": {
         "1": "Sperrungen",
         "2": "Verwarnungen",
