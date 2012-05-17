@@ -41,10 +41,19 @@ class EntryListView extends BaseView {
     }
 
     protected function _renderJSON() {
-        $aOutput = array();
+        $aOutput = array(
+            'header' => array(
+                'status' => 200
+            )
+        );
 
-        foreach($this->getDocuments() as $oDocument) {
-            $aOutput[] = $oDocument->getProperties();
+        $aOutput['navigation'] = $this->getPagination();
+        $aOutput['documents'] = array();
+
+        if(count($this->getDocuments()) > 0) {
+            foreach($this->getDocuments() as $oDocument) {
+                $aOutput['documents'][] = $oDocument->getProperties();
+            }
         }
 
         echo json_encode($aOutput);

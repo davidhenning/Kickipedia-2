@@ -170,7 +170,8 @@ abstract class View extends Base {
                 $aPages = array(
                     'pages' => array(),
                     'currentPage' => $this->_iCurrentPage,
-                    'totalPages' => $iPages  
+                    'documentsPerPage' => $this->_iPerPage,
+                    'totalPages' => $iPages
                 );
 
                 // set URL to previous page and first page
@@ -223,7 +224,13 @@ abstract class View extends Base {
             $sUrl .= "{$this->_sPaginationAdditionalUrl}/";
         }
 
-        return $sUrl . $iPage;
+        $sUrl .= $iPage;
+
+        if($this->_sOutputMethod == 'json') {
+            $sUrl .= '?output=json';
+        }
+
+        return $sUrl;
     }
 
     /**
