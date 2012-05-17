@@ -7,6 +7,7 @@ require_once(__DIR__ . '/../bootstrap.php');
 use Kickipedia2\Controllers\EntryActions;
 use MongoAppKit\HttpAuthDigest;
 use MongoAppKit\Exceptions\HttpException;
+use Kickipedia2\Models\UserDocumentList;
 
 try {
     $sDigest = (isset($_SERVER['PHP_AUTH_DIGEST'])) ? $_SERVER['PHP_AUTH_DIGEST'] : null;
@@ -17,20 +18,19 @@ try {
         
     $oAuth = new HttpAuthDigest('Kickipedia2', $sDigest);
     $oAuth->sendAuthenticationHeader();
+    $oUserList = new UserDocumentList();
+    $sUserName = $oAuth->getUserName();
+    $aUserDocument = $oUserList->getUser($sUserName);
 
-    $aUsers = array(
-        'MadCat' => md5("MadCat:Kickipedia2:test"),
-        'kicki' => md5("kicki:Kickipedia2:pedia")
-    );
-
-    $sUser = $oAuth->getUserName();
-
-    $oAuth->authenticate($aUsers[$sUser]);
+    $oAuth->authenticate($aUserDocument->getProperty('token'));
 } catch(HttpException $e) {
     if($e->getCode() === 401) {
         $oAuth->sendAuthenticationHeader(true);
     }
 
+    echo $e->getMessage();
+    exit();
+} catch(\Exception $e) {
     echo $e->getMessage();
     exit();
 }
