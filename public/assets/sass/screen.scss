@@ -19,6 +19,10 @@ a {
     text-decoration: none;
 }
 
+textarea, input { 
+    outline: none; 
+}
+
 nav {
     font-size: 12px;
     border-top-left-radius: 5px;
