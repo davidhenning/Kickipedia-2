@@ -91,7 +91,9 @@ class EntryActions {
             $iTypeId = null;
         }
 
-        redirect_to('entry', 'list', 'type', $iTypeId);
+        if(Input::getInstance()->getRequestMethod() === 'POST') {
+            redirect_to('entry', 'list', 'type', $iTypeId);
+        }          
     }
 
     public function deleteEntry() {
