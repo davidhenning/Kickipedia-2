@@ -16,7 +16,7 @@ class UserDocumentList extends DocumentList {
     protected function _isValidUser($sName) {
         $this->findByName($sName);
 
-        if($this->_iDocuments === 1) {
+        if($this->_iFoundDocuments === 1) {
             return true;
         }
 

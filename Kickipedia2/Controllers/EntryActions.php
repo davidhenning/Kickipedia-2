@@ -25,6 +25,8 @@ class EntryActions {
         dispatch_post('/entry/:id/delete', array($this, 'deleteEntry')); 
 
         // GET actions
+        dispatch_get('/entry/search', array($this, 'showList'));
+        dispatch_get('/entry/search/:page', array($this, 'showList'));
         dispatch_get('/entry/new', array($this, 'newEntry'));
         dispatch_get('/entry/list', array($this, 'showList'));
         dispatch_get('/entry/list/:page', array($this, 'showList'));
@@ -39,13 +41,19 @@ class EntryActions {
  
         $iPage = (int)params('page');
         $iType = (int)params('type');
+        $sTerm = Input::getInstance()->getGetData('term');
         
+        if(!empty($sTerm)) {
+            $oView->setListType('search');
+            $oView->setSearchTerm($sTerm);
+        }
+
         if($iPage > 0) {
             $oView->setCurrentPage($iPage);
         }
 
         if($iType > 0) {
-            $oView->setType($iType);
+            $oView->setDocumentType($iType);
         }
 
         $oView->setPerPage(100);

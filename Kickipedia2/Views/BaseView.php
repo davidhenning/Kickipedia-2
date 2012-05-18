@@ -7,7 +7,7 @@ use MongoAppKit\View;
 class BaseView extends View {
     protected $_sAppName = 'Kickipedia2';
     protected $_aTypes = null;
-    protected $_iType = 1;
+    protected $_iDocumentType = 1;
     protected $_aNavigation = null;
 
     public function getTypes() {
@@ -19,10 +19,10 @@ class BaseView extends View {
                 $aType = array(
                     'id' => $sId,
                     'name' => $sName,
-                    'url' => "{$this->_sPaginationBaseUrl}/type/{$sId}"
+                    'url' => "/entry/list/type/{$sId}"
                 );
 
-                if($this->_iType == $sId) {
+                if($this->_iDocumentType == $sId) {
                     $aType['active'] = true;
                 }
 

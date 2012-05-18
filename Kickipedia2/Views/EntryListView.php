@@ -11,20 +11,52 @@ class EntryListView extends BaseView {
     protected $_sTemplateName = 'entry_list.twig';
     protected $_sPaginationBaseUrl = '/entry/list';
     protected $_oDocuments = null;
+    protected $_sSeachTerm = null;
+    protected $_sListType = 'list';
     
-    public function setType($iType) {
-        $this->_iType = $iType;
+    public function setDocumentType($iType) {
+        $this->_iDocumentType = $iType;
+    }
+
+    public function setListType($sType) {
+        $this->_sListType = $sType;
+    }
+
+    public function getSearchTerm() {
+        return $this->_sSeachTerm;
+    }
+
+    public function setSearchTerm($sTerm) {
+        $this->_sTemplateName = 'entry_search.twig';
+        $this->_sSeachTerm = $sTerm;
+    }
+
+    public function getTotalDocuments() {
+        return $this->_iTotalDocuments;
+    }
+
+    public function getFoundDocuments() {
+        return $this->_iFoundDocuments;
     }
 
     public function getDocuments() {
         if($this->_oDocuments === null) {
             $oEntryDocumentList = new EntryDocumentList();
 
-            if($this->_iType !== null) {
-                $this->_sPaginationAdditionalUrl = "type/{$this->_iType}";
-                $oEntryDocumentList->findByType($this->_iType, $this->_iCurrentPage, $this->_iPerPage);
-            } else {
-                $oEntryDocumentList->findByPage($this->_iCurrentPage, $this->_iPerPage);
+            if($this->_sListType === 'search') {
+                
+                $this->_sPaginationBaseUrl = "/entry/search";
+                $oEntryDocumentList->search($this->_sSeachTerm, $this->_iCurrentPage, $this->_iPerPage);
+
+            } elseif($this->_sListType === 'list') {
+                
+                if($this->_iDocumentType !== null) {
+                    $this->_sPaginationAdditionalUrl = "type/{$this->_iDocumentType}";
+                    $oEntryDocumentList->findByType($this->_iDocumentType, $this->_iCurrentPage, $this->_iPerPage);
+                } else {
+                    $oEntryDocumentList->findByPage($this->_iCurrentPage, $this->_iPerPage);
+                }
+
             }
 
             $this->_oDocuments = $oEntryDocumentList;
@@ -34,10 +66,27 @@ class EntryListView extends BaseView {
     }
 
     public function render() {
+        $this->_iFoundDocuments = $this->getDocuments()->getFoundDocuments(); 
         $this->_iTotalDocuments = $this->getDocuments()->getTotalDocuments(); 
         $this->_aTemplateData['view'] = $this;
 
         parent::render();
+    }
+
+    protected function _createPageUrl($iPage) {
+        $sUrl = parent::_createPageUrl($iPage);
+
+        if($this->_sSeachTerm !== null) {
+            if(strpos($sUrl, '?') !== false) {
+                $sUrl .= "&";
+            } else {
+                $sUrl .= "?";
+            }
+
+            $sUrl .= "term={$this->_sSeachTerm}";
+        }
+
+        return $sUrl;
     }
 
     protected function _renderJSON() {
@@ -46,7 +95,7 @@ class EntryListView extends BaseView {
                 'status' => 200,
                 'requestMethod' => 'GET',
                 'queryType' => 'read',
-                'documentType' => $this->_iType
+                'documentType' => $this->_iDocumentType
             )
         );
 

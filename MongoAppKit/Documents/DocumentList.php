@@ -49,7 +49,7 @@ abstract class DocumentList extends IterateableList {
      * @var integer
      */
 
-    protected $_iDocuments = 0;
+    protected $_iFoundDocuments = 0;
 
     /**
      * Total count of documents of the selected MongoDB collection
@@ -127,6 +127,16 @@ abstract class DocumentList extends IterateableList {
     }
 
     /**
+     * Returns count of documents of selected MongoDB collection
+     *
+     * @return integer
+     */
+
+    public function getFoundDocuments() {
+        return $this->_iFoundDocuments;
+    }
+
+    /**
      * Returns MongoCursor object with given fields for given where clause
      *
      * @param array $aWhere
@@ -198,7 +208,7 @@ abstract class DocumentList extends IterateableList {
             $aData[] = $oDocument;
         }
 
-        $this->_iDocuments = $oCursor->count(true);
+        $this->_iFoundDocuments = $oCursor->count(true);
         $this->_iTotalDocuments = $oCursor->count();
         $this->_aProperties = $aData;
     }
