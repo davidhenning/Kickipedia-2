@@ -16,35 +16,7 @@
     </nav>
 </header>
 <div id="content">
-    {{ tools.paginationSnippet(view.getPagination(), 'top') }}
-
-    <table id="entryList" data-module="modules/entry/list">
-        <tr>
-            <th class="tools"></th>
-            <th class="date">Datum:</th>
-            <th class="name">Name:</th>
-            <th class="ip">IP:</th>
-            <th class="reason">Grund:</th>
-        </tr>
-        {% for entry in view.getDocuments() %}
-            <tr>
-                <td>
-                    {% spaceless %}
-                        <ul class="tools">
-                            <li><a class="edit" href="{{ entry.getEditUrl() }}">Bearbeiten</a></li>
-                            <li><a class="delete" data-rest-action="{{ entry.getUrl() }}" href="{{ entry.getDeleteUrl() }}">L&ouml;schen</a></li>
-                        </ul>
-                    {% endspaceless %}
-                </td>
-                <td>{{ entry.createdOn|date("d.m.Y") }}</td>
-                <td>{{ entry.name }}</td>
-                <td>{{ entry.ip }}</td>
-                <td>{{ entry.reason }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    {{ tools.paginationSnippet(view.getPagination(), 'bottom') }}
+    {% include 'entry_data.twig' %}
 </div>
 
 {% include 'footer.twig' %}

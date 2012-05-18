@@ -60,11 +60,52 @@ body {
             @include pie-clearfix;
         }
 
-        h1 {
+        .logo {
+            float: left;
             width: 200px;
+            
+            h1 {
+                height: 69px;
+                text-indent: -999em;
+                background: inline-image("logo.png") no-repeat left 16px;
+            }
+        }
+
+        .search {
+            float: left;
+            width: 950px;
             height: 69px;
-            text-indent: -999em;
-            background: inline-image("logo.png") no-repeat left 16px;
+
+            form {
+                padding: 21px 0;
+
+                input[type="text"] {
+                    width: 151px;
+                    height: 18px;
+                    padding: 3px 6px;
+                    border: 1px solid #000000;
+                    border-right: none;
+                    border-top-left-radius: 5px;
+                    border-bottom-left-radius: 5px;
+                    vertical-align: bottom;
+                    margin: 0;
+                }
+
+                a {
+                    display: inline-block;
+                    text-indent: -999em;
+                    height: 24px;
+                    width: 23px;
+                    border: 1px solid #000000;
+                    border-top-right-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                    background: inline-image("search.png") no-repeat left top;
+                }
+            }
+        }
+
+        .navigation {
+            @include pie-clearfix;
         }
 
         nav {

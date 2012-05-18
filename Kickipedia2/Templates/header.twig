@@ -8,28 +8,40 @@
     <body>
         <header>
             <div class="centered">
-                <h1>Kickipedia</h1>
-                <nav class="home">
+                <div class="logo">
+                    <h1>Kickipedia</h1>
+                </div>
+                <div class="search">
                     {% spaceless %}
-                        <ul>
-                            <li><a href="/home">Home</a></li>
-                        </ul>
+                        <form action="/entry/search" method="get" data-module="modules/header/search">
+                            <input type="text" name="term" placeholder="Suchbegriff">
+                            <a href="#">Go</a>
+                        </form>
                     {% endspaceless %}
-                </nav>
-                <nav class="menu">
-                    {% spaceless %}
-                        <ul>
-                            {% for type in view.getNavigation() %}
-                                <li {% if type.active == true %}class="active"{% endif %}>
-                                    <a href="{{ type.route }}">{{ type.name }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endspaceless %}
-                </nav>
-                <div class="user">
-                    Willkommen, {{ view.getSession().user.name }}!
-                </div>                
+                </div>
+                <div class="navigation">
+                    <nav class="home">
+                        {% spaceless %}
+                            <ul>
+                                <li><a href="/home">Home</a></li>
+                            </ul>
+                        {% endspaceless %}
+                    </nav>
+                    <nav class="menu">
+                        {% spaceless %}
+                            <ul>
+                                {% for type in view.getNavigation() %}
+                                    <li {% if type.active == true %}class="active"{% endif %}>
+                                        <a href="{{ type.route }}">{{ type.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endspaceless %}
+                    </nav>
+                    <div class="user">
+                        Willkommen, {{ view.getSession().user.name }}!
+                    </div>
+                </div>              
             </div>
         </header>
         <div id="wrapper" class="centered">

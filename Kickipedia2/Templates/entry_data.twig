@@ -1,0 +1,31 @@
+{{ tools.paginationSnippet(view.getPagination(), 'top') }}
+
+{% if view.getFoundDocuments() > 0 %}
+    <table id="entryList" data-module="modules/entry/list">
+        <tr>
+            <th class="tools"></th>
+            <th class="date">Datum:</th>
+            <th class="name">Name:</th>
+            <th class="ip">IP:</th>
+            <th class="reason">Grund:</th>
+        </tr>
+        {% for entry in view.getDocuments() %}
+            <tr>
+                <td>
+                    {% spaceless %}
+                        <ul class="tools">
+                            <li><a class="edit" href="{{ entry.getEditUrl() }}">Bearbeiten</a></li>
+                            <li><a class="delete" data-rest-action="{{ entry.getUrl() }}" href="{{ entry.getDeleteUrl() }}">L&ouml;schen</a></li>
+                        </ul>
+                    {% endspaceless %}
+                </td>
+                <td>{{ entry.createdOn|date("d.m.Y") }}</td>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.ip }}</td>
+                <td>{{ entry.reason }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+{{ tools.paginationSnippet(view.getPagination(), 'bottom') }}

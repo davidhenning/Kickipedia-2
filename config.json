@@ -5,7 +5,11 @@
     "TemplateDebugMode": true,
     "NavItems": [
         {
-            "name": "Neu",
+            "name": "News",
+            "route": "/news"
+        },
+        {
+            "name": "Neuer Eintrag",
             "route": "/entry/new"
         },
         {
