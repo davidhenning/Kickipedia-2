@@ -44,6 +44,8 @@ class EntryListView extends BaseView {
         $aOutput = array(
             'header' => array(
                 'status' => 200,
+                'requestMethod' => 'GET',
+                'queryType' => 'read',
                 'documentType' => $this->_iType
             )
         );
