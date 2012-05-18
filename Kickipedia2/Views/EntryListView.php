@@ -78,10 +78,18 @@ class EntryListView extends BaseView {
             'header' => array(
                 'status' => 200,
                 'requestMethod' => 'GET',
-                'queryType' => 'read',
-                'documentType' => $this->_iDocumentType
+                'queryType' => 'read'
+                
             )
         );
+
+        if($this->_sListType === 'list') {
+            $aOutput['header']['documentType'] = $this->_iDocumentType;
+        }
+
+        if($this->_sListType === 'search') {
+            $aOutput['header']['searchTerm'] = $this->_sSeachTerm;
+        }        
 
         $aOutput['navigation'] = $this->getPagination();
         $aOutput['documents'] = array();
