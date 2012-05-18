@@ -3,6 +3,7 @@
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
+@import "compass";
 @import "compass/reset";
 @import "compass/utilities/general/clearfix";
 
@@ -50,14 +51,9 @@ body {
 
     > header {
         @include pie-clearfix;
+        @include background-image(linear-gradient(bottom, #2F2F2F 4%, #004191 90%));
         padding: 0 20px;
         height: 100px;
-
-        background-image: linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
-        background-image: -o-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
-        background-image: -moz-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
-        background-image: -webkit-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
-        background-image: -ms-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
 
         .centered {
             position: relative;
@@ -73,11 +69,7 @@ body {
 
         nav {
             li {
-                background-image: linear-gradient(bottom, #294667 19%, #4779B3 90%);
-                background-image: -o-linear-gradient(bottom, #294667 19%, #4779B3 90%);
-                background-image: -moz-linear-gradient(bottom, #294667 19%, #4779B3 90%);
-                background-image: -webkit-linear-gradient(bottom, #294667 19%, #4779B3 90%);
-                background-image: -ms-linear-gradient(bottom, #294667 19%, #4779B3 90%);
+                @include background-image(linear-gradient(bottom, #294667 19%, #4779B3 90%));
 
                 &:hover, &.active {
                     background: #FEFEFE;
@@ -127,12 +119,8 @@ body {
         color: #FFFFFF;
 
         .info {
-            padding: 1em 0;
-            background-image: linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
-            background-image: -o-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
-            background-image: -moz-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
-            background-image: -webkit-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
-            background-image: -ms-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);             
+            @include background-image(linear-gradient(bottom, #2F2F2F 4%, #004191 90%));
+            padding: 1em 0;            
         }
         
         .social {
@@ -178,11 +166,7 @@ body {
         border: 1px solid #C9C9C9;
         border-bottom: none;
 
-        background-image: linear-gradient(bottom, #E6E6E6 45%, #F7F7F7 73%);
-        background-image: -o-linear-gradient(bottom, #E6E6E6 45%, #F7F7F7 73%);
-        background-image: -moz-linear-gradient(bottom, #E6E6E6 45%, #F7F7F7 73%);
-        background-image: -webkit-linear-gradient(bottom, #E6E6E6 45%, #F7F7F7 73%);
-        background-image: -ms-linear-gradient(bottom, #E6E6E6 45%, #F7F7F7 73%);
+        @include background-image(linear-gradient(bottom, #E6E6E6 45%, #F7F7F7 73%));
 
         @include pie-clearfix;
 
@@ -193,12 +177,12 @@ body {
             margin-bottom: 20px;
         }
 
+        .hits {
+            height: 30px;
+        }
+
         nav li {
-            background-image: linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
-            background-image: -o-linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
-            background-image: -moz-linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
-            background-image: -webkit-linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
-            background-image: -ms-linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
+            @include background-image(linear-gradient(bottom, #5B5B5B 23%, #808080 73%));
 
             border: none;
 
@@ -275,11 +259,7 @@ body {
     }
 
     th {
-        background-image: linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
-        background-image: -o-linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
-        background-image: -moz-linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
-        background-image: -webkit-linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
-        background-image: -ms-linear-gradient(bottom, #5B5B5B 23%, #808080 73%);
+        @include background-image(linear-gradient(bottom, #5B5B5B 23%, #808080 73%));
         color: #FFFFFF;
         
         &.tools {
