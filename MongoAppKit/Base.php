@@ -27,13 +27,6 @@ abstract class Base {
      */
 
     protected $_oStorage = null;
- 
-    /**
-     * Session object
-     * @var Session
-     */
-
-    protected $_oSession = null;
 
     /**
      * Returns Config object
@@ -61,19 +54,5 @@ abstract class Base {
         }
         
         return $this->_oStorage;       
-    }
-
-    /**
-     * Returns Session object
-     *
-     * @return Session
-     */
-
-    public function getSession() {
-        if($this->_oSession === null) {
-            $this->_oSession = new Storage($this->getConfig());
-        }
-
-        return $this->_oSession;       
     }
 }
