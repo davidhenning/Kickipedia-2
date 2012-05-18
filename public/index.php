@@ -1,12 +1,15 @@
 <?php
 
+session_start();
+
 $time = microtime(true);
 
 require_once(__DIR__ . '/../bootstrap.php');
 
-use Kickipedia2\Controllers\EntryActions;
 use MongoAppKit\HttpAuthDigest;
+use MongoAppKit\Input;
 use MongoAppKit\Exceptions\HttpException;
+use Kickipedia2\Controllers\EntryActions;
 use Kickipedia2\Models\UserDocumentList;
 
 try {
@@ -19,8 +22,9 @@ try {
     $oAuth = new HttpAuthDigest('Kickipedia2', $sDigest);
     $oAuth->sendAuthenticationHeader();
     $oUserList = new UserDocumentList();
-    $sUserName = $oAuth->getUserName();
+    $sUserName = Input::getInstance()->sanitize($oAuth->getUserName());
     $aUserDocument = $oUserList->getUser($sUserName);
+    $_SESSION['user'] = $aUserDocument;
 
     $oAuth->authenticate($aUserDocument->getProperty('token'));
 } catch(HttpException $e) {

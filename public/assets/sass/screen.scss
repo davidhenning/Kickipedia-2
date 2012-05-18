@@ -59,6 +59,11 @@ body {
         background-image: -webkit-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
         background-image: -ms-linear-gradient(bottom, #2F2F2F 4%, #004191 90%);
 
+        .centered {
+            position: relative;
+            @include pie-clearfix;
+        }
+
         h1 {
             width: 200px;
             height: 69px;
@@ -107,6 +112,15 @@ body {
             }            
         }
 
+        .user {
+            position: absolute;
+            bottom: 10px;
+            right: 0;
+            width: 200px;
+            color: #FFFFFF;
+            font-size: 12px;
+            text-align: right;
+        }
     }
 
     > footer {

@@ -2,6 +2,8 @@
 
 namespace Kickipedia2\Controllers;
 
+
+use MongoAppKit\Input;
 use Kickipedia2\Views\EntryListView;
 use Kickipedia2\Views\EntryView;
 use Kickipedia2\Views\EntryEditView;
@@ -48,8 +50,10 @@ class EntryActions {
 
         $oView->setPerPage(100);
 
-        if(isset($_GET['output'])) {
-            $oView->setOutputMethod($_GET['output']);
+        $sOutputMethod = Input::getInstance()->getGetData('output');
+
+        if(!empty($sOutputMethod)) {
+            $oView->setOutputMethod($sOutputMethod);
         }
 
         $oView->render();    
@@ -76,7 +80,7 @@ class EntryActions {
 
     public function updateEntry() {
         $sId = params('id');
-        $entryData = $_POST['entry'];
+        $entryData = Input::getInstance()->getData('entry');
 
         $oView = new EntryEditView($sId);
         $oView->update($entryData);

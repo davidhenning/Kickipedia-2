@@ -55,4 +55,8 @@ class BaseView extends View {
 
         return $this->_aNavigation;        
     }
+
+    public function getSession() {
+        return $_SESSION;
+    }
 }
