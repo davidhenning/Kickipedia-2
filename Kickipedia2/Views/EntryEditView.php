@@ -41,7 +41,7 @@ class EntryEditView extends BaseView {
         $this->_oDocument = new EntryDocument();
         $sId = $this->getId();
 
-        if(!empty($sId)) {
+        if(!is_null($sId)) {
             $this->_oDocument->load($sId);
         }
             
@@ -57,5 +57,33 @@ class EntryEditView extends BaseView {
 
     public function getTypeId() {
         return $this->_oDocument->getProperty('type');
-    }  
+    }
+
+    public function renderDeleteResponse() {
+        $aOutput = array(
+            'header' => array(
+                'status' => 200,
+                'requestMethod' => 'DELETE',
+                'queryType' => 'delete',
+                'documentId' => $this->getId()
+            )
+        );
+
+        echo json_encode($aOutput); 
+    }
+
+    public function renderPutResponse() {
+        $sId = $this->_oDocument->getProperty('_id');
+        $aOutput = array(
+            'header' => array(
+                'status' => 200,
+                'requestMethod' => 'PUT',
+                'queryType' => (!is_null($this->getId())) ? 'update' : 'create',
+                'documentId' => $this->_oDocument->getProperty('_id'),
+                'documentUri' => "/entry/{$sId}"
+            )
+        );
+
+        echo json_encode($aOutput);
+    }
 }

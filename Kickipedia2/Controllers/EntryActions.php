@@ -93,12 +93,20 @@ class EntryActions {
 
         if(Input::getInstance()->getRequestMethod() === 'POST') {
             redirect_to('entry', 'list', 'type', $iTypeId);
-        }          
+        }  elseif(Input::getInstance()->getRequestMethod() === 'PUT') {
+            $oView->renderPutResponse();
+        }        
     }
 
     public function deleteEntry() {
         $sId = params('id');
         $oView = new EntryEditView($sId);
         $oView->delete();
+
+        if(Input::getInstance()->getRequestMethod() === 'POST') {
+            redirect_to('entry', 'list', 'type', $iTypeId);
+        }  elseif(Input::getInstance()->getRequestMethod() === 'DELETE') {
+            $oView->renderDeleteResponse();
+        } 
     }
 }
