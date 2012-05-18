@@ -13,6 +13,7 @@ class Input {
 
     protected $_sRequestMethod = 'GET';
     protected $_aPutValues = null;
+    protected $_sInputStream = null;
 
     /**
      * Return instance of class Config
@@ -29,6 +30,7 @@ class Input {
     }
 
     public function __construct() {
+        $this->_sInputStream = file_get_contents("php://input");
         $this->_sRequestMethod = $_SERVER['REQUEST_METHOD'];
     }
 
@@ -43,8 +45,7 @@ class Input {
     protected function _getPutValues() {
         if($this->_aPutValues === null) {
             $aPutValues = array();
-            parse_str(file_get_contents('php://input'), $aPutValues);
-
+            parse_str($this->_sInputStream, $aPutValues);
             $this->_aPutValues = $aPutValues;
         }
 
@@ -82,7 +83,8 @@ class Input {
     }
 
     public function getPutData($sName) {
-        return (isset($this->_aPutValues[$sName])) ? $this->sanitize($this->_aPutValues[$sName]) : null;
+        $aPutValues = $this->_getPutValues();
+        return (isset($aPutValues[$sName])) ? $this->sanitize($aPutValues[$sName]) : null;
     }
 
     public function getData($sName) {
