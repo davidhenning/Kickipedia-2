@@ -71,6 +71,13 @@ abstract class View extends Base {
     protected $_sPaginationAdditionalUrl = '';
 
     /**
+     * Additional get parameters for generated urls
+     * @var array
+     */
+
+    protected $_aPaginationAdditionalParameters = array();
+
+    /**
      * Total count of documents for pagination
      * @var integer
      */
@@ -132,6 +139,7 @@ abstract class View extends Base {
 
     public function setOutputMethod($sOutputMethod) {
         $this->_sOutputMethod = $sOutputMethod;
+        $this->addAdditionalUrlParameter('output', $sOutputMethod);
     }
 
     /**
@@ -152,6 +160,17 @@ abstract class View extends Base {
 
     public function setCurrentPage($iPage) {
         $this->_iCurrentPage = $iPage;
+    }
+
+    /**
+     * Adds an get parameter to generated urls
+     *
+     * @param string $sName
+     * @param string $sValue
+     */
+
+    public function addAdditionalUrlParameter($sName, $sValue) {
+        $this->_aPaginationAdditionalParameters[$sName] = $sValue;
     }
 
     /**
@@ -226,8 +245,8 @@ abstract class View extends Base {
 
         $sUrl .= $iPage;
 
-        if($this->_sOutputMethod == 'json') {
-            $sUrl .= '?output=json';
+        if(!empty($this->_aPaginationAdditionalParameters)) {
+            $sUrl .= '?'.http_build_query($this->_aPaginationAdditionalParameters);
         }
 
         return $sUrl;

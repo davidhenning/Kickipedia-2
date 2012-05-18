@@ -44,7 +44,7 @@ class EntryListView extends BaseView {
             $oEntryDocumentList = new EntryDocumentList();
 
             if($this->_sListType === 'search') {
-                
+                $this->addAdditionalUrlParameter('term', $this->_sSeachTerm);
                 $this->_sPaginationBaseUrl = "/entry/search";
                 $oEntryDocumentList->search($this->_sSeachTerm, $this->_iCurrentPage, $this->_iPerPage);
 
@@ -71,22 +71,6 @@ class EntryListView extends BaseView {
         $this->_aTemplateData['view'] = $this;
 
         parent::render();
-    }
-
-    protected function _createPageUrl($iPage) {
-        $sUrl = parent::_createPageUrl($iPage);
-
-        if($this->_sSeachTerm !== null) {
-            if(strpos($sUrl, '?') !== false) {
-                $sUrl .= "&";
-            } else {
-                $sUrl .= "?";
-            }
-
-            $sUrl .= "term={$this->_sSeachTerm}";
-        }
-
-        return $sUrl;
     }
 
     protected function _renderJSON() {
