@@ -1,9 +1,18 @@
 "use strict";
 
-define(['jquery'], function($) {
+define(['jquery', 'tablesorter'], function($) {
     var exports = {};
 
     exports.init = function(element) {
+        $(element).tablesorter({
+            headers: {
+                0: {
+                    sorter: false
+                }
+            },
+            sortList: [[1,1]]
+        });
+
         $('.tools a.delete', element).click(function(e) {
             e.preventDefault();
             var row = $(this).parents('tr');

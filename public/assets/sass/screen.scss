@@ -299,14 +299,37 @@ body {
     width: $centeredWidth - $contentPadding * 2;
     border-radius: 10px;
 
+    thead {
+        @include background-image(linear-gradient(bottom, #5B5B5B 23%, #808080 73%));
+    }
+
     th, td {
         padding: 10px;
     }
 
     th {
-        @include background-image(linear-gradient(bottom, #5B5B5B 23%, #808080 73%));
+        
         color: #FFFFFF;
         
+        &.header {
+            span {
+                padding-right: 30px;
+                background: inline-image("sort_neutral.png") no-repeat right 3px;
+            }
+
+            &.headerSortUp {
+                span {
+                    background-image: inline-image("sort_desc.png");
+                }
+            }
+
+            &.headerSortDown {
+                span {
+                    background-image: inline-image("sort_asc.png");
+                }
+            }
+        }
+
         &.tools {
             width: 42px;
         }

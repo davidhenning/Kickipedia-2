@@ -5,7 +5,8 @@
             paths: {
                 'jquery': 'libs/jquery/jquery-1.7.2',
                 'moduleloader': 'libs/core/moduleloader',
-                'jqhttp': 'libs/jquery/jquery-http-1.0.0'
+                'jqhttp': 'libs/jquery/jquery-http-1.0.0',
+                'tablesorter': 'libs/jquery/jquery.tablesorter'
             }
         };
 
