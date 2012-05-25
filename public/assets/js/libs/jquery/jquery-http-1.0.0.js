@@ -1,11 +1,11 @@
-(function() {
-    jQuery.extend({
+(function($) {
+    $.extend({
         put: function(url, callback) {
-            return jQuery.ajax(url, {type: 'PUT', success: callback});
+            return $.ajax(url, {type: 'PUT', success: callback});
         },
         
         delete: function(url, callback) {
-            return jQuery.ajax(url, {type: 'DELETE', success: callback});
+            return $.ajax(url, {type: 'DELETE', success: callback});
         }
     });     
-})();
+})(jQuery);
