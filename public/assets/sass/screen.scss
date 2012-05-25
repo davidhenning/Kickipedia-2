@@ -312,6 +312,8 @@ body {
         color: #FFFFFF;
         
         &.header {
+            cursor: pointer;
+
             span {
                 padding-right: 30px;
                 background: inline-image("sort_neutral.png") no-repeat right 3px;
