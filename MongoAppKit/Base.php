@@ -12,7 +12,7 @@
 
 namespace MongoAppKit;
 
-abstract class Base {
+class Base {
 
     /**
      * Config object
