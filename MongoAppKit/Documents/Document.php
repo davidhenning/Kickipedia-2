@@ -24,13 +24,6 @@ class Document extends IterateableList {
     protected $_oDatabase = null;
 
     /**
-     * Collection name
-     * @var string
-     */
-
-    protected $_sCollectionName = null;
-
-    /**
      * MongoCollection object
      * @var MongoCollection
      */
@@ -45,40 +38,40 @@ class Document extends IterateableList {
     protected $_aCollectionConfig = array();
 
     /**
-     * Accesses database, sets current Collection, loads config data for collection and loads document data if an document id is given
-     *
-     * @param string $sId
+     * Access database, sets current Collection, loads config data for collection and loads document data if an document id is given
      */
 
-    public function __construct($sId = null) {
+    public function __construct() {
         $this->_oDatabase = $this->getStorage()->getDatabase();
-        
-        if($this->_sCollectionName === null) {
-            throw new Exception('No MongoDB collection specified!');
-        }
-
-        $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
-        $this->_loadCollectionConfig();
-
-        if($sId !== null) {
-            $this->load($sId);
-        }
     }
 
     /**
-     * Loads collection config from config object and stores it interally
+     * Select MongoDB collection
+     *
+     * @param string $sCollectionName
      */
 
-    protected function _loadCollectionConfig() {
+    public function setCollectionName($sCollectionName) {
+        $this->_oCollection = $this->_oDatabase->selectCollection($sCollectionName);
+        $this->_loadCollectionConfig($sCollectionName);
+    }
+
+    /**
+     * Load collection config from config object and stores it interally
+     *
+     * @param string $sCollectionName
+     */
+
+    protected function _loadCollectionConfig($sCollectionName) {
         $aPropertyConfig = $this->getConfig()->getProperty('Fields');
 
-        if(isset($aPropertyConfig[$this->_sCollectionName]) && count($aPropertyConfig[$this->_sCollectionName]) > 0) {
-            $this->_aCollectionConfig = $aPropertyConfig[$this->_sCollectionName];
+        if(isset($aPropertyConfig[$sCollectionName]) && count($aPropertyConfig[$sCollectionName]) > 0) {
+            $this->_aCollectionConfig = $aPropertyConfig[$sCollectionName];
         }
     }
 
     /**
-     * Iterates all properties and prepares them for saving in the selected Collection
+     * Iterate all properties and prepares them for saving in the selected Collection
      */
 
     protected function _getPreparedProperties() {
@@ -98,7 +91,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Prepares a proptery for saving
+     * Prepare a proptery for saving
      *
      * @param string $sProperty
      * @param mixed $value
@@ -150,7 +143,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Returns MongoCollection object or throws an exception if it's not set
+     * Get MongoCollection object or throws an exception if it's not set
      *
      * @throws Exception
      * @return MongoCollection
@@ -165,7 +158,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Overrides parent method to perpare certain values (f.e. MongoDate) to return their value
+     * Override parent method to perpare certain values (f.e. MongoDate) to return their value
      *
      * @param string $sKey
      * @param mixed $value
@@ -189,7 +182,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Returns id of current document
+     * Get id of current document
      *
      * @return string
      */
@@ -200,7 +193,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Sets id of current document if none exists
+     * Set id of current document if none exists
      */
 
     protected function _setId() {
@@ -210,7 +203,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Updates properties with from given array
+     * Update properties with from given array
      *
      * @param array $aProperties
      */
@@ -224,7 +217,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Loads documend from given id
+     * Load documend from given id
      *
      * @param string $sId
      */
@@ -240,7 +233,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Saves document properties into the selected MongoDB collection
+     * Save document properties into the selected MongoDB collection
      */
 
     public function save() {
@@ -250,7 +243,7 @@ class Document extends IterateableList {
     }
 
     /**
-     * Deletes current document from the selected MongoDB collection
+     * Delete current document from the selected MongoDB collection
      */
 
     public function delete() {
