@@ -52,6 +52,10 @@ class Document extends IterateableList {
      */
 
     public function setCollectionName($sCollectionName) {
+        if(empty($sCollectionName)) {
+            throw new \InvalidArgumentException('Collection name empty');
+        }
+
         $this->_oCollection = $this->_oDatabase->selectCollection($sCollectionName);
         $this->_loadCollectionConfig($sCollectionName);
     }
