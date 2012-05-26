@@ -6,7 +6,11 @@ use MongoAppKit\Documents\DocumentList;
 
 class EntryDocumentList extends DocumentList {
     protected $_sCollectionName = 'entry';
-    protected $_sDocumentClass = '\Kickipedia2\Models\EntryDocument';
+
+    public function __construct() {
+        parent::__construct();
+        $this->setDocumentBaseObject(new EntryDocument());
+    }
 
     public function findByType($iType, $iPage = 1, $iPerPage = 50) {
         $oCursor = $this->_getDefaultCursor(array('type' => $iType));

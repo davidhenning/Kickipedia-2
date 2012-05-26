@@ -38,11 +38,11 @@ class DocumentList extends IterateableList {
     protected $_oCollection = null;
 
     /**
-     * Name of the document class with the complete namespace
-     * @var string
+     * Document object
+     * @var Document
      */
 
-    protected $_sDocumentClass = null;
+    protected $_oDocumentBaseObject = null;
 
     /**
      * Count of selected documents
@@ -82,6 +82,21 @@ class DocumentList extends IterateableList {
         if($this->_sCollectionName !== null) {
             $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
         }
+    }
+
+    /**
+     * Set document base object for list
+     *
+     * @param Document $oDocumentObject
+     */
+
+    public function setDocumentBaseObject(Document $oDocumentObject) {       
+        // check for valid document object
+        if(!$oDocumentObject instanceof Document) {
+            throw new \InvalidArgumentException("Expecting instance of Document");
+        }
+
+        $this->_oDocumentBaseObject = $oDocumentObject;
     }
 
     /**
@@ -200,10 +215,15 @@ class DocumentList extends IterateableList {
             throw new \Exception("No cursor object set");
         }
 
+        // check for valid base document object
+        if(!$this->_oDocumentBaseObject instanceof Document) {
+            throw new \Exception("No document base object set");
+        }
+
         // iterate cursor
         foreach($oCursor as $oLine) {
             // create new document object with given class and store the current document
-            $oDocument = new $this->_sDocumentClass();
+            $oDocument = clone $this->_oDocumentBaseObject;
             $oDocument->updateProperties($oLine);
             $aData[] = $oDocument;
         }

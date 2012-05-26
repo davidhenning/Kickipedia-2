@@ -6,7 +6,11 @@ use MongoAppKit\Documents\DocumentList;
 
 class UserDocumentList extends DocumentList {
     protected $_sCollectionName = 'user';
-    protected $_sDocumentClass = '\Kickipedia2\Models\UserDocument';
+
+    public function __construct() {
+        parent::__construct();
+        $this->setDocumentBaseObject(new UserDocument());
+    }
 
     public function findByName($sName) {
         $oCursor = $this->_getDefaultCursor(array('name' => $sName));
