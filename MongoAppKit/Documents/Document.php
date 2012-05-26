@@ -53,10 +53,12 @@ abstract class Document extends IterateableList {
     public function __construct($sId = null) {
         $this->_oDatabase = $this->getStorage()->getDatabase();
         
-        if($this->_sCollectionName !== null) {
-            $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
-            $this->_loadCollectionConfig();
+        if($this->_sCollectionName === null) {
+            throw new Exception('No MongoDB collection specified!');
         }
+
+        $this->_oCollection = $this->_oDatabase->selectCollection($this->_sCollectionName);
+        $this->_loadCollectionConfig();
 
         if($sId !== null) {
             $this->load($sId);
