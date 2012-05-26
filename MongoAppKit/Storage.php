@@ -12,7 +12,7 @@
 
 namespace MongoAppKit;
 
-class Storage {
+class Storage extends Base {
 
     /**
      * Storage object
@@ -42,9 +42,9 @@ class Storage {
      * @return Storage
      */
 
-    public static function getInstance($oConfig) {
+    public static function getInstance() {
         if(self::$_oInstance === null) {
-            self::$_oInstance = new Storage($oConfig);
+            self::$_oInstance = new Storage();
         }
 
         return self::$_oInstance;
@@ -56,9 +56,9 @@ class Storage {
      * @param Config
      */
 
-    private function __construct($oConfig) {
-        $this->_oMongo = new \Mongo($oConfig->getProperty('MongoServer'));
-        $this->_oDatabase = $this->_oMongo->selectDB($oConfig->getProperty('MongoDatabase'));
+    private function __construct() {
+        $this->_oMongo = new \Mongo($this->getConfig()->getProperty('MongoServer'));
+        $this->_oDatabase = $this->_oMongo->selectDB($this->getConfig()->getProperty('MongoDatabase'));
     }
 
     /**
