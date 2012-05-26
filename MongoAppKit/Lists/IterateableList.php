@@ -12,7 +12,7 @@
 
 namespace MongoAppKit\Lists;
 
-abstract class IterateableList extends ArrayList implements \Countable, \Iterator, \ArrayAccess {
+class IterateableList extends ArrayList implements \Countable, \Iterator, \ArrayAccess {
 
     /**
      * Returns count of object properties

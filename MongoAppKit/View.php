@@ -12,7 +12,7 @@
 
 namespace MongoAppKit;
 
-abstract class View extends Base {
+class View extends Base {
 
     /**
      * Name of the App built with MongoAppKit (used template path)

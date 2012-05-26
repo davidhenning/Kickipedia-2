@@ -14,7 +14,7 @@ namespace MongoAppKit\Documents;
 
 use MongoAppKit\Lists\IterateableList;
 
-abstract class Document extends IterateableList {
+class Document extends IterateableList {
 
     /**
      * MongoDB object

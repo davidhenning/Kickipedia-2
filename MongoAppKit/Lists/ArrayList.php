@@ -14,7 +14,7 @@ namespace MongoAppKit\Lists;
 
 use MongoAppKit\Base;
 
-abstract class ArrayList extends Base {
+class ArrayList extends Base {
  
     /**
      * Stores properties
