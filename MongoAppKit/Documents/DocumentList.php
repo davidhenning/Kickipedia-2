@@ -73,7 +73,7 @@ class DocumentList extends IterateableList {
     protected $_sCustomSortOrder = null;
 
     /**
-     * Gets MongoDB object and selects MongoDB collection
+     * Get MongoDB object and selects MongoDB collection
      */
 
     public function __construct() {
@@ -100,7 +100,7 @@ class DocumentList extends IterateableList {
     }
 
     /**
-     * Loads all documents of selected MongoDB collection
+     * Load all documents of selected MongoDB collection
      */
 
     public function findAll() {       
@@ -109,7 +109,7 @@ class DocumentList extends IterateableList {
     }
 
     /**
-     * Loads documents of selected MongoDB collection by given page
+     * Load documents of selected MongoDB collection by given page
      *
      * @param integer $iPage
      * @param integer $iPerPage
@@ -132,7 +132,7 @@ class DocumentList extends IterateableList {
     }
 
     /**
-     * Returns total count of documents of selected MongoDB collection
+     * Get total count of documents of selected MongoDB collection
      *
      * @return integer
      */
@@ -142,7 +142,7 @@ class DocumentList extends IterateableList {
     }
 
     /**
-     * Returns count of documents of selected MongoDB collection
+     * Get count of documents of selected MongoDB collection
      *
      * @return integer
      */
@@ -152,7 +152,7 @@ class DocumentList extends IterateableList {
     }
 
     /**
-     * Returns MongoCursor object with given fields for given where clause
+     * Get MongoCursor object with given fields for given where clause
      *
      * @param array $aWhere
      * @param arary $aFields
@@ -202,7 +202,7 @@ class DocumentList extends IterateableList {
     }
 
     /**
-     * Creates instances of the given document class for each document in the given MongoCursor object 
+     * Clone instances of the given document object for each document in the given MongoCursor object 
      *
      * @param MongoCursor $oCursor
      */
@@ -222,7 +222,7 @@ class DocumentList extends IterateableList {
 
         // iterate cursor
         foreach($oCursor as $oLine) {
-            // create new document object with given class and store the current document
+            // clone base object and fill with data from current cursor iteration
             $oDocument = clone $this->_oDocumentBaseObject;
             $oDocument->updateProperties($oLine);
             $aData[] = $oDocument;
