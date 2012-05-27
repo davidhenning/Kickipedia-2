@@ -2,9 +2,7 @@
 
 namespace Kickipedia2\Models;
 
-use MongoAppKit\Documents\Document;
-
-class EntryDocument extends Document {
+class EntryDocument extends BaseDocument {
 
     public function __construct() {
         parent::__construct();
