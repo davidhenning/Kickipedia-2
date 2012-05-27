@@ -87,6 +87,10 @@ class ArrayList extends Base {
      */
 
     public function removeProperty($sKey) {
+        if(!array_key_exists($sKey, $this->_aProperties)) {
+            throw new \OutOfBoundsException("Index '{$sKey}' does not exist");
+        }
+
         unset($this->_aProperties[$sKey]);
     }
 }
