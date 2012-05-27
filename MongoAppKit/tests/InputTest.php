@@ -5,7 +5,7 @@ namespace MongoAppKit;
 class InputTest extends \PHPUnit_Framework_TestCase {
 
 	public function testSanitizeTrim() {
-		$input = new Input();
+		$input = Input::getInstance();
 		$value = ' value ';
 		$expectedValue = trim($value);
 		$sanitizedValue = $input->sanitize($value);
@@ -14,7 +14,7 @@ class InputTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testSanitizeUrlDecode() {
-		$input = new Input();
+		$input = Input::getInstance();
 		$value = rawurlencode('value [] =');
 		$expectedValue = rawurldecode($value);
 		$sanitizedValue = $input->sanitize($value);
@@ -22,19 +22,19 @@ class InputTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($expectedValue, $sanitizedValue);
 	}
 
-	public function testSanitizeStripTags() {
-		$input = new Input();
-		$value = '<b>strong</ba>';
-		$expectedValue = strip_tags($value);
+	public function testSanitizeSpecialChars() {
+		$input = Input::getInstance();
+		$value = '<b>strong</b>';
+		$expectedValue = htmlspecialchars($value);
 		$sanitizedValue = $input->sanitize($value);
 
 		$this->assertEquals($expectedValue, $sanitizedValue);
 	}
 
-	public function testSanitizeSpecialChars() {
-		$input = new Input();
-		$value = '<b>strong</ba>';
-		$expectedValue = htmlspecialchars($value);
+	public function testSanitizeArray() {
+		$input = Input::getInstance();
+		$value = array('foo' => ' bar ');
+		$expectedValue = array('foo' => 'bar');
 		$sanitizedValue = $input->sanitize($value);
 
 		$this->assertEquals($expectedValue, $sanitizedValue);
