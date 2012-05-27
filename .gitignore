@@ -3,3 +3,4 @@
 /test.php
 cache/*
 public/assets/.sass-cache/*
+MongoAppKit/tests/report/*
