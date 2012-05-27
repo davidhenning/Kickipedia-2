@@ -31,7 +31,7 @@ class Input {
 
     public function __construct() {
         $this->_sInputStream = file_get_contents("php://input");
-        $this->_sRequestMethod = $_SERVER['REQUEST_METHOD'];
+        $this->_sRequestMethod = (isset($_SERVER['REQUEST_METHOD'])) ? $_SERVER['REQUEST_METHOD'] : 'CONSOLE';
     }
 
     /**
