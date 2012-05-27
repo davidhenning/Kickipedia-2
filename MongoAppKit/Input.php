@@ -67,9 +67,9 @@ class Input {
         }
 
         $data = trim($data);
-        $data = rawurldecode($data);
-        $data = strip_tags($data);
+        $data = rawurldecode($data);     
         $data = htmlspecialchars($data);
+        $data = strip_tags($data);
 
         return $data;
     }
