@@ -45,4 +45,15 @@ class ArrayListTest extends \PHPUnit_Framework_TestCase {
 
 		$this->fail('Expected OutOfBoundsException was not thrown.');
 	}
+
+	public function testRemoveNonExistingProperty() {
+		try {
+			$list = new ArrayList();
+			$list->removeProperty('foo');
+		} catch(\OutOfBoundsException $e) {
+			return;
+		}
+
+		$this->fail('Expected OutOfBoundsException was not thrown.');
+	}
 }
