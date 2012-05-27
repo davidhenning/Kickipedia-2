@@ -76,9 +76,11 @@ class Document extends IterateableList {
 
     /**
      * Iterate all properties and prepares them for saving in the selected Collection
+     *
+     * @return array
      */
 
-    protected function _getPreparedProperties() {
+    public function getPreparedProperties() {
         $aPreparedProperties = array();
 
         if(!empty($this->_aCollectionConfig)) {
@@ -99,20 +101,15 @@ class Document extends IterateableList {
      *
      * @param string $sProperty
      * @param mixed $value
-     * @param $aFieldConfig
+     * @param array $aFieldConfig
      * @return mixed
      */
 
     protected function _prepareProperty($sProperty, $value, $aFieldConfig) {
          if(!empty($aFieldConfig)) {
-            if(isset($aFieldConfig['type'])) {
-                // use class MongoDate to store a date correctly in MongoDB 
-                if($aFieldConfig['type'] === 'date') {
-                    // if date is currently a string or update field "updatedOn"
-                    if(!$value instanceof \MongoDate || $sProperty == 'updatedOn') {
-                        $value = new \MongoDate();
-                    }                 
-                }          
+            // set Mongo type object
+            if(isset($aFieldConfig['mongoType'])) {
+                $value = $this->_setMongoValueType($aFieldConfig['mongoType'], $value);
             }
 
             // set index
@@ -125,25 +122,63 @@ class Document extends IterateableList {
                 // for future use       
             }
 
-            if(isset($aFieldConfig['typeCast'])) {
-                switch($aFieldConfig['typeCast']) {
-                    case 'int':
-                        $value = (int)$value;
-                        break;
-                    case 'float':
-                        $value = (float)$value;
-                        break;                        
-                    case 'bool':
-                        $value = (bool)$value;
-                        break;  
-                    case 'string':
-                        $value = (string)$value;
-                        break;  
-                }
+            // set php type
+            if(isset($aFieldConfig['phpType'])) {
+                $value = $this->_setPhpValueType($aFieldConfig['phpType'], $value);
             }           
         }
 
         return $value; 
+    }
+
+    /**
+     * Convert value to a Mongo type object
+     *
+     * @param string $sType
+     * @param mixed $value
+     * @return mixed
+     */
+
+    protected function _setMongoValueType($sType, $value) {
+        switch($sType) {
+            case 'id':
+                if(!$value instanceof \MongoId) {
+                    return ($value !== null) ? new \MongoId($value) : new \MongoId();
+                }              
+                
+                break;
+            case 'date':
+                if(!$value instanceof \MongoDate) {
+                    return ($value !== null) ? new \MongoDate($value) : new \MongoDate();
+                }              
+                
+                break;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Type cast to given PHP type
+     *
+     * @param string $sType
+     * @param mixed $value
+     * @return mixed
+     */
+
+    protected function _setPhpValueType($sType, $value) {
+        switch($sType) {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;                      
+            case 'bool':
+                return (bool)$value;
+            case 'string':
+                return (string)$value;
+        }
+
+        return $value;
     }
 
     /**
@@ -242,7 +277,7 @@ class Document extends IterateableList {
 
     public function save() {
         $this->_setId();
-        $aPreparedProperties = $this->_getPreparedProperties();
+        $aPreparedProperties = $this->getPreparedProperties();
         $this->_getCollection()->save($aPreparedProperties);
     }
 
