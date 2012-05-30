@@ -25,43 +25,46 @@ class EntryActions {
         dispatch_post('/entry/:id/delete', array($this, 'deleteEntry')); 
 
         // GET actions
+        dispatch_get(array('/entry/list.*', array('format')), array($this, 'showList'));
         dispatch_get('/entry/search', array($this, 'showList'));
-        dispatch_get('/entry/search/:page', array($this, 'showList'));
+
         dispatch_get('/entry/new', array($this, 'newEntry'));
-        dispatch_get('/entry/list', array($this, 'showList'));
-        dispatch_get('/entry/list/:page', array($this, 'showList'));
-        dispatch_get('/entry/list/type/:type', array($this, 'showList'));
-        dispatch_get('/entry/list/type/:type/:page', array($this, 'showList'));      
+        
+  
         dispatch_get('/entry/:id', array($this, 'showEntry'));
         dispatch_get('/entry/:id/edit', array($this, 'editEntry'));
     }
 
     public function showList() {
         $oView = new EntryListView();
- 
-        $iPage = (int)params('page');
-        $iType = (int)params('type');
-        $sTerm = Input::getInstance()->getGetData('term');
+        $oInput = Input::getInstance();
+
+        $iSkip = (int)$oInput->getGetData('skip');
+        $iLimit = (int)$oInput->getGetData('limit');
+        $iType = (int)$oInput->getGetData('type');
+        $sTerm = $oInput->getGetData('term');
+
+        $sFormat = params('format');
         
         if(!empty($sTerm)) {
             $oView->setListType('search');
             $oView->setSearchTerm($sTerm);
         }
 
-        if($iPage > 0) {
-            $oView->setCurrentPage($iPage);
+        if($iSkip > 0) {
+            $oView->setSkippedDocuments($iSkip);
+        }
+
+        if($iLimit > 0) {
+            $oView->setDocumentLimit($iLimit);
         }
 
         if($iType > 0) {
             $oView->setDocumentType($iType);
         }
 
-        $oView->setPerPage(100);
-
-        $sOutputMethod = Input::getInstance()->getGetData('output');
-
-        if(!empty($sOutputMethod)) {
-            $oView->setOutputMethod($sOutputMethod);
+        if(!empty($sFormat)) {
+            $oView->setOutputFormat($sFormat);
         }
 
         $oView->render();    

@@ -9,7 +9,7 @@ class EntryListView extends BaseView {
     
     protected $_sAppName = 'Kickipedia2';
     protected $_sTemplateName = 'entry_list.twig';
-    protected $_sPaginationBaseUrl = '/entry/list';
+    protected $_sBaseUrl = '/entry/list';
     protected $_oDocuments = null;
     protected $_sSeachTerm = null;
     protected $_sListType = 'list';
@@ -45,16 +45,16 @@ class EntryListView extends BaseView {
 
             if($this->_sListType === 'search') {
                 $this->addAdditionalUrlParameter('term', $this->_sSeachTerm);
-                $this->_sPaginationBaseUrl = "/entry/search";
-                $oEntryDocumentList->search($this->_sSeachTerm, $this->_iCurrentPage, $this->_iPerPage);
+                $this->_sBaseUrl = "/entry/search";
+                $oEntryDocumentList->search($this->_sSeachTerm, $this->getCurrentPage(), $this->_iDocumentLimit);
 
             } elseif($this->_sListType === 'list') {
                 
                 if($this->_iDocumentType !== null) {
-                    $this->_sPaginationAdditionalUrl = "type/{$this->_iDocumentType}";
-                    $oEntryDocumentList->findByType($this->_iDocumentType, $this->_iCurrentPage, $this->_iPerPage);
+                    $this->addAdditionalUrlParameter('type', $this->_iDocumentType);
+                    $oEntryDocumentList->findByType($this->_iDocumentType, $this->getCurrentPage(), $this->_iDocumentLimit);
                 } else {
-                    $oEntryDocumentList->findByPage($this->_iCurrentPage, $this->_iPerPage);
+                    $oEntryDocumentList->findByPage($this->getCurrentPage(), $this->_iDocumentLimit);
                 }
 
             }
@@ -78,14 +78,9 @@ class EntryListView extends BaseView {
             'header' => array(
                 'status' => 200,
                 'requestMethod' => 'GET',
-                'queryType' => 'read'
-                
+                'date' => date('Y-m-d H:i:s')              
             )
         );
-
-        if($this->_sListType === 'list') {
-            $aOutput['header']['documentType'] = $this->_iDocumentType;
-        }
 
         if($this->_sListType === 'search') {
             $aOutput['header']['searchTerm'] = $this->_sSeachTerm;

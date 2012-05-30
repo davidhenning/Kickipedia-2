@@ -47,7 +47,14 @@ class View extends Base {
      * @var integer
      */
 
-    protected $_iPerPage = 50;
+    protected $_iDocumentLimit = 100;
+
+    /**
+     * Skipped documents
+     * @var integer
+     */
+
+    protected $_iSkippedDocuments = 0;
 
     /**
      * Current page
@@ -61,7 +68,7 @@ class View extends Base {
      * @var string
      */
 
-    protected $_sPaginationBaseUrl = '';
+    protected $_sBaseUrl = '';
 
     /**
      * Additional path for generated urls
@@ -75,7 +82,7 @@ class View extends Base {
      * @var array
      */
 
-    protected $_aPaginationAdditionalParameters = array();
+    protected $_aAdditionalUrlParameters = array();
 
     /**
      * Total count of documents for pagination
@@ -92,12 +99,18 @@ class View extends Base {
     protected $_aPagination = null;
 
     /**
-     * Output method
+     * Current output format
      * @var string
      */
 
-    protected $_sOutputMethod = 'template';
+    protected $_sOutputFormat = 'html';
 
+    /**
+     * Allowed output format
+     * @var string
+     */
+
+    protected $_aAllowedOutputFormats = array('html', 'json', 'xml');
 
     /**
      * Sets id if given
@@ -134,32 +147,45 @@ class View extends Base {
     /**
      * Sets output method
      *
-     * @param string $sId
+     * @param string $sOutputFormat
      */
 
-    public function setOutputMethod($sOutputMethod) {
-        $this->_sOutputMethod = $sOutputMethod;
-        $this->addAdditionalUrlParameter('output', $sOutputMethod);
+    public function setOutputFormat($sOutputFormat) {
+        if(!in_array($sOutputFormat, $this->_aAllowedOutputFormats)) {
+            throw new \InvalidArgumentException('Specified output format is unkown');
+        }
+
+        $this->_sOutputFormat = $sOutputFormat;
     }
 
     /**
      * Sets count of documents per page
      *
-     * @param integer $iPerPage
+     * @param integer $iDocumentLimit
      */
 
-    public function setPerPage($iPerPage) {
-        $this->_iPerPage = $iPerPage;
+    public function setDocumentLimit($iDocumentLimit) {
+        $this->_iDocumentLimit = $iDocumentLimit;
     }
 
     /**
-     * Sets current page number
+     * Set count of skipped documents
      *
-     * @param integer $iPage
+     * @param integer $iSkippedDocuments
      */
 
-    public function setCurrentPage($iPage) {
-        $this->_iCurrentPage = $iPage;
+    public function setSkippedDocuments($iSkippedDocuments) {
+        $this->_iSkippedDocuments = $iSkippedDocuments;
+    }
+
+    /**
+     * Get current page number
+     *
+     * @return integer
+     */
+
+    public function getCurrentPage() {
+        return $this->_iSkippedDocuments / $this->_iDocumentLimit + 1;
     }
 
     /**
@@ -170,7 +196,7 @@ class View extends Base {
      */
 
     public function addAdditionalUrlParameter($sName, $sValue) {
-        $this->_aPaginationAdditionalParameters[$sName] = $sValue;
+        $this->_aAdditionalUrlParameters[$sName] = $sValue;
     }
 
     /**
@@ -182,27 +208,27 @@ class View extends Base {
     public function getPagination() {
         if($this->_aPagination === null) {    
             // compute total pages
-            $iPages = ceil($this->_iTotalDocuments / $this->_iPerPage);
+            $iPages = ceil($this->_iTotalDocuments / $this->_iDocumentLimit);
             
             if($iPages > 1) {
                 // init array of the pagination
                 $aPages = array(
                     'pages' => array(),
-                    'currentPage' => $this->_iCurrentPage,
-                    'documentsPerPage' => $this->_iPerPage,
+                    'currentPage' => $this->getCurrentPage(),
+                    'documentsPerPage' => $this->_iDocumentLimit,
                     'totalPages' => $iPages
                 );
 
                 // set URL to previous page and first page
-                if($this->_iCurrentPage > 1) {
-                    $aPages['prevPageUrl'] = $this->_createPageUrl($this->_iCurrentPage - 1);
-                    $aPages['firstPageUrl'] = $this->_createPageUrl(1);
+                if($this->getCurrentPage() > 1) {
+                    $aPages['prevPageUrl'] = $this->_createPageUrl($this->getCurrentPage() - 1, $this->_iDocumentLimit);
+                    $aPages['firstPageUrl'] = $this->_createPageUrl(1, $this->_iDocumentLimit);
                 }
 
                 // set URL to next page and last page
-                if($this->_iCurrentPage < $iPages) {
-                    $aPages['nextPageUrl'] = $this->_createPageUrl($this->_iCurrentPage + 1);
-                    $aPages['lastPageUrl'] = $this->_createPageUrl($iPages);
+                if($this->getCurrentPage() < $iPages) {
+                    $aPages['nextPageUrl'] = $this->_createPageUrl($this->getCurrentPage() + 1 ,$this->_iDocumentLimit);
+                    $aPages['lastPageUrl'] = $this->_createPageUrl($iPages, $this->_iDocumentLimit);
                 }
 
                 if($iPages > 0) {
@@ -211,10 +237,10 @@ class View extends Base {
                     for($i = 1; $i <= $iPages; $i++) {
                         $aPage = array(
                             'nr' => $i,
-                            'url' => $this->_createPageUrl($i)
+                            'url' => $this->_createPageUrl($i, $this->_iDocumentLimit)
                         );
 
-                        if($i === $this->_iCurrentPage) {
+                        if($i === $this->getCurrentPage()) {
                             $aPage['active'] = true;
                         }
 
@@ -230,26 +256,38 @@ class View extends Base {
     }
 
     /**
-     * Creates and returns a page url for given page number
+     * Get url with given parameters and permanently added parameters
      *
-     * @param integer $iPage
+     * @param array $aParams
      * @return string
      */
 
-    protected function _createPageUrl($iPage) {
-        $sUrl = "{$this->_sPaginationBaseUrl}/";
-        
-        if(!empty($this->_sPaginationAdditionalUrl)) {
-            $sUrl .= "{$this->_sPaginationAdditionalUrl}/";
-        }
+    protected function _createUrl($aParams) {
+        $sUrl = "{$this->_sBaseUrl}.{$this->_sOutputFormat}";
+        $aParams = array_merge($this->_aAdditionalUrlParameters, $aParams);
 
-        $sUrl .= $iPage;
-
-        if(!empty($this->_aPaginationAdditionalParameters)) {
-            $sUrl .= '?'.http_build_query($this->_aPaginationAdditionalParameters);
+        if(!empty($aParams)) {
+            $sUrl .= '?'.http_build_query($aParams);
         }
 
         return $sUrl;
+    }
+
+    /**
+     * Get url for given page number and limit
+     *
+     * @param integer $iPage
+     * @param integer $iLimit
+     * @return string
+     */
+
+    protected function _createPageUrl($iPage, $iLimit) {
+        $aParams = array(
+            'skip' => (($iPage - 1) * $iLimit), 
+            'limit' => $iLimit
+        );
+
+        return $this->_createUrl($aParams);
     }
 
     /**
@@ -257,9 +295,9 @@ class View extends Base {
      */
 
     public function render() {
-        if($this->_sOutputMethod == 'template') {
+        if($this->_sOutputFormat == 'html') {
             $this->_renderTwig();
-        } elseif($this->_sOutputMethod == 'json') {
+        } elseif($this->_sOutputFormat == 'json') {
             header('Content-type: application/json');
             $this->_renderJSON();
         } else {
