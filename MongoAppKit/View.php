@@ -259,11 +259,13 @@ class View extends Base {
      * Get url with given parameters and permanently added parameters
      *
      * @param array $aParams
+     * @param string $sBaseUrl
      * @return string
      */
 
-    protected function _createUrl($aParams) {
-        $sUrl = "{$this->_sBaseUrl}.{$this->_sOutputFormat}";
+    protected function _createUrl($aParams, $sBaseUrl = null) {
+        $sBaseUrl = (!empty($sBaseUrl)) ? $sBaseUrl : $this->_sBaseUrl;
+        $sUrl = "{$sBaseUrl}.{$this->_sOutputFormat}";
         $aParams = array_merge($this->_aAdditionalUrlParameters, $aParams);
 
         if(!empty($aParams)) {
@@ -300,6 +302,9 @@ class View extends Base {
         } elseif($this->_sOutputFormat == 'json') {
             header('Content-type: application/json');
             $this->_renderJSON();
+        } elseif($this->_sOutputFormat == 'xml') {
+            header('Content-type: text/xml');
+            $this->_renderXML();
         } else {
             $this->_renderTwig();
         }
@@ -319,5 +324,13 @@ class View extends Base {
 
     protected function _renderJSON() {
         echo json_encode($this->_aTemplateData);
+    }
+
+    protected function _renderXML() {
+        $oDocument = new \SimpleXMLElement('<kickipedia></kickipedia>');
+        $oHeader = $oDocument->addChild('header');
+        $oStatus = $oHeader->addChild('status', 200);
+
+        echo $oDocument->asXML();
     }
 }

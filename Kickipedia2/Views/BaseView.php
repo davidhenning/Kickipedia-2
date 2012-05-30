@@ -19,7 +19,7 @@ class BaseView extends View {
                 $aType = array(
                     'id' => $sId,
                     'name' => $sName,
-                    'url' => "/entry/list/type/{$sId}"
+                    'url' => $this->_createUrl(array('type' => $sId))
                 );
 
                 if($this->_iDocumentType == $sId) {

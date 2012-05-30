@@ -42,19 +42,20 @@ class EntryListView extends BaseView {
     public function getDocuments() {
         if($this->_oDocuments === null) {
             $oEntryDocumentList = new EntryDocumentList();
+            $iCurrentPage = $this->getCurrentPage();
 
             if($this->_sListType === 'search') {
                 $this->addAdditionalUrlParameter('term', $this->_sSeachTerm);
                 $this->_sBaseUrl = "/entry/search";
-                $oEntryDocumentList->search($this->_sSeachTerm, $this->getCurrentPage(), $this->_iDocumentLimit);
+                $oEntryDocumentList->search($this->_sSeachTerm, $iCurrentPage, $this->_iDocumentLimit);
 
             } elseif($this->_sListType === 'list') {
                 
                 if($this->_iDocumentType !== null) {
                     $this->addAdditionalUrlParameter('type', $this->_iDocumentType);
-                    $oEntryDocumentList->findByType($this->_iDocumentType, $this->getCurrentPage(), $this->_iDocumentLimit);
+                    $oEntryDocumentList->findByType($this->_iDocumentType, $iCurrentPage, $this->_iDocumentLimit);
                 } else {
-                    $oEntryDocumentList->findByPage($this->getCurrentPage(), $this->_iDocumentLimit);
+                    $oEntryDocumentList->findByPage($iCurrentPage, $this->_iDocumentLimit);
                 }
 
             }
@@ -96,5 +97,34 @@ class EntryListView extends BaseView {
         }
 
         echo json_encode($aOutput);
+    }
+
+    protected function _renderXML() {
+        $oKickipedia = new \SimpleXMLElement('<kickipedia></kickipedia>');
+        
+        $oHeader = $oKickipedia->addChild('header');
+        $oHeader->addChild('status', 200);
+        $oHeader->addChild('requestMethod', 'GET');
+        $oHeader->addChild('date', date('Y-m-d H:i:s'));     
+
+        if($this->_sListType === 'search') {
+            $oHeader->addChild('searchTerm', $this->_sSeachTerm);
+        }   
+
+        $oDocuments = $oKickipedia->addChild('documents');
+
+        if(count($this->getDocuments()) > 0) {
+            foreach($this->getDocuments() as $oDocumentData) {
+                $oDocument = $oDocuments->addChild('document');
+                $oDocument->addAttribute('id', $oDocumentData->getProperty('_id'));
+                foreach($oDocumentData as $key => $value) {
+                    if($key !== '_id') {
+                        $oDocument->addChild($key, $oDocumentData->getProperty($key));
+                    }
+                }
+            }
+        }
+
+        echo $oKickipedia->asXML();
     }
 }

@@ -14,7 +14,7 @@
         },
         {
             "name": "Übersicht",
-            "route": "/entry/list"
+            "route": "/entry/list.html"
         },
         {
             "name": "Statistik",
