@@ -26,7 +26,6 @@ class EntryActions {
 
         // GET actions
         dispatch_get(array('/entry/list.*', array('format')), array($this, 'showList'));
-        dispatch_get(array('/entry/search.*', array('format')), array($this, 'showList'));
         dispatch_get('/entry/new', array($this, 'newEntry'));       
         dispatch_get('/entry/:id', array($this, 'showEntry'));
         dispatch_get('/entry/:id/edit', array($this, 'editEntry'));
