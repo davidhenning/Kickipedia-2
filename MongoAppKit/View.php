@@ -218,27 +218,28 @@ class View extends Base {
     public function getPagination() {
         if($this->_aPagination === null) {    
             // compute total pages
-            $iPages = ceil($this->_iTotalDocuments / $this->_iDocumentLimit);
+            $iDocumentLimit = $this->getDocumentLimit();
+            $iPages = ceil($this->_iTotalDocuments / $iDocumentLimit);
             
             if($iPages > 1) {
                 // init array of the pagination
                 $aPages = array(
                     'pages' => array(),
                     'currentPage' => $this->getCurrentPage(),
-                    'documentsPerPage' => $this->_iDocumentLimit,
+                    'documentsPerPage' => $iDocumentLimit,
                     'totalPages' => $iPages
                 );
 
                 // set URL to previous page and first page
                 if($this->getCurrentPage() > 1) {
-                    $aPages['prevPageUrl'] = $this->_createPageUrl($this->getCurrentPage() - 1, $this->_iDocumentLimit);
-                    $aPages['firstPageUrl'] = $this->_createPageUrl(1, $this->_iDocumentLimit);
+                    $aPages['prevPageUrl'] = $this->_createPageUrl($this->getCurrentPage() - 1, $iDocumentLimit);
+                    $aPages['firstPageUrl'] = $this->_createPageUrl(1, $iDocumentLimit);
                 }
 
                 // set URL to next page and last page
                 if($this->getCurrentPage() < $iPages) {
-                    $aPages['nextPageUrl'] = $this->_createPageUrl($this->getCurrentPage() + 1 ,$this->_iDocumentLimit);
-                    $aPages['lastPageUrl'] = $this->_createPageUrl($iPages, $this->_iDocumentLimit);
+                    $aPages['nextPageUrl'] = $this->_createPageUrl($this->getCurrentPage() + 1, $iDocumentLimit);
+                    $aPages['lastPageUrl'] = $this->_createPageUrl($iPages, $iDocumentLimit);
                 }
 
                 if($iPages > 0) {
@@ -247,7 +248,7 @@ class View extends Base {
                     for($i = 1; $i <= $iPages; $i++) {
                         $aPage = array(
                             'nr' => $i,
-                            'url' => $this->_createPageUrl($i, $this->_iDocumentLimit)
+                            'url' => $this->_createPageUrl($i, $iDocumentLimit)
                         );
 
                         if($i === $this->getCurrentPage()) {
