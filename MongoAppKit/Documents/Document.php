@@ -75,6 +75,17 @@ class Document extends IterateableList {
     }
 
     /**
+     * Check if given field name exists in config
+     *
+     * @param string $sField
+     * @return bool
+     */
+
+    public function fieldExists($sField) {
+        return in_array($sField, array_keys($this->_aCollectionConfig));
+    }
+
+    /**
      * Iterate all properties and prepares them for saving in the selected Collection
      *
      * @return array
@@ -149,6 +160,7 @@ class Document extends IterateableList {
                 break;
             case 'date':
                 if(!$value instanceof \MongoDate) {
+                    $value = (!is_int($value)) ? strtotime($value) : $value;
                     return ($value !== null) ? new \MongoDate($value) : new \MongoDate();
                 }              
                 
@@ -209,7 +221,7 @@ class Document extends IterateableList {
 
         // get timestamp of MongoDate object
         if($value instanceof \MongoDate) {
-            $value = $value->sec;
+            $value = date('Y-m-d H:i:s', $value->sec);
         }
 
         // get id of MongoId object

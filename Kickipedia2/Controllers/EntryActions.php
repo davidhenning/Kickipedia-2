@@ -40,6 +40,8 @@ class EntryActions {
         $iLimit = (int)$oInput->getGetData('limit');
         $iType = (int)$oInput->getGetData('type');
         $sTerm = $oInput->getGetData('term');
+        $sSort = $oInput->getGetData('sort');
+        $sDirection = $oInput->getGetData('direction');
         $sFormat = $oInput->sanitize(params('format'));
         
         if(!empty($sTerm)) {
@@ -57,6 +59,11 @@ class EntryActions {
 
         if($iType > 0) {
             $oView->setDocumentType($iType);
+        }
+
+        if(!empty($sSort)) {
+            $sDirection = (!empty($sDirection)) ? $sDirection : null;
+            $oView->setCustomSorting($sSort, $sDirection);
         }
 
         if(!empty($sFormat)) {

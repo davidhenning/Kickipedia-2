@@ -13,6 +13,8 @@ class EntryListView extends BaseView {
     protected $_oDocuments = null;
     protected $_sSeachTerm = null;
     protected $_sListType = 'list';
+    protected $_sCustomSorting = array();
+    protected $_sCustomSortOrder = null;
     
     public function setDocumentType($iType) {
         $this->_iDocumentType = $iType;
@@ -39,10 +41,21 @@ class EntryListView extends BaseView {
         return $this->_iFoundDocuments;
     }
 
+    public function setCustomSorting($sField, $sOrder) {
+        $this->_sCustomSortField = $sField;
+        $this->_sCustomSortOrder = $sOrder;
+        $this->addAdditionalUrlParameter('sort', $sField);
+        $this->addAdditionalUrlParameter('direction', $sOrder);
+    }
+
     public function getDocuments() {
         if($this->_oDocuments === null) {
             $oEntryDocumentList = new EntryDocumentList();
             $iCurrentPage = $this->getCurrentPage();
+
+            if(!empty($this->_sCustomSortField)) {
+                $oEntryDocumentList->setCustomSorting($this->_sCustomSortField, $this->_sCustomSortOrder);
+            }
 
             if($this->_sListType === 'search') {
                 $this->addAdditionalUrlParameter('term', $this->_sSeachTerm);
@@ -87,17 +100,23 @@ class EntryListView extends BaseView {
                     'limit' => $this->_iDocumentLimit
                 )
             ),
-            'response' => array(
-                'header' => array(              
-                      'total' => $this->_iTotalDocuments,
-                      'found' => $this->_iFoundDocuments                     
-                )
+            'response' => array(        
+                'total' => $this->_iTotalDocuments,
+                'found' => $this->_iFoundDocuments                     
             )
         );
 
         if($this->_sListType === 'search') {
             $aOutput['request']['params']['term'] = $this->_sSeachTerm;
         }        
+
+        if(!empty($this->_sCustomSortField)) {
+            $aOutput['request']['params']['sort'] = $this->_sCustomSortField;
+        }
+
+        if(!empty($this->_sCustomSortOrder)) {
+            $aOutput['request']['params']['direction'] = $this->_sCustomSortOrder;
+        }
 
         $aOutput['response']['documents'] = array();
 

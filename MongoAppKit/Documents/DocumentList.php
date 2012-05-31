@@ -85,6 +85,35 @@ class DocumentList extends IterateableList {
     }
 
     /**
+     * Set custom sorting
+     *
+     * @param string $sField
+     * @param string $sDirection
+     * @throws Exception
+     */
+
+    public function setCustomSorting($sField, $sDirection = 'asc') {
+        if(!$this->_oDocumentBaseObject instanceof Document) {
+            throw new \Exception("No document base object set");
+        }
+
+        if(!$this->_oDocumentBaseObject->fieldExists($sField)) {
+            throw new \Exception("Field {$sField} does not exist.");
+        }
+
+        if($sDirection === null) {
+            $sDirection = 'asc';
+        }
+
+        if(!in_array($sDirection, array('asc', 'desc'))) {
+            throw new \Exception("Direction {$sDirection} is not supported.");
+        }
+
+        $this->_sCustomSortField = $sField;
+        $this->_sCustomSortOrder = $sDirection;
+    }
+
+    /**
      * Set document base object for list
      *
      * @param Document $oDocumentObject
@@ -172,16 +201,25 @@ class DocumentList extends IterateableList {
 
         // get documents
         $oCursor = $this->_oCollection->find($aWhere, $aFields);
+
+        // sort
+        $aSorting = $this->_getSorting();
+        $oCursor->sort($aSorting);
+
+        return $oCursor;     
+    }
+
+    protected function _getSorting() {
         $aSorting = array();
 
         if($this->_sCustomSortField !== null) {
             $iSortOrder = 1;
 
             // set sorting direction
-            if($this->_sCustomSortField !== null) {
-                if($this->_sCustomSortField === 'asc') {
+            if($this->_sCustomSortOrder !== null) {
+                if($this->_sCustomSortOrder === 'asc') {
                     $iSortOrder = 1;
-                } elseif($this->_sCustomSortField === 'asc') {
+                } elseif($this->_sCustomSortOrder === 'desc') {
                     $iSortOrder = -1;
                 } else {
                     $iSortOrder = 1;
@@ -195,10 +233,7 @@ class DocumentList extends IterateableList {
             $aSorting = array('createdOn' => -1);
         }
 
-        // sort
-        $oCursor->sort($aSorting);
-
-        return $oCursor;     
+        return $aSorting;
     }
 
     /**
