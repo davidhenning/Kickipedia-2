@@ -7,7 +7,7 @@ use MongoAppKit\View;
 class BaseView extends View {
     protected $_sAppName = 'Kickipedia2';
     protected $_aTypes = null;
-    protected $_iDocumentType = 1;
+    protected $_iDocumentType = null;
     protected $_aNavigation = null;
 
     public function getTypes() {
