@@ -113,7 +113,7 @@ class View extends Base {
     protected $_aAllowedOutputFormats = array('html', 'json', 'xml');
 
     /**
-     * Sets id if given
+     * Set document id if given
      *
      * @param string $sId
      */
@@ -125,7 +125,7 @@ class View extends Base {
     }
 
     /**
-     * Returns id
+     * Get document id
      *
      * @return string
      */
@@ -135,7 +135,7 @@ class View extends Base {
     }
 
     /**
-     * Sets id
+     * Set document id
      *
      * @param string $sId
      */
@@ -145,7 +145,7 @@ class View extends Base {
     }
 
     /**
-     * Sets output method
+     * Set output method
      *
      * @param string $sOutputFormat
      */
@@ -158,7 +158,6 @@ class View extends Base {
         $this->_sOutputFormat = $sOutputFormat;
     }
 
-
     /**
      * Get document limit
      *
@@ -170,7 +169,7 @@ class View extends Base {
     }
 
     /**
-     * Sets count of documents per page
+     * Set count of documents per page
      *
      * @param integer $iDocumentLimit
      */
@@ -200,7 +199,7 @@ class View extends Base {
     }
 
     /**
-     * Adds an get parameter to generated urls
+     * Add a get parameter to generated urls
      *
      * @param string $sName
      * @param string $sValue
@@ -211,7 +210,7 @@ class View extends Base {
     }
 
     /**
-     * Create and returns array with all pagination data
+     * Create and return array with all pagination data
      *
      * @return array
      */
@@ -304,7 +303,7 @@ class View extends Base {
     }
 
     /**
-     * Loads Twig and starts page rendering
+     * Begin rendering the page in selected output format (HTML/TWIG, JSON, XML)
      */
 
     public function render() {
@@ -321,6 +320,10 @@ class View extends Base {
         }
     }
 
+    /**
+     * Load Twig Template Engine and render selected template with set data
+     */
+
     protected function _renderTwig() {
         // load Twig
         $loader = new \Twig_Loader_Filesystem(getBasePath() ."/{$this->_sAppName}/Templates");
@@ -333,9 +336,17 @@ class View extends Base {
         echo $twig->render($this->_sTemplateName, $this->_aTemplateData);
     }
 
+    /**
+     * Render JSON output
+     */
+
     protected function _renderJSON() {
         echo json_encode($this->_aTemplateData);
     }
+
+    /**
+     * Render XML output
+     */
 
     protected function _renderXML() {
         $oDocument = new \SimpleXMLElement('<kickipedia></kickipedia>');
