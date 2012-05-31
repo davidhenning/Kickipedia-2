@@ -86,7 +86,6 @@ class EntryListView extends BaseView {
 
             if($this->_sListType === 'search') {
                 $this->addAdditionalUrlParameter('term', $this->_sSeachTerm);
-                $this->_sBaseUrl = "/entry/search";
                 $oEntryDocumentList->search($this->_sSeachTerm, $iCurrentPage, $iDocumentLimit);
 
             } elseif($this->_sListType === 'list') {
