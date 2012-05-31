@@ -15,7 +15,33 @@ class EntryListView extends BaseView {
     protected $_sListType = 'list';
     protected $_sCustomSorting = array();
     protected $_sCustomSortOrder = null;
-    
+    protected $_aPossibleParams = array(
+        array(
+            'property' => '_iSkippedDocuments',
+            'param' => 'skip'
+        ),
+        array(
+            'property' => '_iDocumentLimit',
+            'param' => 'limit'
+        ),
+        array(
+            'property' => '_iDocumentType',
+            'param' => 'type'
+        ),
+        array(
+            'property' => '_sSeachTerm',
+            'param' => 'term'
+        ),
+        array(
+            'property' => '_sCustomSortField',
+            'param' => 'sort'
+        ),
+        array(
+            'property' => '_sCustomSortOrder',
+            'param' => 'direction'
+        )
+    );
+
     public function setDocumentType($iType) {
         $this->_iDocumentType = $iType;
     }
@@ -52,6 +78,7 @@ class EntryListView extends BaseView {
         if($this->_oDocuments === null) {
             $oEntryDocumentList = new EntryDocumentList();
             $iCurrentPage = $this->getCurrentPage();
+            $iDocumentLimit = $this->getDocumentLimit();
 
             if(!empty($this->_sCustomSortField)) {
                 $oEntryDocumentList->setCustomSorting($this->_sCustomSortField, $this->_sCustomSortOrder);
@@ -60,15 +87,18 @@ class EntryListView extends BaseView {
             if($this->_sListType === 'search') {
                 $this->addAdditionalUrlParameter('term', $this->_sSeachTerm);
                 $this->_sBaseUrl = "/entry/search";
-                $oEntryDocumentList->search($this->_sSeachTerm, $iCurrentPage, $this->_iDocumentLimit);
+                $oEntryDocumentList->search($this->_sSeachTerm, $iCurrentPage, $iDocumentLimit);
 
             } elseif($this->_sListType === 'list') {
-                
+                if($this->_iDocumentType === null && $this->_sOutputFormat === 'html') {
+                    $this->_iDocumentType = 1;
+                }
+
                 if($this->_iDocumentType !== null) {
                     $this->addAdditionalUrlParameter('type', $this->_iDocumentType);
-                    $oEntryDocumentList->findByType($this->_iDocumentType, $iCurrentPage, $this->_iDocumentLimit);
+                    $oEntryDocumentList->findByType($this->_iDocumentType, $iCurrentPage, $iDocumentLimit);
                 } else {
-                    $oEntryDocumentList->findByPage($iCurrentPage, $this->_iDocumentLimit);
+                    $oEntryDocumentList->findByPage($iCurrentPage, $iDocumentLimit);
                 }
 
             }
@@ -93,29 +123,20 @@ class EntryListView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'GET',
-                'url' => request_uri(),
-                'params' => array(
-                    'type' => $this->_iDocumentType,
-                    'skip' => $this->_iSkippedDocuments,
-                    'limit' => $this->_iDocumentLimit
-                )
+                'url' => request_uri()
             ),
             'response' => array(        
                 'total' => $this->_iTotalDocuments,
-                'found' => $this->_iFoundDocuments                     
+                'found' => $this->_iFoundDocuments                    
             )
         );
 
-        if($this->_sListType === 'search') {
-            $aOutput['request']['params']['term'] = $this->_sSeachTerm;
-        }        
-
-        if(!empty($this->_sCustomSortField)) {
-            $aOutput['request']['params']['sort'] = $this->_sCustomSortField;
-        }
-
-        if(!empty($this->_sCustomSortOrder)) {
-            $aOutput['request']['params']['direction'] = $this->_sCustomSortOrder;
+        foreach($this->_aPossibleParams as $aParam) {
+            $value = (isset($this->{$aParam['property']})) ? $this->{$aParam['property']} : null;
+            
+            if(!empty($value)) {
+                $aOutput['request']['params'][$aParam['param']] = $value;
+            }
         }
 
         $aOutput['response']['documents'] = array();
