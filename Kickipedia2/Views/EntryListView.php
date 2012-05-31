@@ -153,25 +153,32 @@ class EntryListView extends BaseView {
     protected function _renderXML() {
         $oKickipedia = new \SimpleXMLElement('<kickipedia></kickipedia>');
         
-        $oHeader = $oKickipedia->addChild('header');
-        $oHeader->addChild('status', 200);
-        $oHeader->addChild('requestMethod', 'GET');
-        $oHeader->addChild('date', date('Y-m-d H:i:s'));     
+        $oKickipedia->addChild('status', 200);
+        $oKickipedia->addChild('date', date('Y-m-d H:i:s'));
+        
+        $oRequest = $oKickipedia->addChild('request');
+        $oRequest->addChild('method', 'GET');
+        $oRequest->addChild('url', request_uri());
 
-        if($this->_sListType === 'search') {
-            $oHeader->addChild('searchTerm', $this->_sSeachTerm);
-        }   
+        foreach($this->_aPossibleParams as $aParam) {
+            $value = (isset($this->{$aParam['property']})) ? $this->{$aParam['property']} : null;
+            
+            if(!empty($value)) {
+                $oRequest->addChild($aParam['param'], $value);
+            }
+        }
 
-        $oDocuments = $oKickipedia->addChild('documents');
+        $oResponse = $oKickipedia->addChild('response');
+        $oResponse->addChild('total', $this->_iTotalDocuments);
+        $oResponse->addChild('found', $this->_iFoundDocuments);
+
+        $oDocuments = $oResponse->addChild('documents');
 
         if(count($this->getDocuments()) > 0) {
             foreach($this->getDocuments() as $oDocumentData) {
                 $oDocument = $oDocuments->addChild('document');
-                $oDocument->addAttribute('id', $oDocumentData->getProperty('_id'));
                 foreach($oDocumentData as $key => $value) {
-                    if($key !== '_id') {
-                        $oDocument->addChild($key, $oDocumentData->getProperty($key));
-                    }
+                    $oDocument->addChild($key, $oDocumentData->getProperty($key));
                 }
             }
         }
