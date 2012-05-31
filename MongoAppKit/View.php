@@ -219,26 +219,27 @@ class View extends Base {
         if($this->_aPagination === null) {    
             // compute total pages
             $iDocumentLimit = $this->getDocumentLimit();
+            $iCurrentPage = $this->getCurrentPage();
             $iPages = ceil($this->_iTotalDocuments / $iDocumentLimit);
             
             if($iPages > 1) {
                 // init array of the pagination
                 $aPages = array(
                     'pages' => array(),
-                    'currentPage' => $this->getCurrentPage(),
+                    'currentPage' => $iCurrentPage,
                     'documentsPerPage' => $iDocumentLimit,
                     'totalPages' => $iPages
                 );
 
                 // set URL to previous page and first page
                 if($this->getCurrentPage() > 1) {
-                    $aPages['prevPageUrl'] = $this->_createPageUrl($this->getCurrentPage() - 1, $iDocumentLimit);
+                    $aPages['prevPageUrl'] = $this->_createPageUrl($iCurrentPage - 1, $iDocumentLimit);
                     $aPages['firstPageUrl'] = $this->_createPageUrl(1, $iDocumentLimit);
                 }
 
                 // set URL to next page and last page
                 if($this->getCurrentPage() < $iPages) {
-                    $aPages['nextPageUrl'] = $this->_createPageUrl($this->getCurrentPage() + 1, $iDocumentLimit);
+                    $aPages['nextPageUrl'] = $this->_createPageUrl($iCurrentPage + 1, $iDocumentLimit);
                     $aPages['lastPageUrl'] = $this->_createPageUrl($iPages, $iDocumentLimit);
                 }
 
@@ -251,7 +252,7 @@ class View extends Base {
                             'url' => $this->_createPageUrl($i, $iDocumentLimit)
                         );
 
-                        if($i === $this->getCurrentPage()) {
+                        if($i === $iCurrentPage) {
                             $aPage['active'] = true;
                         }
 
