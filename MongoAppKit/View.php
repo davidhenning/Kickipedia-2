@@ -47,7 +47,7 @@ class View extends Base {
      * @var integer
      */
 
-    protected $_iDocumentLimit = 100;
+    protected $_iDocumentLimit = null;
 
     /**
      * Skipped documents
@@ -156,6 +156,17 @@ class View extends Base {
         }
 
         $this->_sOutputFormat = $sOutputFormat;
+    }
+
+
+    /**
+     * Get document limit
+     *
+     * @return integer
+     */
+
+    public function getDocumentLimit() {
+        return ($this->_iDocumentLimit !== null) ? $this->_iDocumentLimit : 100;
     }
 
     /**
