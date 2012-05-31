@@ -76,23 +76,34 @@ class EntryListView extends BaseView {
 
     protected function _renderJSON() {
         $aOutput = array(
-            'header' => array(
-                'status' => 200,
-                'requestMethod' => 'GET',
-                'date' => date('Y-m-d H:i:s')              
+            'status' => 200,
+            'time' => date('Y-m-d H:i:s'),
+            'request' => array(
+                'method' => 'GET',
+                'url' => request_uri(),
+                'params' => array(
+                    'type' => $this->_iDocumentType,
+                    'skip' => $this->_iSkippedDocuments,
+                    'limit' => $this->_iDocumentLimit
+                )
+            ),
+            'response' => array(
+                'header' => array(              
+                      'total' => $this->_iTotalDocuments,
+                      'found' => $this->_iFoundDocuments                     
+                )
             )
         );
 
         if($this->_sListType === 'search') {
-            $aOutput['header']['searchTerm'] = $this->_sSeachTerm;
+            $aOutput['request']['params']['term'] = $this->_sSeachTerm;
         }        
 
-        $aOutput['navigation'] = $this->getPagination();
-        $aOutput['documents'] = array();
+        $aOutput['response']['documents'] = array();
 
         if(count($this->getDocuments()) > 0) {
             foreach($this->getDocuments() as $oDocument) {
-                $aOutput['documents'][] = $oDocument->getProperties();
+                $aOutput['response']['documents'][] = $oDocument->getProperties();
             }
         }
 
