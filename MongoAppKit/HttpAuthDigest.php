@@ -56,8 +56,11 @@ class HttpAuthDigest extends Base {
         $this->_sRealm = $sRealm;
         $this->_sDigest = $sDigest;
 
-        $this->_sNonce = uniqid();
-        $this->_sOpaque = md5($sRealm);
+        $sIp = (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+        $sOpaque = sha1($sRealm.$_SERVER['HTTP_USER_AGENT'].$sIp);
+
+        $this->_sNonce = sha1(uniqid($sIp));
+        $this->_sOpaque = $sOpaque;
     }
 
     protected function _parseDigest() {
