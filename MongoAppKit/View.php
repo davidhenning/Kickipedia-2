@@ -243,28 +243,45 @@ class View extends Base {
                     $aPages['lastPageUrl'] = $this->_createPageUrl($iPages, $iDocumentLimit);
                 }
 
-                if($iPages > 0) {
-                    
-                    // set pages with number, url and active state
-                    for($i = 1; $i <= $iPages; $i++) {
-                        $aPage = array(
-                            'nr' => $i,
-                            'url' => $this->_createPageUrl($i, $iDocumentLimit)
-                        );
-
-                        if($i === $iCurrentPage) {
-                            $aPage['active'] = true;
-                        }
-
-                        $aPages['pages'][] = $aPage;
-                    }
-                }
+                $aPages['pages'] = $this->_getPages($iPages, $iDocumentLimit, $iCurrentPage); 
 
                 $this->_aPagination = $aPages;
             }
         }
 
         return $this->_aPagination;
+    }
+
+    /**
+     * Get pages array with page numbers and urls
+     *
+     * @param integer $iPages
+     * @param integer $iDocumentLimit
+     * @param integer $iCurrentPage
+     * @return array
+     */
+
+    protected function _getPages($iPages, $iDocumentLimit, $iCurrentPage) {
+        $aPages = array();
+
+        if($iPages > 0) {
+            
+            // set pages with number, url and active state
+            for($i = 1; $i <= $iPages; $i++) {
+                $aPage = array(
+                    'nr' => $i,
+                    'url' => $this->_createPageUrl($i, $iDocumentLimit)
+                );
+
+                if($i === $iCurrentPage) {
+                    $aPage['active'] = true;
+                }
+
+                $aPages[] = $aPage;
+            }
+        }
+
+        return $aPages;
     }
 
     /**
