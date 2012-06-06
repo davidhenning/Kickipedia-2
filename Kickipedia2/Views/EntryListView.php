@@ -77,7 +77,6 @@ class EntryListView extends BaseView {
     public function getDocuments() {
         if($this->_oDocuments === null) {
             $oEntryDocumentList = new EntryDocumentList();
-            $iCurrentPage = $this->getCurrentPage();
             $iDocumentLimit = $this->getDocumentLimit();
 
             if(!empty($this->_sCustomSortField)) {
@@ -86,7 +85,7 @@ class EntryListView extends BaseView {
 
             if($this->_sListType === 'search') {
                 $this->addAdditionalUrlParameter('term', $this->_sSeachTerm);
-                $oEntryDocumentList->search($this->_sSeachTerm, $iCurrentPage, $iDocumentLimit);
+                $oEntryDocumentList->findByTerm($this->_sSeachTerm, $iDocumentLimit, $this->_iSkippedDocuments);
 
             } elseif($this->_sListType === 'list') {
                 if($this->_iDocumentType === null && $this->_sOutputFormat === 'html') {
@@ -95,9 +94,9 @@ class EntryListView extends BaseView {
 
                 if($this->_iDocumentType !== null) {
                     $this->addAdditionalUrlParameter('type', $this->_iDocumentType);
-                    $oEntryDocumentList->findByType($this->_iDocumentType, $iCurrentPage, $iDocumentLimit);
+                    $oEntryDocumentList->findByType($this->_iDocumentType, $iDocumentLimit, $this->_iSkippedDocuments);
                 } else {
-                    $oEntryDocumentList->findByPage($iCurrentPage, $iDocumentLimit);
+                    $oEntryDocumentList->find($iDocumentLimit, $this->_iSkippedDocuments);
                 }
 
             }

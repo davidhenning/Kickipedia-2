@@ -12,12 +12,12 @@ class EntryDocumentList extends DocumentList {
         $this->setDocumentBaseObject(new EntryDocument());
     }
 
-    public function findByType($iType, $iPage = 1, $iPerPage = 50) {
+    public function findByType($iType, $iLimit = 100, $iSkip = 0) {
         $oCursor = $this->_getDefaultCursor(array('type' => $iType));
-        $this->findByPage($iPage, $iPerPage, $oCursor);
+        $this->find($iLimit, $iSkip, $oCursor);
     }
 
-    public function search($sTerm, $iPage = 1, $iPerPage = 50) {
+    public function findByTerm($sTerm, $iLimit = 100, $iSkip = 0) {
         $aWhere = array('$or' => array(
             array('name' => new \MongoRegex("/{$sTerm}/i")),
             array('reason' => new \MongoRegex("/{$sTerm}/i")),
@@ -26,6 +26,6 @@ class EntryDocumentList extends DocumentList {
         ));
 
         $oCursor = $this->_getDefaultCursor($aWhere);
-        $this->findByPage($iPage, $iPerPage, $oCursor);
+        $this->find($iLimit, $iSkip, $oCursor);
     }
 }

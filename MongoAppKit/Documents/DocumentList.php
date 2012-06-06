@@ -145,13 +145,11 @@ class DocumentList extends IterateableList {
      * @param MongoCursor $oCursorOverride
      */
 
-    public function findByPage($iPage = 1, $iPerPage = 50, $oCursorOverride = null) {
+    public function find($iLimit = 100, $iSkip = 0, $oCursorOverride = null) {
         // set default cursor if no override is available
         $oCursor = ($oCursorOverride !== null && $oCursorOverride instanceof \MongoCursor) ? $oCursorOverride : $this->_getDefaultCursor();
         // set limit for page
-        $oCursor->limit($iPerPage);
-
-        $iSkip = ($iPage - 1) * $iPerPage;
+        $oCursor->limit($iLimit);
 
         if($iSkip > 0) {
             $oCursor->skip($iSkip);
