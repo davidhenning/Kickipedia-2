@@ -105,7 +105,8 @@ class EntryActions {
         }
 
         if(Input::getInstance()->getRequestMethod() === 'POST') {
-            redirect_to('entry', 'list', 'type', $iTypeId);
+            $sUrl = "/entry/list.html?type={$iTypeId}"
+            redirect_to($sUrl);
         }  elseif(Input::getInstance()->getRequestMethod() === 'PUT') {
             $oView->renderPutResponse();
         }        
@@ -117,7 +118,8 @@ class EntryActions {
         $oView->delete();
 
         if(Input::getInstance()->getRequestMethod() === 'POST') {
-            redirect_to('entry', 'list', 'type', $iTypeId);
+            $sUrl = "/entry/list.html?type={$iTypeId}"
+            redirect_to($sUrl);
         }  elseif(Input::getInstance()->getRequestMethod() === 'DELETE') {
             $oView->renderDeleteResponse();
         } 
