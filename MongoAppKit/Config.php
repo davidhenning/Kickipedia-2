@@ -12,9 +12,9 @@
 
 namespace MongoAppKit;
 
-use MongoAppKit\Lists\ArrayList;
+use MongoAppKit\Lists\IterateableList;
 
-class Config extends ArrayList {
+class Config extends IterateableList {
 
     /**
      * Config object
