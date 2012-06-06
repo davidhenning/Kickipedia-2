@@ -34,3 +34,22 @@ Additional to the web interface Kickipedia 2 features a RESTful web-service API 
 - MongoDB 2.0 or higher
 
 Kickipedia 2 will run on Windows, Mac OS X and Linux servers.
+
+## Apache configuration ##
+
+In order to function properly and for improved security you need to create an virtual host in your Apache configuration.
+
+The following example is suited for a local installation on the host kickipedia.name on your localhost IP address. To document root points to the public directory. Feel free to add any other configuration options you may need.
+
+```apache
+<VirtualHost 127.0.0.1>
+    DocumentRoot /var/www/kickipedia2/public
+    ServerName kickipedia2.name
+    
+    <directory /var/www/kickipedia2/public>
+        Order allow,deny
+        Allow From All
+        AllowOverride All
+    </directory>
+</VirtualHost>
+```
