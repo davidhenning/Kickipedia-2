@@ -4,9 +4,9 @@ require_once(__DIR__ . '/bootstrap.php');
 
 use Kickipedia2\Models\EntryDocument;
 
-for($i = 0; $i < 1000; $i++) {
+for($i = 0; $i < 10000; $i++) {
 	$entry = new EntryDocument();
-	$entry->setProperty('type', 3);
+	$entry->setProperty('type', rand(1,4));
 	$entry->setProperty('user', 1);
 	$entry->setProperty('name', "Victim {$i}");
 	$entry->setProperty('reason', 'Troll');
