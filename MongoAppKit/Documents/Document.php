@@ -154,14 +154,14 @@ class Document extends IterateableList {
         switch($sType) {
             case 'id':
                 if(!$value instanceof \MongoId) {
-                    return ($value !== null) ? new \MongoId($value) : new \MongoId();
+                    return ($value !== null && !empty($value)) ? new \MongoId($value) : new \MongoId();
                 }              
                 
                 break;
             case 'date':
                 if(!$value instanceof \MongoDate) {
                     $value = (!is_int($value)) ? strtotime($value) : $value;
-                    return ($value !== null) ? new \MongoDate($value) : new \MongoDate();
+                    return ($value !== null && !empty($value)) ? new \MongoDate($value) : new \MongoDate();
                 }              
                 
                 break;
