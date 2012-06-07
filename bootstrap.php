@@ -6,9 +6,9 @@ if(!function_exists('getBasePath')) {
     }
 }
 
-require_once(__DIR__ . '/lib/limonade.php');
-require_once(__DIR__ . '/lib/Twig/Autoloader.php');
-require_once(__DIR__ . '/lib/Phpass/Loader.php');
+require_once(__DIR__ . '/vendor/limonade.php');
+require_once(__DIR__ . '/vendor/Twig/Autoloader.php');
+require_once(__DIR__ . '/vendor/Phpass/Loader.php');
 
 spl_autoload_register(function($className) {
     $classPath = __DIR__ . '/' . 
