@@ -9,6 +9,7 @@ if(!function_exists('getBasePath')) {
 require_once(__DIR__ . '/vendor/Limonade/limonade.php');
 require_once(__DIR__ . '/vendor/Twig/Autoloader.php');
 require_once(__DIR__ . '/vendor/Phpass/Loader.php');
+require_once(__DIR__ . '/vendor/GibberishAES/GibberishAES.php');
 
 spl_autoload_register(function($className) {
     $classPath = __DIR__ . '/' . 
