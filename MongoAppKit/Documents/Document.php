@@ -12,7 +12,8 @@
 
 namespace MongoAppKit\Documents;
 
-use MongoAppKit\Lists\IterateableList;
+use MongoAppKit\Lists\IterateableList,
+    MongoAppKit\Encryption;
 
 class Document extends IterateableList {
 
@@ -130,7 +131,7 @@ class Document extends IterateableList {
 
             // encrypt field data
             if(isset($aFieldConfig['encrypt'])) {
-                // for future use       
+                $value = Encryption::getInstance()->encrypt($value, $this->getConfig()->getProperty('EncryptionKey'));
             }
 
             // set php type
@@ -212,7 +213,6 @@ class Document extends IterateableList {
      * Override parent method to perpare certain values (f.e. MongoDate) to return their value
      *
      * @param string $sKey
-     * @param mixed $value
      * @return mixed
      */
 
@@ -227,6 +227,10 @@ class Document extends IterateableList {
         // get id of MongoId object
         if($value instanceof \MongoId) {
             $value = $value->{'$id'};
+        }
+
+        if(isset($this->_aCollectionConfig[$sKey]['encrypt'])) {
+            $value = Encryption::getInstance()->decrypt($value, $this->getConfig()->getProperty('EncryptionKey'));
         }
 
         return $value;
