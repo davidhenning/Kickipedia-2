@@ -32,6 +32,6 @@ class UserDocumentList extends DocumentList {
             return $this->_aProperties[0];
         }
 
-        throw new \Exception("Could not find user: {$sName}");
+        throw new \InvalidArgumentException("Could not find user: {$sName}");
     }
 }
