@@ -8,6 +8,7 @@ if(!function_exists('getBasePath')) {
 
 require_once(__DIR__ . '/lib/limonade.php');
 require_once(__DIR__ . '/lib/Twig/Autoloader.php');
+require_once(__DIR__ . '/lib/Phpass/Loader.php');
 
 spl_autoload_register(function($className) {
     $classPath = __DIR__ . '/' . 
@@ -21,3 +22,4 @@ spl_autoload_register(function($className) {
 });
 
 \Twig_Autoloader::register();
+\Phpass\Loader::registerAutoloader();
