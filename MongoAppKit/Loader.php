@@ -2,8 +2,14 @@
 
 namespace MongoAppKit;
 
+require_once(__DIR__ . '/vendor/GibberishAES/GibberishAES.php');
+require_once(__DIR__ . '/vendor/Twig/Autoloader.php');
+
+\Twig_Autoloader::register();
+
 class Loader {
-	public static function registerAutoloader() {
+	
+    public static function registerAutoloader() {
 		return spl_autoload_register(array ('MongoAppKit\\Loader', 'load'));
 	}
 
@@ -23,4 +29,5 @@ class Loader {
             }
         }
 	}
+
 }

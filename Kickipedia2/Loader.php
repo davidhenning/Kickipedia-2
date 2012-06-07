@@ -2,6 +2,11 @@
 
 namespace Kickipedia2;
 
+require_once(__DIR__ . '/vendor/Phpass/Loader.php');
+require_once(__DIR__ . '/vendor/Limonade/limonade.php');
+
+\Phpass\Loader::registerAutoloader();
+
 class Loader {
 	public static function registerAutoloader() {
 		return spl_autoload_register(array ('Kickipedia2\\Loader', 'load'));
