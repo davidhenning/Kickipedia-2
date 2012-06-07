@@ -12,7 +12,7 @@ if(file_exists($sDependencyFile)) {
         foreach($aDependencies as $aDependency) {
             $sDependencyFile = __DIR__ . '/vendor/' . $aDependency['file'];
             if(file_exists($sDependencyFile)) {
-                require_once($sDependencyFile);
+                include_once($sDependencyFile);
 
                 if(!empty($aDependency['autoload'])) {
                     if(isset($aDependency['autoload']['className']) && isset($aDependency['autoload']['methodName'])) {
@@ -36,13 +36,13 @@ class Loader {
         }
 
         $sLibraryRoot = realpath(__DIR__ . '/../');
-        $sFileName = str_replace('\\', DIRECTORY_SEPARATOR, $sClassName) . '.php';
+        $sFileName = str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $sClassName) . '.php';
         $sFileName = realpath($sLibraryRoot . DIRECTORY_SEPARATOR . $sFileName);
         
         if(substr($sFileName, 0, strlen($sLibraryRoot)) == $sLibraryRoot) {
             
             if(is_readable($sFileName)) {
-                require_once($sFileName);
+                include_once($sFileName);
             }
         }
 	}
