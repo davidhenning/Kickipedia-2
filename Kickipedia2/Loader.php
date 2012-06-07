@@ -2,13 +2,31 @@
 
 namespace Kickipedia2;
 
-require_once(__DIR__ . '/vendor/Phpass/Loader.php');
-require_once(__DIR__ . '/vendor/Limonade/limonade.php');
+$sDependencyFile = __DIR__ . '/vendor/dependencies.json';
 
-\Phpass\Loader::registerAutoloader();
+if(file_exists($sDependencyFile)) {
+    $sDependencies = file_get_contents($sDependencyFile);
+    $aDependencies = json_decode($sDependencies, true);
+
+    if(!empty($aDependencies)) {
+        foreach($aDependencies as $aDependency) {
+            $sDependencyFile = __DIR__ . '/vendor/' . $aDependency['file'];
+            if(file_exists($sDependencyFile)) {
+                require_once($sDependencyFile);
+
+                if(!empty($aDependency['autoload'])) {
+                    if(isset($aDependency['autoload']['className']) && isset($aDependency['autoload']['methodName'])) {
+                        call_user_func(array($aDependency['autoload']['className'], $aDependency['autoload']['methodName']));
+                    }
+                }
+            }
+        }
+    }
+}
 
 class Loader {
-	public static function registerAutoloader() {
+	
+    public static function registerAutoloader() {
 		return spl_autoload_register(array ('Kickipedia2\\Loader', 'load'));
 	}
 
@@ -28,4 +46,5 @@ class Loader {
             }
         }
 	}
+
 }

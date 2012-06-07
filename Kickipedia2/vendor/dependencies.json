@@ -1,0 +1,16 @@
+[
+    {
+        "name": "Limonade",
+        "file": "Limonade/limonade.php",
+        "loaderClassName": null,
+        "loaderMethodName": null
+    },
+    {
+        "name": "Phpass",
+        "file": "Phpass/Loader.php",
+        "autoload": {
+            "className": "\\Phpass\\Loader",
+            "methodName": "registerAutoloader"
+        }
+    }
+]

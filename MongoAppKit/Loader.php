@@ -2,18 +2,35 @@
 
 namespace MongoAppKit;
 
-require_once(__DIR__ . '/vendor/GibberishAES/GibberishAES.php');
-require_once(__DIR__ . '/vendor/Twig/Autoloader.php');
+$sDependencyFile = __DIR__ . '/vendor/dependencies.json';
 
-\Twig_Autoloader::register();
+if(file_exists($sDependencyFile)) {
+    $sDependencies = file_get_contents($sDependencyFile);
+    $aDependencies = json_decode($sDependencies, true);
+
+    if(!empty($aDependencies)) {
+        foreach($aDependencies as $aDependency) {
+            $sDependencyFile = __DIR__ . '/vendor/' . $aDependency['file'];
+            if(file_exists($sDependencyFile)) {
+                require_once($sDependencyFile);
+
+                if(!empty($aDependency['autoload'])) {
+                    if(isset($aDependency['autoload']['className']) && isset($aDependency['autoload']['methodName'])) {
+                        call_user_func(array($aDependency['autoload']['className'], $aDependency['autoload']['methodName']));
+                    }
+                }
+            }
+        }
+    }
+}
 
 class Loader {
-	
+    
     public static function registerAutoloader() {
-		return spl_autoload_register(array ('MongoAppKit\\Loader', 'load'));
-	}
+        return spl_autoload_register(array ('MongoAppKit\\Loader', 'load'));
+    }
 
-	public static function load($sClassName) {
+    public static function load($sClassName) {
         if(substr($sClassName, 0, 11) !== 'MongoAppKit') {
             return;
         }
@@ -28,6 +45,6 @@ class Loader {
                 require_once($sFileName);
             }
         }
-	}
+    }
 
 }

@@ -1,0 +1,16 @@
+[
+    {
+        "name": "GibberishAES",
+        "file": "GibberishAES/GibberishAES.php",
+        "loaderClassName": null,
+        "loaderMethodName": null
+    },
+    {
+        "name": "Twig",
+        "file": "Twig/Autoloader.php",
+        "autoload": {
+            "className": "\\Twig_Autoloader",
+            "methodName": "register"
+        }
+    }
+]
