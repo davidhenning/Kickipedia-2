@@ -6,21 +6,15 @@ if(!function_exists('getBasePath')) {
     }
 }
 
-require_once(__DIR__ . '/vendor/Limonade/limonade.php');
-require_once(__DIR__ . '/vendor/Twig/Autoloader.php');
-require_once(__DIR__ . '/vendor/Phpass/Loader.php');
-require_once(__DIR__ . '/vendor/GibberishAES/GibberishAES.php');
+require_once(__DIR__ . '/MongoAppKit/Loader.php');
+require_once(__DIR__ . '/Kickipedia2/Loader.php');
+require_once(__DIR__ . '/Kickipedia2/vendor/Twig/Autoloader.php');
+require_once(__DIR__ . '/Kickipedia2/vendor/Phpass/Loader.php');
 
-spl_autoload_register(function($className) {
-    $classPath = __DIR__ . '/' . 
-                 implode(DIRECTORY_SEPARATOR, explode('\\', $className)) . '.php';
-
-    if(!file_exists($classPath)) {
-        return false;
-    }
-    
-    require_once($classPath);
-});
-
+\MongoAppKit\Loader::registerAutoloader();
+\Kickipedia2\Loader::registerAutoloader();
 \Twig_Autoloader::register();
 \Phpass\Loader::registerAutoloader();
+
+require_once(__DIR__ . '/Kickipedia2/vendor/Limonade/limonade.php');
+require_once(__DIR__ . '/MongoAppKit/vendor/GibberishAES/GibberishAES.php');
