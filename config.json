@@ -63,6 +63,7 @@
             },
 
             "token": {
+                "encrypt": true,
                 "index": {
                     "use": true
                 }
@@ -100,21 +101,18 @@
             },           
 
             "name": {
-                "encrypt": true,
                 "index": {
                     "use": true
                 }
             },
 
             "reason": {
-                "encrypt": true,
                 "index": {
                     "use": true
                 }
             },
 
             "ip": {
-                "encrypt": true,
                 "index": {
                     "use": true
                 }
@@ -127,7 +125,6 @@
             },
 
             "comment": {
-                "encrypt": true,
                 "index": {
                     "use": true
                 }
