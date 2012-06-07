@@ -2,8 +2,8 @@
 
 namespace Kickipedia2\Views;
 
-use MongoAppKit\View;
-use Kickipedia2\Models\EntryDocument;
+use MongoAppKit\View,
+	Kickipedia2\Models\EntryDocument;
 
 class EntryView extends BaseView {
     

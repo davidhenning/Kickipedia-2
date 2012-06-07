@@ -2,12 +2,11 @@
 
 namespace Kickipedia2\Controllers;
 
-
-use MongoAppKit\Input;
-use Kickipedia2\Views\EntryListView;
-use Kickipedia2\Views\EntryView;
-use Kickipedia2\Views\EntryEditView;
-use Kickipedia2\Views\EntryNewView;
+use MongoAppKit\Input,
+    Kickipedia2\Views\EntryListView,
+    Kickipedia2\Views\EntryView,
+    Kickipedia2\Views\EntryEditView,
+    Kickipedia2\Views\EntryNewView;
 
 class EntryActions {
 
