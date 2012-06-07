@@ -18,11 +18,11 @@
         },
         {
             "name": "Statistik",
-            "route": "/entry/stats"
+            "route": "/stats.html"
         },
         {
             "name": "Profil",
-            "route": "/entry/profile"
+            "route": "/profile"
         }        
     ],
     "EntryTypes": {
