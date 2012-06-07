@@ -1,39 +1,29 @@
-# Introduction #
+# Kickipedia 2 #
 
-## What is Kickipedia 2? ##
+Kickipedia 2 is a database application designed for the administrative staff of big forums. On default Kickipedia 2 stores warnings, blocked or banned users and provides statistics. If you need more types, just add them to the config file.
 
-Kickipedia 2 is a database application designed for the administrative staff of big forums.
-
-## Why? ##
-
-I am an administrator in one of Germany's largest forums. About 10 years ago I decided to write an web-based app to keep track of all blocked, banned or warned users. The first Kickipedia was born.
-
-It growed over the years and so the old PHP 4 based procedural code became really old-fashioned junk. I planned a rewrite several years ago but was never able to complete it.
-
-In short: it's time for a completly new Kickipedia.
-
-## Technology ##
-
-The new version is based on PHP too, but of course on PHP 5.3 and is completely object-oriented. Instead of a relational database like MySQL, Kickipedia 2 features the document-oriented database MongoDB for a really fast, flexible and much more comfortable data storage.
-
-To use MongoDB even more comfortable, I created MongoAppKit. A small but powerful framework to write apps with PHP 5.3 and MongoDB. It will be released separately on Github soon.
-
-Kickipedia 2 features two more frameworks:
-
-- Limonade: a powerful and really easy to use routing system inspired by Sinatra for Ruby
-- Twig: the mighty template engine from Symfony 2
-
-# REST #
-
-Additional to the web interface Kickipedia 2 features a RESTful web-service API with HTTP digest authentication. The data provided as JSON or XML. If you need a custom format, just add your implementation of the format in a new render method of the related view and you're done.
+Kickipedia 2 features a RESTful API with HTTP digest authentication. Data is provided as JSON or XML. Custom format can be easily implementend into the related view classes.
 
 # Requirements #
 
 - Apache 2 with enabled mod_rewrite and a possibilty to create your own virtual host
-- PHP 5.3 or higher with a MongoDB driver
+- PHP 5.3 or higher with following extensions:
+  - mongo
+  - json
+  - hash
+  - mcrypt
+  - session
 - MongoDB 2.0 or higher
 
-Kickipedia 2 will run on Windows, Mac OS X and Linux servers.
+# Installation #
+
+1. Clone the repository in a directory inside the htdocs directory of your web server
+
+2. Configure a virtual host (see below)
+
+3. Open yourdomain.com/setup.php and follow the instructions
+
+4. You're finished. Have fun!
 
 ## Apache configuration ##
 
@@ -53,3 +43,11 @@ The following example is suited for a local installation on the host kickipedia.
     </directory>
 </VirtualHost>
 ```
+
+# Technology #
+
+To write Kickipedia 2 I created a small framework called MongoAppKit. It's no match for Symfony or CakePHP, but it provides all things you need, to create PHP 5.3 based websites with a MongoDB data storage quite fast.
+
+MongoAppKit itself features [Gibberish AES](https://github.com/ivantcholakov/gibberish-aes-php) to provide AES encryption and [Twig](https://github.com/fabpot/Twig) as powerful an easy to use template engine. If you prefer Smarty or another template engine, Twig can be easily replaced.
+
+The Kickipedia 2 itself features [Limonade](https://github.com/sofadesign/limonade) for URL routing and [Phpass](https://github.com/rchouinard/phpass) to encrypt all user passwords. Phpass utilizies salting and key stretching to achieve maximum password security.
