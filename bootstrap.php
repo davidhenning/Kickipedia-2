@@ -6,7 +6,7 @@ if(!function_exists('getBasePath')) {
     }
 }
 
-require_once(__DIR__ . '/vendor/limonade.php');
+require_once(__DIR__ . '/vendor/Limonade/limonade.php');
 require_once(__DIR__ . '/vendor/Twig/Autoloader.php');
 require_once(__DIR__ . '/vendor/Phpass/Loader.php');
 
