@@ -35,15 +35,22 @@ try {
         $oAuth->sendAuthenticationHeader(true);
     }
 
-    echo $e->getMessage();
+    include_once('./error.php');
     exit();
 } catch(\Exception $e) {
-    echo $e->getMessage();
+    include_once('./error.php');
     exit();
 }
 
-$entryActions = new EntryActions();
-
-run();
+try {
+    $entryActions = new EntryActions();
+    run();
+} catch(\InvalidArgumentException $e) {
+    include_once('./error.php');
+    exit();
+} catch(\Exception $e) {
+    include_once('./error.php');
+    exit();
+}
 
 #echo sprintf("%01.6f", microtime(true) - $time).'s, max memory usage: '.(memory_get_peak_usage() / 1024 / 1024).' MB';
