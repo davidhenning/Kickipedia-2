@@ -57,8 +57,19 @@ class Storage extends Base {
      */
 
     private function __construct() {
-        $this->_oMongo = new \Mongo($this->getConfig()->getProperty('MongoServer'));
+        $sMongoServer = $this->getConfig()->getProperty('MongoServer');
+        $iMongoPort = $this->getConfig()->getProperty('MongoPort');
+        $sMongoUser = $this->getConfig()->getProperty('MongoUser');
+        $sMongoPassword = $this->getConfig()->getProperty('MongoPassword');
+
+        $sHost = "mongodb://{$sMongoServer}:{$iMongoPort}";
+        $this->_oMongo = new \Mongo($sHost);
+
         $this->_oDatabase = $this->_oMongo->selectDB($this->getConfig()->getProperty('MongoDatabase'));
+
+        if(!empty($sMongoUser) && !empty($sMongoPassword)) {
+            $this->_oDatabase->authenticate($sMongoUser, $sMongoPassword);
+        }        
     }
 
     /**
