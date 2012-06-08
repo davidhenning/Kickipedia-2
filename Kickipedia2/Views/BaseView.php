@@ -10,6 +10,15 @@ class BaseView extends View {
     protected $_iDocumentType = null;
     protected $_aNavigation = null;
 
+    public function redirect($sUrl, $aParams = null) {
+        if(!empty($aParams) && is_array($aParams)) {
+            $sUrl .= '?' . http_build_query($aParams);
+        }
+
+        send_header('Location: '.$sUrl, true, 302);
+        exit();
+    }
+
     public function getTypes() {
         if($this->_aTypes === null) {
             $aRawTypes = $this->getConfig()->getProperty('EntryTypes');
