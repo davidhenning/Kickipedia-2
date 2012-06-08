@@ -152,7 +152,7 @@ class View extends Base {
 
     public function setOutputFormat($sOutputFormat) {
         if(!in_array($sOutputFormat, $this->_aAllowedOutputFormats)) {
-            throw new \InvalidArgumentException('Specified output format is unkown');
+            throw new \InvalidArgumentException("Output format '{$sOutputFormat}' is unkown.");
         }
 
         $this->_sOutputFormat = $sOutputFormat;
