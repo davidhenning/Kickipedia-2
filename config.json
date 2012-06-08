@@ -63,10 +63,7 @@
             },
 
             "token": {
-                "encrypt": true,
-                "index": {
-                    "use": true
-                }
+                "encrypt": true
             },
 
             "email": {}
@@ -113,9 +110,7 @@
             },
 
             "ip": {
-                "index": {
-                    "use": true
-                }
+                "encrypt": true
             },
 
             "url": {

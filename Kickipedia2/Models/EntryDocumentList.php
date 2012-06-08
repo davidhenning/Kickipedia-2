@@ -21,7 +21,6 @@ class EntryDocumentList extends DocumentList {
         $aWhere = array('$or' => array(
             array('name' => new \MongoRegex("/{$sTerm}/i")),
             array('reason' => new \MongoRegex("/{$sTerm}/i")),
-            array('ip' => new \MongoRegex("/{$sTerm}/i")),
             array('comment' => new \MongoRegex("/{$sTerm}/i"))
         ));
 
