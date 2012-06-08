@@ -95,7 +95,9 @@ class EntryActions {
         $entryData = Input::getInstance()->getData('entry');
 
         $oView = new EntryEditView($sId);
-        $oView->update($entryData);
+        $oDocument = $oView->getDocument();
+        $oDocument->updateProperties($entryData);
+        $oDocument->save();
 
         try {
             $iTypeId = $oView->getTypeId();
@@ -105,7 +107,7 @@ class EntryActions {
 
         if(Input::getInstance()->getRequestMethod() === 'POST') {
             $oView->redirect('/entry/list.html', array('type' => $iTypeId));
-        }  elseif(Input::getInstance()->getRequestMethod() === 'PUT') {
+        } elseif(Input::getInstance()->getRequestMethod() === 'PUT') {
             $oView->renderPutResponse();
         }        
     }
@@ -113,11 +115,11 @@ class EntryActions {
     public function deleteEntry() {
         $sId = params('id');
         $oView = new EntryEditView($sId);
-        $oView->delete();
+        $oView->getDocument()->delete();
 
         if(Input::getInstance()->getRequestMethod() === 'POST') {
             $oView->redirect('/entry/list.html', array('type' => $iTypeId));
-        }  elseif(Input::getInstance()->getRequestMethod() === 'DELETE') {
+        } elseif(Input::getInstance()->getRequestMethod() === 'DELETE') {
             $oView->renderDeleteResponse();
         } 
     }

@@ -30,29 +30,20 @@ class EntryEditView extends BaseView {
     }
 
     public function getDocument() {
+        if($this->_oDocument === null) {
+            $this->_oDocument = new EntryDocument();
+            $sId = $this->getId();
+
+            if(!is_null($sId)) {
+                $this->_oDocument->load($sId);
+            }
+        }
+
         return $this->_oDocument;
     }
 
     public function getUpdateUrl() {
-        return url_for('entry', $this->getId(), 'update');
-    }
-
-    public function update($aData) {
-        $this->_oDocument = new EntryDocument();
-        $sId = $this->getId();
-
-        if(!is_null($sId)) {
-            $this->_oDocument->load($sId);
-        }
-            
-        $this->_oDocument->updateProperties($aData);
-        $this->_oDocument->save();  
-    }
-
-    public function delete() {
-        $this->_oDocument = new EntryDocument();
-        $this->_oDocument->load($this->getId()); 
-        $this->_oDocument->delete();     
+        return "/entry/{$this->getId()}/update";
     }
 
     public function getTypeId() {
