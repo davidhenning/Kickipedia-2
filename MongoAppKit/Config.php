@@ -43,7 +43,7 @@ class Config extends IterateableList {
 
     private function __construct() {
 
-        $configFile = getBasePath().'config.json';
+        $configFile = getBasePath().'mongoappkit.json';
 
         if(!file_exists($configFile)) {
             throw new Exception('Configuration file missing!');
@@ -52,6 +52,22 @@ class Config extends IterateableList {
         $configFileJsonData = file_get_contents($configFile);
         $configData = json_decode($configFileJsonData, true);
         $this->assign($configData);
+    }
+
+    public function addConfigFile($sFileName = null) {
+        if(empty($sFileName)) {
+            throw new \InvalidArgumentException("Empty config file name specified.");
+        }
+
+        $configFile = getBasePath().$sFileName;
+
+        if(!is_readable($configFile)) {
+            throw new \InvalidArgumentException("File {$sFileName} is not readable!");
+        }
+
+        $configFileJsonData = file_get_contents($configFile);
+        $configData = json_decode($configFileJsonData, true);
+        $this->updateProperties($configData);
     }
 
     /**

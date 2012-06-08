@@ -34,6 +34,20 @@ class IterateableList extends Base implements \Countable, \Iterator, \ArrayAcces
     }
 
     /**
+     * Update properties with from given array
+     *
+     * @param array $aProperties
+     */
+
+    public function updateProperties($aProperties) {
+        if(!empty($aProperties)) {
+            foreach($aProperties as $sProperty => $value) {
+                $this->setProperty($sProperty, $value);
+            }
+        }
+    }
+
+    /**
      * Returns value of given property name or throws an exception if the property does not exist 
      *
      * @param string $sKey

@@ -258,20 +258,6 @@ class Document extends IterateableList {
     }
 
     /**
-     * Update properties with from given array
-     *
-     * @param array $aProperties
-     */
-
-    public function updateProperties($aProperties) {
-        if(!empty($aProperties)) {
-            foreach($aProperties as $sProperty => $value) {
-                $this->setProperty($sProperty, $value);
-            }
-        }
-    }
-
-    /**
      * Load documend from given id
      *
      * @param string $sId

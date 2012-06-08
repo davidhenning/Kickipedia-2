@@ -7,12 +7,15 @@ $time = microtime(true);
 require_once(__DIR__ . '/../bootstrap.php');
 
 use MongoAppKit\HttpAuthDigest;
+use MongoAppKit\Config;
 use MongoAppKit\Input;
 use MongoAppKit\Exceptions\HttpException;
 use Kickipedia2\Controllers\EntryActions;
 use Kickipedia2\Models\UserDocumentList;
 
 try {
+    Config::getInstance()->addConfigFile('kickipedia2.json');
+
     $sDigest = (isset($_SERVER['PHP_AUTH_DIGEST'])) ? $_SERVER['PHP_AUTH_DIGEST'] : null;
 
     if(empty($sDigest) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
