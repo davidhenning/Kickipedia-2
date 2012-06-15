@@ -126,7 +126,11 @@ class EntryActions {
         $oView->getDocument()->delete();
 
         if(Input::getInstance()->getRequestMethod() === 'POST') {
-            $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+            if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json') {
+                $oView->renderJsonDeleteResponse();
+            } else {            
+                $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+            }
         } elseif(Input::getInstance()->getRequestMethod() === 'DELETE') {
             $oView->renderJsonDeleteResponse();
         } 
