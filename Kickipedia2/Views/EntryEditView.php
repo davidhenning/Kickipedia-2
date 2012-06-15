@@ -50,7 +50,7 @@ class EntryEditView extends BaseView {
         return $this->_oDocument->getProperty('type');
     }
 
-    public function renderDeleteResponse() {
+    public function renderJsonDeleteResponse() {
         $aOutput = array(
             'status' => 200,
             'time' => date('Y-m-d H:i:s'),
@@ -67,14 +67,14 @@ class EntryEditView extends BaseView {
         echo json_encode($aOutput); 
     }
 
-    public function renderPutResponse() {
+    public function renderJsonUpdateResponse() {
         $sId = $this->_oDocument->getProperty('_id');
 
         $aOutput = array(
             'status' => 200,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
-                'method' => 'PUT',
+                'method' => $_SERVER['REQUEST_METHOD'],
                 'url' => request_uri()
             ),
             'response' => array(
