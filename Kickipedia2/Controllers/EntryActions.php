@@ -105,10 +105,18 @@ class EntryActions {
             $iTypeId = null;
         }
 
+        if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json') {
+            $oView->setOutputFormat('json');
+        }
+
         if(Input::getInstance()->getRequestMethod() === 'POST') {
-            $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+            if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json') {
+                $oView->renderJsonUpdateResponse();
+            } else {
+                $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+            }         
         } elseif(Input::getInstance()->getRequestMethod() === 'PUT') {
-            $oView->renderPutResponse();
+            $oView->renderJsonUpdateResponse();
         }        
     }
 
@@ -120,7 +128,7 @@ class EntryActions {
         if(Input::getInstance()->getRequestMethod() === 'POST') {
             $oView->redirect('/entry/list.html', array('type' => $iTypeId));
         } elseif(Input::getInstance()->getRequestMethod() === 'DELETE') {
-            $oView->renderDeleteResponse();
+            $oView->renderJsonDeleteResponse();
         } 
     }
 }
