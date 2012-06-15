@@ -11,13 +11,14 @@ if($e->getCode() === 400) {
             'status' => 400,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
-                'method' => 'PUT',
+                'method' => $_SERVER['REQUEST_METHOD'],
                 'url' => request_uri()
             ),
             'response' => array(
                 'error' => str_ireplace('exception', '', get_class($e)),
                 'message' => $e->getMessage(),
-                'backtrace' => $e->getTrace()
+                'backtrace' => $e->getTrace(),
+                'server' => $_SERVER
             )
         );
 
