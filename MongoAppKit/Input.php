@@ -45,7 +45,30 @@ class Input {
     protected function _getPutValues() {
         if($this->_aPutValues === null) {
             $aPutValues = array();
-            parse_str($this->_sInputStream, $aPutValues);
+            
+            if($_SERVER['CONTENT_TYPE'] === 'application/json') {
+                $aPutValues = json_decode($this->_sInputStream, true);
+
+                if(!array_key_exists('data', $aPutValues)) {
+                    throw new \UnexpectedValueException("Invalid JSON: can not find attribute 'data'.", 400);
+                }
+
+                if(empty($aPutValues['data'])) {
+                    throw new \UnexpectedValueException("Invalid JSON: attribute 'data' is empty.", 400);
+                }
+
+            } else {
+                parse_str($this->_sInputStream, $aPutValues);
+
+                if(!array_key_exists('data', $aPutValues)) {
+                    throw new \UnexpectedValueException("Invalid POST request: can not find key 'data'.", 400);
+                }
+
+                if(empty($aPutValues['data'])) {
+                    throw new \UnexpectedValueException("Invalid POST request: array 'data' is empty.", 400);
+                }
+            }
+
             $this->_aPutValues = $aPutValues;
         }
 
