@@ -72,7 +72,7 @@ class EntryActions {
     }
 
     public function showEntry() {
-        $sId = params('id');
+        $sId = Input::getInstance()->sanitize(params('id'));
 
         $oView = new EntryView($sId);
         $oView->render();
@@ -84,7 +84,7 @@ class EntryActions {
     }
 
     public function editEntry() {
-        $sId = params('id');
+        $sId = Input::getInstance()->sanitize(params('id'));
 
         $oView = new EntryEditView($sId);
         $oView->render();        
