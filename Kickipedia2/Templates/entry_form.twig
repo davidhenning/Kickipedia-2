@@ -11,7 +11,7 @@
             {% endif %}
             <li>
                 <label for="name">Typ:</label>
-                <select name="entry[type]">
+                <select name="data[type]">
                     {% for type in view.getTypes() %}
                         <option value="{{ type.id }}" {% if document.type == type.id %}selected {% endif %}>{{ type.name }}</option>
                     {% endfor %}
@@ -19,15 +19,15 @@
             </li>                
             <li>
                 <label for="name">Name:</label>
-                <input type="text" name="entry[name]" value="{{ document.name }}">
+                <input type="text" name="data[name]" value="{{ document.name }}">
             </li>
             <li>
                 <label for="name">Grund:</label>
-                <input type="text" name="entry[reason]" value="{{ document.reason }}">
+                <input type="text" name="data[reason]" value="{{ document.reason }}">
             </li>
             <li>
                 <label for="name">IP:</label>
-                <input type="text" name="entry[ip]" value="{{ document.ip }}">
+                <input type="text" name="data[ip]" value="{{ document.ip }}">
             </li>
             <input type="submit" value="Bearbeiten">          
         </ul>

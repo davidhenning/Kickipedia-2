@@ -92,7 +92,7 @@ class EntryActions {
 
     public function updateEntry() {
         $sId = params('id');
-        $entryData = Input::getInstance()->getData('entry');
+        $entryData = Input::getInstance()->getData('data');
 
         $oView = new EntryEditView($sId);
         $oDocument = $oView->getDocument();
