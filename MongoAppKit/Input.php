@@ -13,6 +13,7 @@ class Input {
 
     protected $_sRequestMethod = 'GET';
     protected $_aPutValues = null;
+    protected $_aPostValues = null;
     protected $_sInputStream = null;
 
     /**
@@ -48,31 +49,47 @@ class Input {
             
             if($_SERVER['CONTENT_TYPE'] === 'application/json') {
                 $aPutValues = json_decode($this->_sInputStream, true);
-
-                if(!array_key_exists('data', $aPutValues)) {
-                    throw new \UnexpectedValueException("Invalid JSON: can not find attribute 'data'.", 400);
-                }
-
-                if(empty($aPutValues['data'])) {
-                    throw new \UnexpectedValueException("Invalid JSON: attribute 'data' is empty.", 400);
-                }
-
+                $this->_validateData('json', $aPutValues);
             } else {
                 parse_str($this->_sInputStream, $aPutValues);
-
-                if(!array_key_exists('data', $aPutValues)) {
-                    throw new \UnexpectedValueException("Invalid POST request: can not find key 'data'.", 400);
-                }
-
-                if(empty($aPutValues['data'])) {
-                    throw new \UnexpectedValueException("Invalid POST request: array 'data' is empty.", 400);
-                }
+                $this->_validateData('text', $aPutValues);
             }
 
             $this->_aPutValues = $aPutValues;
         }
 
         return $this->_aPutValues;
+    }
+
+    protected function _getPostValues($aData) {
+        if($this->_aPostValues === null) {
+            if($_SERVER['CONTENT_TYPE'] === 'application/json') {
+                $aData = json_decode($this->_sInputStream, true);
+                $this->_validateData('json', $aData);
+            } else {
+                $this->_validateData('text', $aData);
+            }
+
+            $this->_aPostValues = $aData;
+        }
+
+        return $this->_aPostValues;
+    }
+
+    protected function _validateData($sType, $aData) {
+        $sInvalidType = 'POST request';
+
+        if($sType === 'json') {
+            $sInvalidType = 'JSON';
+        } 
+
+        if(!array_key_exists('data', $aData)) {
+            throw new \UnexpectedValueException("Invalid {$sInvalidType}: can not find attribute 'data'.", 400);
+        }
+
+        if(empty($aData['data'])) {
+            throw new \UnexpectedValueException("Invalid {$sInvalidType}: attribute 'data' is empty.", 400);
+        }
     }
 
     public function getRequestMethod() {
@@ -102,7 +119,8 @@ class Input {
     }
 
     public function getPostData($sName) {
-        return (isset($_POST[$sName])) ? $this->sanitize($_POST[$sName]) : null;
+        $aPostValues = $this->_getPostValues($_POST);
+        return (isset($aPostValues[$sName])) ? $this->sanitize($aPostValues[$sName]) : null;
     }
 
     public function getPutData($sName) {
