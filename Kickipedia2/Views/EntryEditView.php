@@ -52,11 +52,15 @@ class EntryEditView extends BaseView {
 
     public function renderDeleteResponse() {
         $aOutput = array(
-            'header' => array(
-                'status' => 200,
-                'requestMethod' => 'DELETE',
-                'queryType' => 'delete',
-                'documentId' => $this->getId()
+            'status' => 200,
+            'time' => date('Y-m-d H:i:s'),
+            'request' => array(
+                'method' => 'DELETE',
+                'url' => request_uri()
+            ),
+            'response' => array(    
+                'action' => 'delete',   
+                'documentId' => $this->getId()                
             )
         );
 
@@ -65,13 +69,18 @@ class EntryEditView extends BaseView {
 
     public function renderPutResponse() {
         $sId = $this->_oDocument->getProperty('_id');
+
         $aOutput = array(
-            'header' => array(
-                'status' => 200,
-                'requestMethod' => 'PUT',
-                'queryType' => (!is_null($this->getId())) ? 'update' : 'create',
-                'documentId' => $this->_oDocument->getProperty('_id'),
-                'documentUri' => "/entry/{$sId}"
+            'status' => 200,
+            'time' => date('Y-m-d H:i:s'),
+            'request' => array(
+                'method' => 'PUT',
+                'url' => request_uri()
+            ),
+            'response' => array(
+                'action' => (!is_null($this->getId())) ? 'update' : 'create',     
+                'documentId' => $sId,
+                'documentUri' => "/entry/{$sId}"              
             )
         );
 
