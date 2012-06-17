@@ -26,7 +26,7 @@ class EntryActions {
         // GET actions
         dispatch_get(array('/entry/list.*', array('format')), array($this, 'showList'));
         dispatch_get('/entry/new', array($this, 'newEntry'));       
-        dispatch_get('/entry/:id', array($this, 'showEntry'));
+        dispatch_get(array('/entry/*.*', array('id', 'format')), array($this, 'showEntry'));
         dispatch_get('/entry/:id/edit', array($this, 'editEntry'));
     }
 
@@ -72,9 +72,17 @@ class EntryActions {
     }
 
     public function showEntry() {
-        $sId = Input::getInstance()->sanitize(params('id'));
+        $oInput = Input::getInstance();
+        
+        $sId = $oInput->sanitize(params('id'));
+        $sFormat = $oInput->sanitize(params('format'));
 
         $oView = new EntryView($sId);
+
+        if(!empty($sFormat)) {
+            $oView->setOutputFormat($sFormat);
+        }
+
         $oView->render();
     }
 
