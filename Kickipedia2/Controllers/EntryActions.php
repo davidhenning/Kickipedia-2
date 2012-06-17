@@ -105,19 +105,12 @@ class EntryActions {
             $iTypeId = null;
         }
 
-        if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json') {
-            $oView->setOutputFormat('json');
-        }
-
-        if(Input::getInstance()->getRequestMethod() === 'POST') {
-            if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json') {
-                $oView->renderJsonUpdateResponse();
-            } else {
-                $oView->redirect('/entry/list.html', array('type' => $iTypeId));
-            }         
-        } elseif(Input::getInstance()->getRequestMethod() === 'PUT') {
+        if((isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
+            || Input::getInstance()->getRequestMethod() === 'PUT') {
             $oView->renderJsonUpdateResponse();
-        }        
+        } else {
+            $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+        }          
     }
 
     public function deleteEntry() {
@@ -125,14 +118,11 @@ class EntryActions {
         $oView = new EntryEditView($sId);
         $oView->getDocument()->delete();
 
-        if(Input::getInstance()->getRequestMethod() === 'POST') {
-            if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json') {
-                $oView->renderJsonDeleteResponse();
-            } else {            
-                $oView->redirect('/entry/list.html', array('type' => $iTypeId));
-            }
-        } elseif(Input::getInstance()->getRequestMethod() === 'DELETE') {
+        if((isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
+            || Input::getInstance()->getRequestMethod() === 'DELETE') {
             $oView->renderJsonDeleteResponse();
-        } 
+        } else {            
+            $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+        }
     }
 }
