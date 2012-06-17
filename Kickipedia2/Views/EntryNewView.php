@@ -8,6 +8,6 @@ class EntryNewView extends EntryEditView {
     protected $_bShowEditTools = false;
 
     public function getInsertUrl() {
-        return url_for('entry', 'insert');
+        return '/entry/insert';
     }
 }
