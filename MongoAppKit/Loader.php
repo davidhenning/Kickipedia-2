@@ -39,12 +39,10 @@ class Loader {
         $sFileName = str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $sClassName) . '.php';
         $sFileName = realpath($sLibraryRoot . DIRECTORY_SEPARATOR . $sFileName);
         
-        if(substr($sFileName, 0, strlen($sLibraryRoot)) == $sLibraryRoot) {
-            
+        if(substr($sFileName, 0, strlen($sLibraryRoot)) == $sLibraryRoot) {            
             if(is_readable($sFileName)) {
                 include_once($sFileName);
             }
         }
     }
-
 }
