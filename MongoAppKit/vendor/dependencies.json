@@ -1,9 +1,7 @@
 [
     {
         "name": "GibberishAES",
-        "file": "GibberishAES/GibberishAES.php",
-        "loaderClassName": null,
-        "loaderMethodName": null
+        "file": "GibberishAES/GibberishAES.php"
     },
     {
         "name": "Twig",

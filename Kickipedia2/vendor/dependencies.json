@@ -1,9 +1,7 @@
 [
     {
         "name": "Limonade",
-        "file": "Limonade/limonade.php",
-        "loaderClassName": null,
-        "loaderMethodName": null
+        "file": "Limonade/limonade.php"
     },
     {
         "name": "Phpass",
