@@ -4,6 +4,59 @@ use MongoAppKit\Lists\IterateableList;
 
 class IterateableListTest extends \PHPUnit_Framework_TestCase {
 
+	public function testAssign() {
+		$array = array('food' => 'shrimps', 'sauce' => 'cocktail');
+		$list = new IterateableList();
+		$list->assign($array);
+		
+		$this->assertEquals($array, $list->getProperties());
+	}
+
+	public function testProperty() {
+		$value = 'bar';
+		$list = new IterateableList();
+		$list->setProperty('foo', $value);
+
+		$this->assertEquals($value, $list->getProperty('foo'));
+	}
+
+	public function testNonExistingProperty() {
+		try {
+			$list = new IterateableList();
+			$value = $list->getProperty('foo');
+		} catch(\OutOfBoundsException $e) {
+			return;
+		}
+
+		$this->fail('Expected OutOfBoundsException was not thrown.');
+	}
+
+	public function testRemoveProperty() {
+		try {
+			$property = 'foo';
+			$value = 'bar';
+			$list = new IterateableList();
+			$list->setProperty($property, $value);
+			$list->removeProperty($property);
+			$value = $list->getProperty($property);
+		} catch(\OutOfBoundsException $e) {
+			return;
+		}
+
+		$this->fail('Expected OutOfBoundsException was not thrown.');
+	}
+
+	public function testRemoveNonExistingProperty() {
+		try {
+			$list = new IterateableList();
+			$list->removeProperty('foo');
+		} catch(\OutOfBoundsException $e) {
+			return;
+		}
+
+		$this->fail('Expected OutOfBoundsException was not thrown.');
+	}
+
 	public function testCount() {
 		$list = new IterateableList();
 		$list->setProperty('foo', 'bar');
