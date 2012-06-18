@@ -43,8 +43,11 @@ try {
 }
 
 try {
-    $entryActions = new EntryActions();
-    run();
+    $oApp = new Silex\Application(); 
+
+    $entryActions = new EntryActions($oApp);
+
+    $oApp->run();
 } catch(\InvalidArgumentException $e) {
     include_once('./error.php');
     exit();
