@@ -10,7 +10,20 @@ use MongoAppKit\Input,
 
 class EntryActions {
 
-    public function __construct() {
+    protected $_oApp = null;
+
+    public function __construct($oApp) {
+        $this->_oApp = $oApp;
+        $actions = $this;
+
+        $oApp->get('/entry/list.{format}', function($format) use($oApp, $actions) {
+            $actions->showList($format);
+        });
+
+        $oApp->get('/entry/{id}.{format}', function($id, $format) use($oApp, $actions) {
+            $actions->showEntry($id, $format);
+        });
+
         // PUT actions for REST service
         dispatch_put('/entry', array($this, 'updateEntry'));
         dispatch_put('/entry/:id', array($this, 'updateEntry'));
@@ -30,7 +43,7 @@ class EntryActions {
         dispatch_get('/entry/:id/edit', array($this, 'editEntry'));
     }
 
-    public function showList() {
+    public function showList($sFormat) {
         $oView = new EntryListView();
         $oInput = Input::getInstance();
 
@@ -40,7 +53,7 @@ class EntryActions {
         $sTerm = $oInput->getGetData('term');
         $sSort = $oInput->getGetData('sort');
         $sDirection = $oInput->getGetData('direction');
-        $sFormat = $oInput->sanitize(params('format'));
+        $sFormat = $oInput->sanitize($sFormat);
         
         if(!empty($sTerm)) {
             $oView->setListType('search');
@@ -71,11 +84,11 @@ class EntryActions {
         $oView->render();    
     }
 
-    public function showEntry() {
+    public function showEntry($id, $format) {
         $oInput = Input::getInstance();
         
-        $sId = $oInput->sanitize(params('id'));
-        $sFormat = $oInput->sanitize(params('format'));
+        $sId = $oInput->sanitize($id);
+        $sFormat = $oInput->sanitize($format);
 
         $oView = new EntryView($sId);
 
