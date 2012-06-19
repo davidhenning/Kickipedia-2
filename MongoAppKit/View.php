@@ -215,7 +215,7 @@ class View extends Base {
      */
 
     public function getCurrentPage() {
-        return $this->_iSkippedDocuments / $this->_iDocumentLimit + 1;
+        return $this->_iSkippedDocuments / $this->getDocumentLimit() + 1;
     }
 
     /**

@@ -59,7 +59,7 @@ class BaseView extends View {
             foreach($aRawNav as $aItem) {
                 $aNewItem = $aItem;
 
-                if(request_uri() == $aNewItem['route']) {
+                if($_SERVER['REQUEST_URI'] == $aNewItem['route']) {
                     $aNewItem['active'] = true;
                 } else {
                     $aNewItem['active'] = false;

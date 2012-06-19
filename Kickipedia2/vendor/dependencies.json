@@ -1,9 +1,5 @@
 [
     {
-        "name": "Limonade",
-        "file": "Limonade/limonade.php"
-    },
-    {
         "name": "Phpass",
         "file": "Phpass/Loader.php",
         "autoload": {
