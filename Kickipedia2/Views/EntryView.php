@@ -10,15 +10,15 @@ class EntryView extends BaseView {
     protected $_sAppName = 'Kickipedia2';
     protected $_sTemplateName = 'entry.twig';
 
-    public function render() {
+    public function render($oApp) {
         $oEntry = new EntryDocument();
         $oEntry->load($this->getId());  
         $this->_aTemplateData['entry'] = $oEntry;
 
-        parent::render();
+        return parent::render($oApp);
     }
 
-    protected function _renderJSON() {
+    protected function _renderJSON($oApp) {
         $oEntry = new EntryDocument();
         $oEntry->load($this->getId());
 
@@ -38,7 +38,7 @@ class EntryView extends BaseView {
         $aOutput['response']['documents'] = array();
 		$aOutput['response']['documents'][] = $oEntry->getProperties();
 
-        echo json_encode($aOutput);
+        return $oApp->json($aOutput);
     }
 
     protected function _renderXML() {

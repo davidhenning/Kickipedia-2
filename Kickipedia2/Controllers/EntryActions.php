@@ -3,11 +3,15 @@
 namespace Kickipedia2\Controllers;
 
 use MongoAppKit\Base,
-    MongoAppKit\Input,
-    Kickipedia2\Views\EntryListView,
+    MongoAppKit\Input;
+
+use Kickipedia2\Views\EntryListView,
     Kickipedia2\Views\EntryView,
     Kickipedia2\Views\EntryEditView,
     Kickipedia2\Views\EntryNewView;
+
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\Response;
 
 class EntryActions extends Base {
 
@@ -16,31 +20,55 @@ class EntryActions extends Base {
     public function __construct($oApp) {
         $this->_oApp = $oApp;
         $actions = $this;
-        $oApp->get('/entry/list.{format}', function($format) use($oApp, $actions) {
+        
+        /* GET actions */
+
+        $oApp->get('/entry/list.{format}', function(Request $oRequest, $format) use($oApp, $actions) {
             return $actions->showList($format);
         });
 
-        $oApp->get('/entry/{id}.{format}', function($id, $format) use($oApp, $actions) {
-            $actions->showEntry($id, $format);
+        $oApp->get('/entry/{id}.{format}', function(Request $oRequest, $id, $format) use($oApp, $actions) {
+            return $actions->showEntry($id, $format);
         });
 
-        // PUT actions for REST service
-        dispatch_put('/entry', array($this, 'updateEntry'));
-        dispatch_put('/entry/:id', array($this, 'updateEntry'));
-        
-        // DELETE actions for REST service
-        dispatch_delete('/entry/:id', array($this, 'deleteEntry'));
+        $oApp->get('/entry/new', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->newEntry();
+        });
 
-        // POST actions
-        dispatch_post('/entry/insert', array($this, 'updateEntry'));
-        dispatch_post('/entry/:id/update', array($this, 'updateEntry'));
-        dispatch_post('/entry/:id/delete', array($this, 'deleteEntry')); 
+        $oApp->get('/entry/{id}/edit', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->editEntry($id);
+        });
 
-        // GET actions
-        dispatch_get(array('/entry/list.*', array('format')), array($this, 'showList'));
-        dispatch_get('/entry/new', array($this, 'newEntry'));       
-        dispatch_get(array('/entry/*.*', array('id', 'format')), array($this, 'showEntry'));
-        dispatch_get('/entry/:id/edit', array($this, 'editEntry'));
+        /* PUT actions */
+
+        $oApp->put('/entry', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->updateEntry();
+        });
+
+        $oApp->put('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->updateEntry($id);
+        });
+
+        /* DELETE actions */
+
+        $oApp->delete('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->deleteEntry($id);
+        });
+
+
+        /* POST actions */
+
+        $oApp->post('/entry/insert', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->updateEntry();
+        });        
+
+        $oApp->post('/entry/{id}/update', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->updateEntry($id);
+        });
+
+        $oApp->post('/entry/{id}/delete', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->deleteEntry($id);
+        });
     }
 
     public function showList($sFormat) {
@@ -96,23 +124,24 @@ class EntryActions extends Base {
             $oView->setOutputFormat($sFormat);
         }
 
-        $oView->render();
+        return $oView->render($this->_oApp);
     }
 
     public function newEntry() {
         $oView = new EntryNewView();
-        $oView->render(); 
+        
+        return $oView->render($this->_oApp); 
     }
 
-    public function editEntry() {
-        $sId = Input::getInstance()->sanitize(params('id'));
+    public function editEntry($id) {
+        $sId = Input::getInstance()->sanitize($id);
 
         $oView = new EntryEditView($sId);
-        $oView->render();        
+        return $oView->render($this->_oApp);        
     }
 
-    public function updateEntry() {
-        $sId = params('id');
+    public function updateEntry($id) {
+        $sId = $id;
         $entryData = Input::getInstance()->getData('data');
 
         $oView = new EntryEditView($sId);
@@ -128,20 +157,20 @@ class EntryActions extends Base {
 
         if((isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
             || Input::getInstance()->getRequestMethod() === 'PUT') {
-            $oView->renderJsonUpdateResponse();
+            return $oView->renderJsonUpdateResponse($this->_oApp);
         } else {
             $oView->redirect('/entry/list.html', array('type' => $iTypeId));
         }          
     }
 
-    public function deleteEntry() {
-        $sId = params('id');
+    public function deleteEntry($id) {
+        $sId = $id;
         $oView = new EntryEditView($sId);
         $oView->getDocument()->delete();
 
         if((isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
             || Input::getInstance()->getRequestMethod() === 'DELETE') {
-            $oView->renderJsonDeleteResponse();
+            return $oView->renderJsonDeleteResponse($this->_oApp);
         } else {            
             $oView->redirect('/entry/list.html', array('type' => $iTypeId));
         }
