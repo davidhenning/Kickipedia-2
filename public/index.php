@@ -44,7 +44,7 @@ try {
 
 try {
     $oApp = new Silex\Application(); 
-
+    $oApp['debug'] = true;
     $entryActions = new EntryActions($oApp);
 
     $oApp->run();

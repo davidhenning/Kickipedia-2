@@ -12,6 +12,8 @@
 
 namespace MongoAppKit;
 
+use Silex\Provider\TwigServiceProvider;
+
 class View extends Base {
 
     /**
@@ -125,6 +127,24 @@ class View extends Base {
     }
 
     /**
+     * Get app name
+     *
+     * @return string
+     */
+
+    public function getAppName() {
+        return $this->_sAppName;
+    }
+
+    /**
+     * Set app name
+     */
+
+    protected function _setAppName($sAppName) {
+        $this->_sAppName = $sAppName;
+    }    
+
+    /**
      * Get document id
      *
      * @return string
@@ -235,12 +255,18 @@ class View extends Base {
                 if($this->getCurrentPage() > 1) {
                     $aPages['prevPageUrl'] = $this->_createPageUrl($iCurrentPage - 1, $iDocumentLimit);
                     $aPages['firstPageUrl'] = $this->_createPageUrl(1, $iDocumentLimit);
+                } else {
+                    $aPages['prevPageUrl'] = false;
+                    $aPages['firstPageUrl'] = false;
                 }
 
                 // set URL to next page and last page
                 if($this->getCurrentPage() < $iPages) {
                     $aPages['nextPageUrl'] = $this->_createPageUrl($iCurrentPage + 1, $iDocumentLimit);
                     $aPages['lastPageUrl'] = $this->_createPageUrl($iPages, $iDocumentLimit);
+                } else {
+                    $aPages['nextPageUrl'] = false;
+                    $aPages['lastPageUrl'] = false;
                 }
 
                 $aPages['pages'] = $this->_getPages($iPages, $iDocumentLimit, $iCurrentPage); 
@@ -270,12 +296,13 @@ class View extends Base {
             for($i = 1; $i <= $iPages; $i++) {
                 $aPage = array(
                     'nr' => $i,
-                    'url' => $this->_createPageUrl($i, $iDocumentLimit)
+                    'url' => $this->_createPageUrl($i, $iDocumentLimit),
+                    'active' => false
                 );
 
                 if($i === $iCurrentPage) {
                     $aPage['active'] = true;
-                }
+                } 
 
                 $aPages[] = $aPage;
             }
@@ -325,17 +352,16 @@ class View extends Base {
      * Begin rendering the page in selected output format (HTML/TWIG, JSON, XML)
      */
 
-    public function render() {
+    public function render($oApp) {
         if($this->_sOutputFormat == 'html') {
-            $this->_renderTwig();
+            return $this->_renderTwig($oApp);
         } elseif($this->_sOutputFormat == 'json') {
-            header('Content-type: application/json');
-            $this->_renderJSON();
+            return $this->_renderJSON($oApp);
         } elseif($this->_sOutputFormat == 'xml') {
             header('Content-type: text/xml');
             $this->_renderXML();
         } else {
-            $this->_renderTwig();
+            return $this->_renderTwig($oApp);
         }
     }
 
@@ -343,24 +369,24 @@ class View extends Base {
      * Load Twig Template Engine and render selected template with set data
      */
 
-    protected function _renderTwig() {
-        // load Twig
-        $loader = new \Twig_Loader_Filesystem(getBasePath() ."/{$this->_sAppName}/Templates");
-        $twig = new \Twig_Environment($loader, array(
-          'cache' => getBasePath() .'/tmp',
-          'auto_reload' => $this->getConfig()->getProperty('TemplateDebugMode')
+    protected function _renderTwig($oApp) {
+        $oApp->register(new TwigServiceProvider(), array(
+            'twig.path' => getBasePath() ."/".$this->getConfig()->getProperty('AppName')."/Templates",
+            'twig.options' => array(
+              'cache' => getBasePath() .'/tmp',
+              'auto_reload' => $this->getConfig()->getProperty('TemplateDebugMode')
+            )
         ));
 
-        // render given template with given data
-        echo $twig->render($this->_sTemplateName, $this->_aTemplateData);
+        return $oApp['twig']->render($this->_sTemplateName, $this->_aTemplateData);
     }
 
     /**
      * Render JSON output
      */
 
-    protected function _renderJSON() {
-        echo json_encode($this->_aTemplateData);
+    protected function _renderJSON($oApp) {
+        return $oApp->json($this->_aTemplateData);
     }
 
     /**

@@ -5,10 +5,15 @@ namespace Kickipedia2\Views;
 use MongoAppKit\View;
 
 class BaseView extends View {
-    protected $_sAppName = 'Kickipedia2';
     protected $_aTypes = null;
     protected $_iDocumentType = null;
     protected $_aNavigation = null;
+
+    public function __construct($sId = null) {
+        parent::__construct($sId);
+
+        $this->_setAppName($this->getConfig()->getProperty('AppName'));
+    }
 
     public function redirect($sUrl, $aParams = null) {
         if(!empty($aParams) && is_array($aParams)) {
@@ -33,6 +38,8 @@ class BaseView extends View {
 
                 if($this->_iDocumentType == $sId) {
                     $aType['active'] = true;
+                } else {
+                    $aType['active'] = false;
                 }
 
                 $aTypes[] = $aType;
@@ -54,6 +61,8 @@ class BaseView extends View {
 
                 if(request_uri() == $aNewItem['route']) {
                     $aNewItem['active'] = true;
+                } else {
+                    $aNewItem['active'] = false;
                 }
 
                 $aNav[] = $aNewItem;

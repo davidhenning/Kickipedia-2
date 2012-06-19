@@ -2,22 +2,22 @@
 
 namespace Kickipedia2\Controllers;
 
-use MongoAppKit\Input,
+use MongoAppKit\Base,
+    MongoAppKit\Input,
     Kickipedia2\Views\EntryListView,
     Kickipedia2\Views\EntryView,
     Kickipedia2\Views\EntryEditView,
     Kickipedia2\Views\EntryNewView;
 
-class EntryActions {
+class EntryActions extends Base {
 
     protected $_oApp = null;
 
     public function __construct($oApp) {
         $this->_oApp = $oApp;
         $actions = $this;
-
         $oApp->get('/entry/list.{format}', function($format) use($oApp, $actions) {
-            $actions->showList($format);
+            return $actions->showList($format);
         });
 
         $oApp->get('/entry/{id}.{format}', function($id, $format) use($oApp, $actions) {
@@ -81,7 +81,7 @@ class EntryActions {
             $oView->setOutputFormat($sFormat);
         }
 
-        $oView->render();    
+        return $oView->render($this->_oApp);    
     }
 
     public function showEntry($id, $format) {

@@ -107,15 +107,15 @@ class EntryListView extends BaseView {
         return $this->_oDocuments;
     }
 
-    public function render() {
+    public function render($oApp) {
         $this->_iFoundDocuments = $this->getDocuments()->getFoundDocuments(); 
         $this->_iTotalDocuments = $this->getDocuments()->getTotalDocuments(); 
         $this->_aTemplateData['view'] = $this;
 
-        parent::render();
+        return parent::render($oApp);
     }
 
-    protected function _renderJSON() {
+    protected function _renderJSON($oApp) {
         $aOutput = array(
             'status' => 200,
             'time' => date('Y-m-d H:i:s'),
@@ -145,7 +145,7 @@ class EntryListView extends BaseView {
             }
         }
 
-        echo json_encode($aOutput);
+        return $oApp->json($aOutput);
     }
 
     protected function _renderXML() {
