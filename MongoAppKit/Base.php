@@ -12,6 +12,8 @@
 
 namespace MongoAppKit;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class Base {
 
     /**
@@ -29,7 +31,14 @@ class Base {
     protected $_oStorage = null;
 
     /**
-     * Returns Config object
+     * Request object
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+
+    protected $_oRequest = null;
+
+    /**
+     * Return Config object
      *
      * @return Config
      */
@@ -43,7 +52,7 @@ class Base {
     }
 
     /**
-     * Returns Storage object
+     * Return Storage object
      *
      * @return Storage
      */
@@ -54,5 +63,19 @@ class Base {
         }
         
         return $this->_oStorage;       
+    }
+
+    /**
+     * Return Request object
+     *
+     * @return Symfony\Component\HttpFoundation\Request
+     */
+
+    public function getRequest() {
+        if($this->_oRequest === null) {
+            $this->_oRequest = Request::createFromGlobals();
+        }
+        
+        return $this->_oRequest; 
     }
 }
