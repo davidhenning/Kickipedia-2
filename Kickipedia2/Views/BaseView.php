@@ -55,11 +55,12 @@ class BaseView extends View {
         if($this->_aNavigation === null) {
             $aRawNav = $this->getConfig()->getProperty('NavItems');
             $aNav = array();
+            $oRequest = $this->getRequest();
 
             foreach($aRawNav as $aItem) {
                 $aNewItem = $aItem;
 
-                if($_SERVER['REQUEST_URI'] == $aNewItem['route']) {
+                if($oRequest->getPathInfo() == $aNewItem['route']) {
                     $aNewItem['active'] = true;
                 } else {
                     $aNewItem['active'] = false;
