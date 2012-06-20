@@ -56,7 +56,7 @@ class EntryEditView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'DELETE',
-                'url' => request_uri()
+                'url' => $this->getRequest()->getPathInfo()
             ),
             'response' => array(    
                 'action' => 'delete',   
@@ -75,7 +75,7 @@ class EntryEditView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => $_SERVER['REQUEST_METHOD'],
-                'url' => request_uri()
+                'url' => $this->getRequest()->getPathInfo()
             ),
             'response' => array(
                 'action' => (!is_null($this->getId())) ? 'update' : 'create',     

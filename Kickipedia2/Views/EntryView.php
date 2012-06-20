@@ -27,7 +27,7 @@ class EntryView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'GET',
-                'url' => request_uri()
+                'url' => $this->getRequest()->getPathInfo()
             ),
             'response' => array(        
                 'total' => 1,
@@ -51,7 +51,7 @@ class EntryView extends BaseView {
         
         $oRequest = $oKickipedia->addChild('request');
         $oRequest->addChild('method', 'GET');
-        $oRequest->addChild('url', request_uri());
+        $oRequest->addChild('url', $this->getRequest()->getPathInfo());
 
         $oResponse = $oKickipedia->addChild('response');
         $oResponse->addChild('total', 1);

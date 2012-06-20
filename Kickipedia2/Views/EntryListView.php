@@ -121,7 +121,7 @@ class EntryListView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'GET',
-                'url' => request_uri()
+                'url' => $this->getRequest()->getPathInfo()
             ),
             'response' => array(        
                 'total' => $this->_iTotalDocuments,
@@ -156,7 +156,7 @@ class EntryListView extends BaseView {
         
         $oRequest = $oKickipedia->addChild('request');
         $oRequest->addChild('method', 'GET');
-        $oRequest->addChild('url', request_uri());
+        $oRequest->addChild('url', $this->getRequest()->getPathInfo());
 
         foreach($this->_aPossibleParams as $aParam) {
             $value = (isset($this->{$aParam['property']})) ? $this->{$aParam['property']} : null;
