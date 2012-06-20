@@ -2,7 +2,11 @@
 
 require_once(__DIR__ . '/bootstrap.php');
 
+use MongoAppKit\Config;
+
 use Kickipedia2\Models\UserDocument;
+
+Config::getInstance()->addConfigFile('kickipedia2.json');
 
 $entry = new UserDocument();
 $entry->setProperty('name', 'MadCat');
