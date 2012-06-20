@@ -15,13 +15,12 @@ class BaseView extends View {
         $this->_setAppName($this->getConfig()->getProperty('AppName'));
     }
 
-    public function redirect($sUrl, $aParams = null) {
+    public function redirect($oApp, $sUrl, $aParams = null) {
         if(!empty($aParams) && is_array($aParams)) {
             $sUrl .= '?' . http_build_query($aParams);
         }
 
-        send_header('Location: '.$sUrl, true, 302);
-        exit();
+        return $oApp->redirect($sUrl);
     }
 
     public function getTypes() {

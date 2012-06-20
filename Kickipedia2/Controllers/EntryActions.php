@@ -23,50 +23,50 @@ class EntryActions extends Base {
         
         /* GET actions */
 
-        $oApp->get('/entry/list.{format}', function(Request $oRequest, $format) use($oApp, $actions) {
+        $oApp->get('/entry/list.{format}', function($format) use($oApp, $actions) {
             return $actions->showList($format);
         });
 
-        $oApp->get('/entry/{id}.{format}', function(Request $oRequest, $id, $format) use($oApp, $actions) {
+        $oApp->get('/entry/{id}.{format}', function($id, $format) use($oApp, $actions) {
             return $actions->showEntry($id, $format);
         });
 
-        $oApp->get('/entry/new', function(Request $oRequest) use ($oApp, $actions) {
+        $oApp->get('/entry/new', function() use ($oApp, $actions) {
             return $actions->newEntry();
         });
 
-        $oApp->get('/entry/{id}/edit', function(Request $oRequest, $id) use ($oApp, $actions) {
+        $oApp->get('/entry/{id}/edit', function($id) use ($oApp, $actions) {
             return $actions->editEntry($id);
         });
 
         /* PUT actions */
 
-        $oApp->put('/entry', function(Request $oRequest) use ($oApp, $actions) {
-            return $actions->updateEntry();
+        $oApp->put('/entry', function() use ($oApp, $actions) {
+            return $actions->updateEntry(null);
         });
 
-        $oApp->put('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
+        $oApp->put('/entry/{id}', function($id) use ($oApp, $actions) {
             return $actions->updateEntry($id);
         });
 
         /* DELETE actions */
 
-        $oApp->delete('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
+        $oApp->delete('/entry/{id}', function($id) use ($oApp, $actions) {
             return $actions->deleteEntry($id);
         });
 
 
         /* POST actions */
 
-        $oApp->post('/entry/insert', function(Request $oRequest) use ($oApp, $actions) {
+        $oApp->post('/entry/insert', function() use ($oApp, $actions) {
             return $actions->updateEntry();
         });        
 
-        $oApp->post('/entry/{id}/update', function(Request $oRequest, $id) use ($oApp, $actions) {
-            return $actions->updateEntry($id);
+        $oApp->post('/entry/{id}/update', function($id) use ($oApp, $actions) {
+            return $actions->updateEntry($oRequest, $id);
         });
 
-        $oApp->post('/entry/{id}/delete', function(Request $oRequest, $id) use ($oApp, $actions) {
+        $oApp->post('/entry/{id}/delete', function($id) use ($oApp, $actions) {
             return $actions->deleteEntry($id);
         });
     }
@@ -143,6 +143,7 @@ class EntryActions extends Base {
     public function updateEntry($id) {
         $sId = $id;
         $entryData = Input::getInstance()->getData('data');
+        $oRequest = $this->getRequest();
 
         $oView = new EntryEditView($sId);
         $oDocument = $oView->getDocument();
@@ -155,24 +156,23 @@ class EntryActions extends Base {
             $iTypeId = null;
         }
 
-        if((isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
-            || Input::getInstance()->getRequestMethod() === 'PUT') {
+        if($oRequest->headers->get('content_type') === 'application/json' || $oRequest->getMethod() === 'PUT') {
             return $oView->renderJsonUpdateResponse($this->_oApp);
         } else {
-            $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+            return $oView->redirect($this->_oApp, '/entry/list.html', array('type' => $iTypeId));
         }          
     }
 
     public function deleteEntry($id) {
         $sId = $id;
+        $oRequest = $this->getRequest();
         $oView = new EntryEditView($sId);
         $oView->getDocument()->delete();
 
-        if((isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
-            || Input::getInstance()->getRequestMethod() === 'DELETE') {
+        if($oRequest->headers->get('content_type') === 'application/json' || $oRequest->getMethod() === 'DELETE') {
             return $oView->renderJsonDeleteResponse($this->_oApp);
         } else {            
-            $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+            return $oView->redirect($this->_oApp, '/entry/list.html', array('type' => $iTypeId));
         }
     }
 }
