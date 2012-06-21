@@ -2,45 +2,84 @@
 
 namespace Kickipedia2\Controllers;
 
-use MongoAppKit\Input,
-    Kickipedia2\Views\EntryListView,
+use MongoAppKit\Base;
+
+use Kickipedia2\Views\EntryListView,
     Kickipedia2\Views\EntryView,
     Kickipedia2\Views\EntryEditView,
     Kickipedia2\Views\EntryNewView;
 
-class EntryActions {
+use Symfony\Component\HttpFoundation\Request;
 
-    public function __construct() {
-        // PUT actions for REST service
-        dispatch_put('/entry', array($this, 'updateEntry'));
-        dispatch_put('/entry/:id', array($this, 'updateEntry'));
+class EntryActions extends Base {
+
+    protected $_oApp = null;
+
+    public function __construct($oApp) {
+        $this->_oApp = $oApp;
+        $actions = $this;
         
-        // DELETE actions for REST service
-        dispatch_delete('/entry/:id', array($this, 'deleteEntry'));
+        /* GET actions */
 
-        // POST actions
-        dispatch_post('/entry/insert', array($this, 'updateEntry'));
-        dispatch_post('/entry/:id/update', array($this, 'updateEntry'));
-        dispatch_post('/entry/:id/delete', array($this, 'deleteEntry')); 
+        $oApp->get('/entry/list.{format}', function(Request $oRequest, $format) use($oApp, $actions) {
+            return $actions->showList($oRequest, $format);
+        })->bind('list_get');
 
-        // GET actions
-        dispatch_get(array('/entry/list.*', array('format')), array($this, 'showList'));
-        dispatch_get('/entry/new', array($this, 'newEntry'));       
-        dispatch_get(array('/entry/*.*', array('id', 'format')), array($this, 'showEntry'));
-        dispatch_get('/entry/:id/edit', array($this, 'editEntry'));
+        $oApp->get('/entry/{id}.{format}', function(Request $oRequest, $id, $format) use($oApp, $actions) {
+            return $actions->showEntry($oRequest, $id, $format);
+        })->bind('view_get');
+
+        $oApp->get('/entry/new', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->newEntry($oRequest);
+        })->bind('new_get');
+
+        $oApp->get('/entry/{id}/edit', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->editEntry($oRequest, $id);
+        })->bind('edit_get');
+
+        /* PUT actions */
+
+        $oApp->put('/entry', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->updateEntry($oRequest, null);
+        })->bind('insert_put');
+
+        $oApp->put('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->updateEntry($oRequest, $id);
+        })->bind('update_put');
+
+        /* DELETE actions */
+
+        $oApp->delete('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->deleteEntry($oRequest, $id);
+        })->bind('delete_delete');
+
+        /* POST actions */
+
+        $oApp->post('/entry/insert', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->updateEntry($oRequest);
+        })->bind('insert_post');        
+
+        $oApp->post('/entry/{id}/update', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->updateEntry($oRequest, $id);
+        })->bind('update_post');
+
+        $oApp->post('/entry/{id}/delete', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->deleteEntry($oRequest, $id);
+        })->bind('delete_post');
     }
 
-    public function showList() {
-        $oView = new EntryListView();
-        $oInput = Input::getInstance();
+    public function showList(Request $oRequest, $sFormat) {
+        $oConfig = $this->getConfig();
 
-        $iSkip = (int)$oInput->getGetData('skip');
-        $iLimit = (int)$oInput->getGetData('limit');
-        $iType = (int)$oInput->getGetData('type');
-        $sTerm = $oInput->getGetData('term');
-        $sSort = $oInput->getGetData('sort');
-        $sDirection = $oInput->getGetData('direction');
-        $sFormat = $oInput->sanitize(params('format'));
+        $iSkip = (int) $oConfig->sanitize($oRequest->query->get('skip'));
+        $iLimit = (int) $oConfig->sanitize($oRequest->query->get('limit'));
+        $iType = (int) $oConfig->sanitize($oRequest->query->get('type'));
+        $sTerm = $oConfig->sanitize($oRequest->query->get('term'));
+        $sSort = $oConfig->sanitize($oRequest->query->get('sort'));
+        $sDirection = $oConfig->sanitize($oRequest->query->get('direction'));
+        $sFormat = $oConfig->sanitize($sFormat);
+
+        $oView = new EntryListView();
         
         if(!empty($sTerm)) {
             $oView->setListType('search');
@@ -68,43 +107,45 @@ class EntryActions {
             $oView->setOutputFormat($sFormat);
         }
 
-        $oView->render();    
+        return $oView->render($this->_oApp);    
     }
 
-    public function showEntry() {
-        $oInput = Input::getInstance();
+    public function showEntry(Request $oRequest, $sId, $sFormat) {
+        $oConfig = $this->getConfig();
+        $sId = $oConfig->sanitize($sId);
+        $sFormat = $oConfig->sanitize($sFormat);
         
-        $sId = $oInput->sanitize(params('id'));
-        $sFormat = $oInput->sanitize(params('format'));
-
         $oView = new EntryView($sId);
 
         if(!empty($sFormat)) {
             $oView->setOutputFormat($sFormat);
         }
 
-        $oView->render();
+        return $oView->render($this->_oApp);
     }
 
-    public function newEntry() {
+    public function newEntry(Request $oRequest) {
         $oView = new EntryNewView();
-        $oView->render(); 
+        
+        return $oView->render($this->_oApp); 
     }
 
-    public function editEntry() {
-        $sId = Input::getInstance()->sanitize(params('id'));
+    public function editEntry(Request $oRequest, $sId) {
+        $oConfig = $this->getConfig();
+        $sId = $oConfig->sanitize($sId);
 
         $oView = new EntryEditView($sId);
-        $oView->render();        
+        return $oView->render($this->_oApp);        
     }
 
-    public function updateEntry() {
-        $sId = params('id');
-        $entryData = Input::getInstance()->getData('data');
-
+    public function updateEntry(Request $oRequest, $sId) {
+        $oConfig = $this->getConfig();
+        $sId = $oConfig->sanitize($sId);       
+        $aEntryData = $oConfig->sanitize($oRequest->request->get('data'));
+        
         $oView = new EntryEditView($sId);
         $oDocument = $oView->getDocument();
-        $oDocument->updateProperties($entryData);
+        $oDocument->updateProperties($aEntryData);
         $oDocument->save();
 
         try {
@@ -113,24 +154,24 @@ class EntryActions {
             $iTypeId = null;
         }
 
-        if((isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
-            || Input::getInstance()->getRequestMethod() === 'PUT') {
-            $oView->renderJsonUpdateResponse();
+        if($oRequest->headers->get('content_type') === 'application/json' || $oRequest->getMethod() === 'PUT') {
+            return $oView->renderJsonUpdateResponse($this->_oApp);
         } else {
-            $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+            return $oView->redirect($this->_oApp, '/entry/list.html', array('type' => $iTypeId));
         }          
     }
 
-    public function deleteEntry() {
-        $sId = params('id');
+    public function deleteEntry(Request $oRequest, $sId) {
+        $oConfig = $this->getConfig();
+        $sId =  $oConfig->sanitize($sId);
+        
         $oView = new EntryEditView($sId);
         $oView->getDocument()->delete();
 
-        if((isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] === 'application/json')
-            || Input::getInstance()->getRequestMethod() === 'DELETE') {
-            $oView->renderJsonDeleteResponse();
+        if($oRequest->headers->get('content_type') === 'application/json' || $oRequest->getMethod() === 'DELETE') {
+            return $oView->renderJsonDeleteResponse($this->_oApp);
         } else {            
-            $oView->redirect('/entry/list.html', array('type' => $iTypeId));
+            return $oView->redirect($this->_oApp, '/entry/list.html', array('type' => $iTypeId));
         }
     }
 }

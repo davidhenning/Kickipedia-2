@@ -2,7 +2,11 @@
 
 require_once(__DIR__ . '/bootstrap.php');
 
+use MongoAppKit\Config;
+
 use Kickipedia2\Models\EntryDocument;
+
+Config::getInstance()->addConfigFile('kickipedia2.json');
 
 for($i = 0; $i < 10000; $i++) {
 	$entry = new EntryDocument();

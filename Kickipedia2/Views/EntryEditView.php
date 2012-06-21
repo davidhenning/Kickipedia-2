@@ -12,7 +12,7 @@ class EntryEditView extends BaseView {
     protected $_oDocument = null;
     protected $_bShowEditTools = true;
 
-    public function render() {
+    public function render($oApp) {
         $this->_oDocument = new EntryDocument();
         $sId = $this->getId();
 
@@ -22,7 +22,7 @@ class EntryEditView extends BaseView {
 
         $this->_aTemplateData['view'] = $this;
 
-        parent::render();
+        return parent::render($oApp);
     }
 
     public function showEditTools() {
@@ -50,13 +50,13 @@ class EntryEditView extends BaseView {
         return $this->_oDocument->getProperty('type');
     }
 
-    public function renderJsonDeleteResponse() {
+    public function renderJsonDeleteResponse($oApp) {
         $aOutput = array(
             'status' => 200,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'DELETE',
-                'url' => request_uri()
+                'url' => $this->getRequest()->getPathInfo()
             ),
             'response' => array(    
                 'action' => 'delete',   
@@ -64,10 +64,10 @@ class EntryEditView extends BaseView {
             )
         );
 
-        echo json_encode($aOutput); 
+        return $oApp->json($aOutput);
     }
 
-    public function renderJsonUpdateResponse() {
+    public function renderJsonUpdateResponse($oApp) {
         $sId = $this->_oDocument->getProperty('_id');
 
         $aOutput = array(
@@ -75,7 +75,7 @@ class EntryEditView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => $_SERVER['REQUEST_METHOD'],
-                'url' => request_uri()
+                'url' => $this->getRequest()->getPathInfo()
             ),
             'response' => array(
                 'action' => (!is_null($this->getId())) ? 'update' : 'create',     
@@ -84,6 +84,6 @@ class EntryEditView extends BaseView {
             )
         );
 
-        echo json_encode($aOutput);
+        return $oApp->json($aOutput);
     }
 }

@@ -70,6 +70,28 @@ class Config extends IterateableList {
         $this->updateProperties($configData);
     }
 
+    public function sanitize($data) {
+        if($data === null) {
+            return null;
+        }
+
+        if(is_array($data)) {
+            $aSanitizedData = array();
+            foreach($data as $key => $value) {
+                $aSanitizedData[$key] = $this->sanitize($value);
+            }
+
+            return $aSanitizedData;
+        }
+
+        $data = trim($data);
+        $data = rawurldecode($data);     
+        $data = htmlspecialchars($data);
+        $data = strip_tags($data);
+
+        return $data;
+    }
+
     /**
      * Prohibit cloning of the class object (Singleton pattern)
      */
