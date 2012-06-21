@@ -107,21 +107,21 @@ class EntryListView extends BaseView {
         return $this->_oDocuments;
     }
 
-    public function render() {
+    public function render($oApp) {
         $this->_iFoundDocuments = $this->getDocuments()->getFoundDocuments(); 
         $this->_iTotalDocuments = $this->getDocuments()->getTotalDocuments(); 
         $this->_aTemplateData['view'] = $this;
 
-        parent::render();
+        return parent::render($oApp);
     }
 
-    protected function _renderJSON() {
+    protected function _renderJSON($oApp) {
         $aOutput = array(
             'status' => 200,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'GET',
-                'url' => request_uri()
+                'url' => $this->getRequest()->getPathInfo()
             ),
             'response' => array(        
                 'total' => $this->_iTotalDocuments,
@@ -145,7 +145,7 @@ class EntryListView extends BaseView {
             }
         }
 
-        echo json_encode($aOutput);
+        return $oApp->json($aOutput);
     }
 
     protected function _renderXML() {
@@ -156,7 +156,7 @@ class EntryListView extends BaseView {
         
         $oRequest = $oKickipedia->addChild('request');
         $oRequest->addChild('method', 'GET');
-        $oRequest->addChild('url', request_uri());
+        $oRequest->addChild('url', $this->getRequest()->getPathInfo());
 
         foreach($this->_aPossibleParams as $aParam) {
             $value = (isset($this->{$aParam['property']})) ? $this->{$aParam['property']} : null;

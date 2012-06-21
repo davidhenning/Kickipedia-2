@@ -1,5 +1,9 @@
 [
     {
+        "name": "Silex",
+        "file": "Silex/autoload.php"
+    },
+    {
         "name": "GibberishAES",
         "file": "GibberishAES/GibberishAES.php"
     },
