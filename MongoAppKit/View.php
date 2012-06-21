@@ -374,7 +374,7 @@ class View extends Base {
             'twig.path' => getBasePath() ."/".$this->getConfig()->getProperty('AppName')."/Templates",
             'twig.options' => array(
               'cache' => getBasePath() .'/tmp',
-              'auto_reload' => $this->getConfig()->getProperty('TemplateDebugMode')
+              'auto_reload' => $this->getConfig()->getProperty('DebugMode')
             )
         ));
 
