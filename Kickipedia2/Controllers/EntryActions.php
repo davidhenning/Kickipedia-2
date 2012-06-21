@@ -54,7 +54,6 @@ class EntryActions extends Base {
             return $actions->deleteEntry($oRequest, $id);
         })->bind('delete_delete');
 
-
         /* POST actions */
 
         $oApp->post('/entry/insert', function(Request $oRequest) use ($oApp, $actions) {
