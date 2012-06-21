@@ -14,7 +14,7 @@ namespace MongoAppKit\Lists;
 
 use MongoAppKit\Base;
 
-class IterateableList extends Base implements \Countable, \Iterator, \ArrayAccess {
+class IterateableList extends Base implements \Countable, \IteratorAggregate, \ArrayAccess {
 
     /**
      * Stores properties
@@ -123,53 +123,13 @@ class IterateableList extends Base implements \Countable, \Iterator, \ArrayAcces
     }
 
     /**
-     * Resets internal pointer of properties to first item
+     * Return ArrayIterator instance with list properties
      *
-     * @return mixed
+     * @return ArrayIterator
      */
 
-    public function rewind() {
-        return reset($this->_aProperties);
-    }
-
-    /**
-     * Advances the internal pointer of properties by one and returns the value
-     *
-     * @return mixed
-     */
-
-    public function next() {
-        return next($this->_aProperties);
-    }
-
-    /**
-     * Returns the key (property name) of the current pointer position
-     *
-     * @return mixed
-     */
-    
-    public function key() {
-        return key($this->_aProperties);
-    }   
-  
-    /**
-     * Returns the value of the current pointer position
-     *
-     * @return mixed
-     */
-
-    public function current() {
-        return current($this->_aProperties);
-    }
-
-    /**
-     * Returns if the current position is valid
-     *
-     * @return bool
-     */
-    
-    public function valid() {
-        return (bool)$this->current();
+    public function getIterator() {
+        return \ArrayIterator($this->_aProperties);
     }
 
     /**
