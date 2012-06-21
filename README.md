@@ -46,8 +46,10 @@ The following example is suited for a local installation on the host kickipedia.
 
 # Technology #
 
-To write Kickipedia 2 I created a small framework called MongoAppKit. It's no match for Symfony or CakePHP, but it provides all things you need, to create PHP 5.3 based websites with a MongoDB data storage quite fast.
+## Used frameworks ##
 
-MongoAppKit itself features [Gibberish AES](https://github.com/ivantcholakov/gibberish-aes-php) to provide AES encryption and [Twig](https://github.com/fabpot/Twig) as powerful an easy to use template engine. If you prefer Smarty or another template engine, Twig can be easily replaced.
-
-The Kickipedia 2 itself features [Limonade](https://github.com/sofadesign/limonade) for URL routing and [Phpass](https://github.com/rchouinard/phpass) to encrypt all user passwords. Phpass utilizies salting and key stretching to achieve maximum password security.
+- [Silex](https://github.com/fabpot/Silex) (URL routing, request handling and much more)
+- [Twig](https://github.com/fabpot/Twig) (template engine)
+- [Gibberish AES for PHP](https://github.com/ivantcholakov/gibberish-aes-php) (AES encryption) Symfony components)
+- [Phpass](https://github.com/rchouinard/phpass) (secure password encryption with salting and key streching)
+- MongoAppKit (MongoDB abstraction layer, will be released separatly soon)
