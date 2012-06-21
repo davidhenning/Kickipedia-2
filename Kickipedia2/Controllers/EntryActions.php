@@ -9,8 +9,7 @@ use Kickipedia2\Views\EntryListView,
     Kickipedia2\Views\EntryEditView,
     Kickipedia2\Views\EntryNewView;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class EntryActions extends Base {
 
