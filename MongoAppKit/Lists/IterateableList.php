@@ -129,7 +129,7 @@ class IterateableList extends Base implements \Countable, \IteratorAggregate, \A
      */
 
     public function getIterator() {
-        return \ArrayIterator($this->_aProperties);
+        return new \ArrayIterator($this->_aProperties);
     }
 
     /**
