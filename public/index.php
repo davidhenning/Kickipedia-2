@@ -13,28 +13,39 @@ use Kickipedia2\Controllers\EntryActions,
     Kickipedia2\Models\UserDocumentList;
 
 use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\HttpFoundation\ParameterBag;
 
 use Silex\Application,
     Silex\Provider\UrlGeneratorServiceProvider; 
 
 try {
-    Config::getInstance()->addConfigFile('kickipedia2.json');
+    $oConfig = Config::getInstance();
+    $oConfig->addConfigFile('kickipedia2.json');
+    $oRequest = $oConfig->getRequest();
 
     $oApp = new Application();
     $oApp->register(new UrlGeneratorServiceProvider());
-    #$oApp['debug'] = true;
+    $oApp['debug'] = $oConfig->getProperty('DebugMode');
 
-    $sDigest = (isset($_SERVER['PHP_AUTH_DIGEST'])) ? $_SERVER['PHP_AUTH_DIGEST'] : null;
-
-    if(empty($sDigest) && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
-        $sDigest = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+    $oApp->before(function(Request $oRequest) {
+        if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
+            $aData = json_decode($oRequest->getContent(), true);
+            $oRequest->request->replace(is_array($aData) ? $aData : array());
+        }
+    });
+    
+    $sDigest = $oRequest->server->get('PHP_AUTH_DIGEST');
+    $sHttpAuth = $oRequest->server->get('REDIRECT_HTTP_AUTHORIZATION');
+    
+    if(empty($sDigest) && !empty($sHttpAuth)) {
+        $sDigest = $sHttpAuth;
     }
         
     $oAuth = new HttpAuthDigest('Kickipedia2', $sDigest);
     $oAuth->sendAuthenticationHeader();
     $oUserList = new UserDocumentList();
-    $sUserName = Input::getInstance()->sanitize($oAuth->getUserName());
+    $sUserName = $oConfig->sanitize($oAuth->getUserName());
     $aUserDocument = $oUserList->getUser($sUserName);
     $_SESSION['user'] = $aUserDocument;
 

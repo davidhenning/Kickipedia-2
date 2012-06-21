@@ -2,8 +2,7 @@
 
 namespace Kickipedia2\Controllers;
 
-use MongoAppKit\Base,
-    MongoAppKit\Input;
+use MongoAppKit\Base;
 
 use Kickipedia2\Views\EntryListView,
     Kickipedia2\Views\EntryView,
@@ -23,65 +22,66 @@ class EntryActions extends Base {
         
         /* GET actions */
 
-        $oApp->get('/entry/list.{format}', function($format) use($oApp, $actions) {
-            return $actions->showList($format);
+        $oApp->get('/entry/list.{format}', function(Request $oRequest, $format) use($oApp, $actions) {
+            return $actions->showList($oRequest, $format);
         })->bind('list');
 
-        $oApp->get('/entry/{id}.{format}', function($id, $format) use($oApp, $actions) {
-            return $actions->showEntry($id, $format);
+        $oApp->get('/entry/{id}.{format}', function(Request $oRequest, $id, $format) use($oApp, $actions) {
+            return $actions->showEntry($oRequest, $id, $format);
         })->bind('view');
 
-        $oApp->get('/entry/new', function() use ($oApp, $actions) {
-            return $actions->newEntry();
+        $oApp->get('/entry/new', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->newEntry($oRequest);
         })->bind('new');
 
-        $oApp->get('/entry/{id}/edit', function($id) use ($oApp, $actions) {
-            return $actions->editEntry($id);
+        $oApp->get('/entry/{id}/edit', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->editEntry($oRequest, $id);
         })->bind('edit');
 
         /* PUT actions */
 
-        $oApp->put('/entry', function() use ($oApp, $actions) {
-            return $actions->updateEntry(null);
+        $oApp->put('/entry', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->updateEntry($oRequest, null);
         });
 
-        $oApp->put('/entry/{id}', function($id) use ($oApp, $actions) {
-            return $actions->updateEntry($id);
+        $oApp->put('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->updateEntry($oRequest, $id);
         });
 
         /* DELETE actions */
 
-        $oApp->delete('/entry/{id}', function($id) use ($oApp, $actions) {
-            return $actions->deleteEntry($id);
+        $oApp->delete('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->deleteEntry($oRequest, $id);
         });
 
 
         /* POST actions */
 
-        $oApp->post('/entry/insert', function() use ($oApp, $actions) {
-            return $actions->updateEntry();
+        $oApp->post('/entry/insert', function(Request $oRequest) use ($oApp, $actions) {
+            return $actions->updateEntry($oRequest);
         });        
 
-        $oApp->post('/entry/{id}/update', function($id) use ($oApp, $actions) {
+        $oApp->post('/entry/{id}/update', function(Request $oRequest, $id) use ($oApp, $actions) {
             return $actions->updateEntry($oRequest, $id);
         });
 
-        $oApp->post('/entry/{id}/delete', function($id) use ($oApp, $actions) {
-            return $actions->deleteEntry($id);
+        $oApp->post('/entry/{id}/delete', function(Request $oRequest, $id) use ($oApp, $actions) {
+            return $actions->deleteEntry($oRequest, $id);
         });
     }
 
-    public function showList($sFormat) {
-        $oView = new EntryListView();
-        $oInput = Input::getInstance();
+    public function showList(Request $oRequest, $sFormat) {
+        $oConfig = $this->getConfig();
 
-        $iSkip = (int)$oInput->getGetData('skip');
-        $iLimit = (int)$oInput->getGetData('limit');
-        $iType = (int)$oInput->getGetData('type');
-        $sTerm = $oInput->getGetData('term');
-        $sSort = $oInput->getGetData('sort');
-        $sDirection = $oInput->getGetData('direction');
-        $sFormat = $oInput->sanitize($sFormat);
+        $iSkip = (int) $oConfig->sanitize($oRequest->query->get('skip'));
+        $iLimit = (int) $oConfig->sanitize($oRequest->query->get('limit'));
+        $iType = (int) $oConfig->sanitize($oRequest->query->get('type'));
+        $sTerm = $oConfig->sanitize($oRequest->query->get('term'));
+        $sSort = $oConfig->sanitize($oRequest->query->get('sort'));
+        $sDirection = $oConfig->sanitize($oRequest->query->get('direction'));
+        $sFormat = $oConfig->sanitize($sFormat);
+
+        $oView = new EntryListView();
         
         if(!empty($sTerm)) {
             $oView->setListType('search');
@@ -112,12 +112,11 @@ class EntryActions extends Base {
         return $oView->render($this->_oApp);    
     }
 
-    public function showEntry($id, $format) {
-        $oInput = Input::getInstance();
+    public function showEntry(Request $oRequest, $sId, $sFormat) {
+        $oConfig = $this->getConfig();
+        $sId = $oConfig->sanitize($sId);
+        $sFormat = $oConfig->sanitize($sFormat);
         
-        $sId = $oInput->sanitize($id);
-        $sFormat = $oInput->sanitize($format);
-
         $oView = new EntryView($sId);
 
         if(!empty($sFormat)) {
@@ -127,27 +126,28 @@ class EntryActions extends Base {
         return $oView->render($this->_oApp);
     }
 
-    public function newEntry() {
+    public function newEntry(Request $oRequest) {
         $oView = new EntryNewView();
         
         return $oView->render($this->_oApp); 
     }
 
-    public function editEntry($id) {
-        $sId = Input::getInstance()->sanitize($id);
+    public function editEntry(Request $oRequest, $sId) {
+        $oConfig = $this->getConfig();
+        $sId = $oConfig->sanitize($sId);
 
         $oView = new EntryEditView($sId);
         return $oView->render($this->_oApp);        
     }
 
-    public function updateEntry($id) {
-        $sId = $id;
-        $entryData = Input::getInstance()->getData('data');
-        $oRequest = $this->getRequest();
-
+    public function updateEntry(Request $oRequest, $sId) {
+        $oConfig = $this->getConfig();
+        $sId = $oConfig->sanitize($sId);       
+        $aEntryData = $oConfig->sanitize($oRequest->request->get('data'));
+        
         $oView = new EntryEditView($sId);
         $oDocument = $oView->getDocument();
-        $oDocument->updateProperties($entryData);
+        $oDocument->updateProperties($aEntryData);
         $oDocument->save();
 
         try {
@@ -163,9 +163,10 @@ class EntryActions extends Base {
         }          
     }
 
-    public function deleteEntry($id) {
-        $sId = $id;
-        $oRequest = $this->getRequest();
+    public function deleteEntry(Request $oRequest, $sId) {
+        $oConfig = $this->getConfig();
+        $sId =  $oConfig->sanitize($sId);
+        
         $oView = new EntryEditView($sId);
         $oView->getDocument()->delete();
 
