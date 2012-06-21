@@ -25,19 +25,19 @@ class EntryActions extends Base {
 
         $oApp->get('/entry/list.{format}', function($format) use($oApp, $actions) {
             return $actions->showList($format);
-        });
+        })->bind('list');
 
         $oApp->get('/entry/{id}.{format}', function($id, $format) use($oApp, $actions) {
             return $actions->showEntry($id, $format);
-        });
+        })->bind('view');
 
         $oApp->get('/entry/new', function() use ($oApp, $actions) {
             return $actions->newEntry();
-        });
+        })->bind('new');
 
         $oApp->get('/entry/{id}/edit', function($id) use ($oApp, $actions) {
             return $actions->editEntry($id);
-        });
+        })->bind('edit');
 
         /* PUT actions */
 
