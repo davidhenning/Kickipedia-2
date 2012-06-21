@@ -71,6 +71,10 @@ class Config extends IterateableList {
     }
 
     public function sanitize($data) {
+        if($data === null) {
+            return null;
+        }
+
         if(is_array($data)) {
             $aSanitizedData = array();
             foreach($data as $key => $value) {
