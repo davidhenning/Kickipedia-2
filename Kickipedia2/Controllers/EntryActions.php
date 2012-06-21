@@ -24,50 +24,50 @@ class EntryActions extends Base {
 
         $oApp->get('/entry/list.{format}', function(Request $oRequest, $format) use($oApp, $actions) {
             return $actions->showList($oRequest, $format);
-        })->bind('list');
+        })->bind('list_get');
 
         $oApp->get('/entry/{id}.{format}', function(Request $oRequest, $id, $format) use($oApp, $actions) {
             return $actions->showEntry($oRequest, $id, $format);
-        })->bind('view');
+        })->bind('view_get');
 
         $oApp->get('/entry/new', function(Request $oRequest) use ($oApp, $actions) {
             return $actions->newEntry($oRequest);
-        })->bind('new');
+        })->bind('new_get');
 
         $oApp->get('/entry/{id}/edit', function(Request $oRequest, $id) use ($oApp, $actions) {
             return $actions->editEntry($oRequest, $id);
-        })->bind('edit');
+        })->bind('edit_get');
 
         /* PUT actions */
 
         $oApp->put('/entry', function(Request $oRequest) use ($oApp, $actions) {
             return $actions->updateEntry($oRequest, null);
-        });
+        })->bind('insert_put');
 
         $oApp->put('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
             return $actions->updateEntry($oRequest, $id);
-        });
+        })->bind('update_put');
 
         /* DELETE actions */
 
         $oApp->delete('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
             return $actions->deleteEntry($oRequest, $id);
-        });
+        })->bind('delete_delete');
 
 
         /* POST actions */
 
         $oApp->post('/entry/insert', function(Request $oRequest) use ($oApp, $actions) {
             return $actions->updateEntry($oRequest);
-        });        
+        })->bind('insert_post');        
 
         $oApp->post('/entry/{id}/update', function(Request $oRequest, $id) use ($oApp, $actions) {
             return $actions->updateEntry($oRequest, $id);
-        });
+        })->bind('update_post');
 
         $oApp->post('/entry/{id}/delete', function(Request $oRequest, $id) use ($oApp, $actions) {
             return $actions->deleteEntry($oRequest, $id);
-        });
+        })->bind('delete_post');
     }
 
     public function showList(Request $oRequest, $sFormat) {
