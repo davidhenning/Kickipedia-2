@@ -15,13 +15,15 @@ use Kickipedia2\Controllers\EntryActions,
 use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response;
 
-use Silex\Application; 
+use Silex\Application,
+    Silex\Provider\UrlGeneratorServiceProvider; 
 
 try {
     Config::getInstance()->addConfigFile('kickipedia2.json');
 
     $oApp = new Application();
-    $oApp['debug'] = true;
+    $oApp->register(new UrlGeneratorServiceProvider());
+    #$oApp['debug'] = true;
 
     $sDigest = (isset($_SERVER['PHP_AUTH_DIGEST'])) ? $_SERVER['PHP_AUTH_DIGEST'] : null;
 
