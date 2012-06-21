@@ -4,20 +4,16 @@ session_start();
 
 require_once(__DIR__ . '/../bootstrap.php');
 
-use MongoAppKit\HttpAuthDigest,
-    MongoAppKit\Config,
-    MongoAppKit\Input,
+use MongoAppKit\Config,
+    MongoAppKit\HttpAuthDigest, 
     MongoAppKit\Exceptions\HttpException;
 
 use Kickipedia2\Controllers\EntryActions,
     Kickipedia2\Models\UserDocumentList;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 
-use Silex\Application,
-    Silex\Provider\UrlGeneratorServiceProvider; 
+use Silex\Application; 
 
 try {
     $oConfig = Config::getInstance();
@@ -25,7 +21,6 @@ try {
     $oRequest = $oConfig->getRequest();
 
     $oApp = new Application();
-    $oApp->register(new UrlGeneratorServiceProvider());
     $oApp['debug'] = $oConfig->getProperty('DebugMode');
 
     $oApp->before(function(Request $oRequest) {
