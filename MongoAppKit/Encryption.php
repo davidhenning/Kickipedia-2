@@ -25,12 +25,14 @@ class Encryption {
         return self::$_oInstance;
     }
 
+    protected $_oAes = null;
+
     /**
      * Constructor
      */
 
     private function __construct() {
-
+        $this->_oAes = new \Crypt_AES();
     }
 
     /**
@@ -42,10 +44,12 @@ class Encryption {
     }
 
 	public function encrypt($value, $key) {
-		return \GibberishAES::enc($value, $key);
+		$this->_oAes->setKey($key);
+        return base64_encode($this->_oAes->encrypt($value));
 	}
 
 	public function decrypt($value, $key) {
-		return \GibberishAES::dec($value, $key);
+        $this->_oAes->setKey($key);
+		return $this->_oAes->decrypt(base64_decode($value));
 	}
 }

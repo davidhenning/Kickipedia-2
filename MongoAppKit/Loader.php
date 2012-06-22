@@ -2,28 +2,6 @@
 
 namespace MongoAppKit;
 
-$sDependencyFile = __DIR__ . '/vendor/dependencies.json';
-
-if(file_exists($sDependencyFile)) {
-    $sDependencies = file_get_contents($sDependencyFile);
-    $aDependencies = json_decode($sDependencies, true);
-
-    if(!empty($aDependencies)) {
-        foreach($aDependencies as $aDependency) {
-            $sDependencyFile = __DIR__ . '/vendor/' . $aDependency['file'];
-            if(file_exists($sDependencyFile)) {
-                include_once($sDependencyFile);
-
-                if(!empty($aDependency['autoload'])) {
-                    if(isset($aDependency['autoload']['className']) && isset($aDependency['autoload']['methodName'])) {
-                        call_user_func(array($aDependency['autoload']['className'], $aDependency['autoload']['methodName']));
-                    }
-                }
-            }
-        }
-    }
-}
-
 class Loader {
     
     public static function registerAutoloader() {
