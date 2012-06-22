@@ -7,23 +7,29 @@ Kickipedia 2 features a RESTful API with HTTP digest authentication. Data is pro
 # Requirements #
 
 - Apache 2 with enabled mod_rewrite and a possibilty to create your own virtual host
-- PHP 5.3 or higher with following extensions:
+- PHP 5.3.3 or higher with following extensions:
   - mongo
   - json
   - hash
   - mcrypt
   - session
 - MongoDB 2.0 or higher
+- Composer
 
 # Installation #
 
-1. Clone the repository in a directory inside the htdocs directory of your web server
+1. Install Composer
+   `curl -s http://getcomposer.org/installer | php` (skip to the next step if it's already installed on your server)
 
-2. Configure a virtual host (see below)
+2. Clone the repository in a directory inside the htdocs directory of your web server
 
-3. Open yourdomain.com/setup.php and follow the instructions
+3. Run `php composer.phar install` to resolve all dependencies
 
-4. You're finished. Have fun!
+4. Configure a virtual host (see below)
+
+5. Open yourdomain.com/setup.php and follow the instructions
+
+6. You're finished. Have fun!
 
 ## Apache configuration ##
 
@@ -52,4 +58,4 @@ The following example is suited for a local installation on the host kickipedia.
 - [Twig](https://github.com/fabpot/Twig) (template engine)
 - [Gibberish AES for PHP](https://github.com/ivantcholakov/gibberish-aes-php) (AES encryption) Symfony components)
 - [Phpass](https://github.com/rchouinard/phpass) (secure password encryption with salting and key streching)
-- MongoAppKit (MongoDB abstraction layer, will be released separatly soon)
+- [MongoAppKit](https://github.com/MadCatme/mongoappkit) (MongoDB abstraction layer)
