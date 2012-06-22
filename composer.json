@@ -3,6 +3,7 @@
 		"silex/silex": "1.*",
 		"twig/twig": "1.8.*",
 		"rych/phpass": "2.0.*",
-		"phpseclib/phpseclib": "*"
+		"phpseclib/phpseclib": "*",
+		"mongoappkit/mongoappkit": "*"
 	}
 }
