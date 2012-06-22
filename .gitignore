@@ -5,3 +5,4 @@ cache/*
 public/assets/.sass-cache/*
 MongoAppKit/tests/report/*
 /mongoappkit.json
+composer.phar
