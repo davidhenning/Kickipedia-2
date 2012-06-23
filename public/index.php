@@ -17,6 +17,7 @@ use Silex\Application;
 
 try {
     $oConfig = Config::getInstance();
+    $oConfig->addConfigFile('mongoappkit.json');
     $oConfig->addConfigFile('kickipedia2.json');
     $oRequest = $oConfig->getRequest();
 
