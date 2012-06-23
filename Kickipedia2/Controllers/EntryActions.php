@@ -2,8 +2,6 @@
 
 namespace Kickipedia2\Controllers;
 
-use MongoAppKit\Base;
-
 use Kickipedia2\Views\EntryListView,
     Kickipedia2\Views\EntryView,
     Kickipedia2\Views\EntryEditView,
@@ -11,73 +9,68 @@ use Kickipedia2\Views\EntryListView,
 
 use Symfony\Component\HttpFoundation\Request;
 
-class EntryActions extends Base {
+class EntryActions extends BaseActions {
 
-    protected $_oApp = null;
-
-    public function __construct($oApp) {
-        $this->_oApp = $oApp;
-        $actions = $this;
+    protected function _initRoutes() {
+        $oActions = $this;
         
         /* GET actions */
 
-        $oApp->get('/entry/list.{format}', function(Request $oRequest, $format) use($oApp, $actions) {
-            return $actions->showList($oRequest, $format);
+        $this->_oApp->get('/entry/list.{format}', function(Request $oRequest, $format) use($oActions) {
+            return $oActions->showList($oRequest, $format);
         })->bind('list_get');
 
-        $oApp->get('/entry/{id}.{format}', function(Request $oRequest, $id, $format) use($oApp, $actions) {
-            return $actions->showEntry($oRequest, $id, $format);
+        $this->_oApp->get('/entry/{id}.{format}', function(Request $oRequest, $id, $format) use($oActions) {
+            return $oActions->showEntry($oRequest, $id, $format);
         })->bind('view_get');
 
-        $oApp->get('/entry/new', function(Request $oRequest) use ($oApp, $actions) {
-            return $actions->newEntry($oRequest);
+        $this->_oApp->get('/entry/new', function(Request $oRequest) use ($oActions) {
+            return $oActions->newEntry($oRequest);
         })->bind('new_get');
 
-        $oApp->get('/entry/{id}/edit', function(Request $oRequest, $id) use ($oApp, $actions) {
-            return $actions->editEntry($oRequest, $id);
+        $this->_oApp->get('/entry/{id}/edit', function(Request $oRequest, $id) use ($oActions) {
+            return $oActions->editEntry($oRequest, $id);
         })->bind('edit_get');
 
         /* PUT actions */
 
-        $oApp->put('/entry', function(Request $oRequest) use ($oApp, $actions) {
-            return $actions->updateEntry($oRequest, null);
+        $this->_oApp->put('/entry', function(Request $oRequest) use ($oActions) {
+            return $oActions->updateEntry($oRequest, null);
         })->bind('insert_put');
 
-        $oApp->put('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
-            return $actions->updateEntry($oRequest, $id);
+        $this->_oApp->put('/entry/{id}', function(Request $oRequest, $id) use ($oActions) {
+            return $oActions->updateEntry($oRequest, $id);
         })->bind('update_put');
 
         /* DELETE actions */
 
-        $oApp->delete('/entry/{id}', function(Request $oRequest, $id) use ($oApp, $actions) {
-            return $actions->deleteEntry($oRequest, $id);
+        $this->_oApp->delete('/entry/{id}', function(Request $oRequest, $id) use ($oActions) {
+            return $oActions->deleteEntry($oRequest, $id);
         })->bind('delete_delete');
 
         /* POST actions */
 
-        $oApp->post('/entry/insert', function(Request $oRequest) use ($oApp, $actions) {
-            return $actions->updateEntry($oRequest);
+        $this->_oApp->post('/entry/insert', function(Request $oRequest) use ($oActions) {
+            return $oActions->updateEntry($oRequest);
         })->bind('insert_post');        
 
-        $oApp->post('/entry/{id}/update', function(Request $oRequest, $id) use ($oApp, $actions) {
-            return $actions->updateEntry($oRequest, $id);
+        $this->_oApp->post('/entry/{id}/update', function(Request $oRequest, $id) use ($oActions) {
+            return $oActions->updateEntry($oRequest, $id);
         })->bind('update_post');
 
-        $oApp->post('/entry/{id}/delete', function(Request $oRequest, $id) use ($oApp, $actions) {
-            return $actions->deleteEntry($oRequest, $id);
+        $this->_oApp->post('/entry/{id}/delete', function(Request $oRequest, $id) use ($oActions) {
+            return $oActions->deleteEntry($oRequest, $id);
         })->bind('delete_post');
     }
 
     public function showList(Request $oRequest, $sFormat) {
-        $oConfig = $this->getConfig();
-
-        $iSkip = (int) $oConfig->sanitize($oRequest->query->get('skip'));
-        $iLimit = (int) $oConfig->sanitize($oRequest->query->get('limit'));
-        $iType = (int) $oConfig->sanitize($oRequest->query->get('type'));
-        $sTerm = $oConfig->sanitize($oRequest->query->get('term'));
-        $sSort = $oConfig->sanitize($oRequest->query->get('sort'));
-        $sDirection = $oConfig->sanitize($oRequest->query->get('direction'));
-        $sFormat = $oConfig->sanitize($sFormat);
+        $iSkip = (int) $this->_oConfig->sanitize($oRequest->query->get('skip'));
+        $iLimit = (int) $this->_oConfig->sanitize($oRequest->query->get('limit'));
+        $iType = (int) $this->_oConfig->sanitize($oRequest->query->get('type'));
+        $sTerm = $this->_oConfig->sanitize($oRequest->query->get('term'));
+        $sSort = $this->_oConfig->sanitize($oRequest->query->get('sort'));
+        $sDirection = $this->_oConfig->sanitize($oRequest->query->get('direction'));
+        $sFormat = $this->_oConfig->sanitize($sFormat);
 
         $oView = new EntryListView();
         
@@ -111,9 +104,8 @@ class EntryActions extends Base {
     }
 
     public function showEntry(Request $oRequest, $sId, $sFormat) {
-        $oConfig = $this->getConfig();
-        $sId = $oConfig->sanitize($sId);
-        $sFormat = $oConfig->sanitize($sFormat);
+        $sId = $this->_oConfig->sanitize($sId);
+        $sFormat = $this->_oConfig->sanitize($sFormat);
         
         $oView = new EntryView($sId);
 
@@ -131,17 +123,15 @@ class EntryActions extends Base {
     }
 
     public function editEntry(Request $oRequest, $sId) {
-        $oConfig = $this->getConfig();
-        $sId = $oConfig->sanitize($sId);
+        $sId = $this->_oConfig->sanitize($sId);
 
         $oView = new EntryEditView($sId);
         return $oView->render($this->_oApp);        
     }
 
     public function updateEntry(Request $oRequest, $sId) {
-        $oConfig = $this->getConfig();
-        $sId = $oConfig->sanitize($sId);       
-        $aEntryData = $oConfig->sanitize($oRequest->request->get('data'));
+        $sId = $this->_oConfig->sanitize($sId);       
+        $aEntryData = $this->_oConfig->sanitize($oRequest->request->get('data'));
         
         $oView = new EntryEditView($sId);
         $oDocument = $oView->getDocument();
@@ -162,8 +152,7 @@ class EntryActions extends Base {
     }
 
     public function deleteEntry(Request $oRequest, $sId) {
-        $oConfig = $this->getConfig();
-        $sId =  $oConfig->sanitize($sId);
+        $sId =  $this->_oConfig->sanitize($sId);
         
         $oView = new EntryEditView($sId);
         $oView->getDocument()->delete();

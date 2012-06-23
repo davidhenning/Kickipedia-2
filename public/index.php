@@ -47,7 +47,7 @@ try {
 
     $oAuth->authenticate($aUserDocument->getProperty('token'));
 
-    $entryActions = new EntryActions($oApp);
+    $entryActions = new EntryActions($oConfig, $oApp);
     $oApp->run();
 } catch(HttpException $e) {
     if($e->getCode() === 401) {
