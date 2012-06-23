@@ -6,15 +6,16 @@ Kickipedia 2 features a RESTful API with HTTP digest authentication. Data is pro
 
 # Requirements #
 
-- Apache 2 with enabled mod_rewrite and a possibilty to create your own virtual host
+- Apache 2 with enabled mod_rewrite
 - PHP 5.3.3 or higher with following extensions:
   - mongo
   - json
   - hash
   - mcrypt
+  - phar
   - session
 - MongoDB 2.0 or higher
-- Composer
+- [Composer](http://getcomposer.org/)
 
 # Installation #
 
@@ -25,7 +26,7 @@ Kickipedia 2 features a RESTful API with HTTP digest authentication. Data is pro
 
 3. Run `php composer.phar install` to resolve all dependencies
 
-4. Configure a virtual host (see below)
+4. Configure a virtual host or place a .htaccess file inside your document root (for both see below)
 
 5. Open yourdomain.com/setup.php and follow the instructions
 
@@ -49,6 +50,32 @@ The following example is suited for a local installation on the host kickipedia.
     </directory>
 </VirtualHost>
 ```
+## Fallback Apache configuration ##
+
+Create an .htaccess file inside your document root with following content:
+
+```apache
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+    Options +Indexes
+    RewriteEngine on
+
+    # if your app is in a subfolder
+    RewriteBase /Kickipedia-2/public/
+
+    # test string is a valid files
+    RewriteCond %{SCRIPT_FILENAME} !-f
+    # test string is a valid directory
+    RewriteCond %{SCRIPT_FILENAME} !-d
+
+    RewriteRule ^assets/(.*)$ /Kickipedia-2/public/assets/$1 [L]
+    RewriteRule ^(.*)$   index.php?uri=/$1    [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},NC,L,QSA]
+    # with QSA flag (query string append),
+    # forces the rewrite engine to append a query string part of the
+    # substitution string to the existing string, instead of replacing it.
+</IfModule>
+```
+If necessary, adjust the RewriteBase path and the asset path.
 
 # Technology #
 
