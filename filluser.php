@@ -6,6 +6,7 @@ use MongoAppKit\Config;
 
 use Kickipedia2\Models\UserDocument;
 
+Config::getInstance()->addConfigFile('mongoappkit.json');
 Config::getInstance()->addConfigFile('kickipedia2.json');
 
 $entry = new UserDocument();

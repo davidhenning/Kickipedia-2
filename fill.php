@@ -6,6 +6,7 @@ use MongoAppKit\Config;
 
 use Kickipedia2\Models\EntryDocument;
 
+Config::getInstance()->addConfigFile('mongoappkit.json');
 Config::getInstance()->addConfigFile('kickipedia2.json');
 
 for($i = 0; $i < 10000; $i++) {
