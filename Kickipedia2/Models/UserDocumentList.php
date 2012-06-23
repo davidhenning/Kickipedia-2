@@ -8,6 +8,8 @@ class UserDocumentList extends DocumentList {
     protected $_sCollectionName = 'user';
 
     public function __construct() {
+        $this->setDatabase($this->getStorage()->getDatabase());
+        $this->setConfig($this->getConfig());
         $this->setDocumentBaseObject(new UserDocument());
     }
 

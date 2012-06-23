@@ -8,6 +8,8 @@ class EntryDocumentList extends DocumentList {
     protected $_sCollectionName = 'entry';
 
     public function __construct() {
+        $this->setDatabase($this->getStorage()->getDatabase());
+        $this->setConfig($this->getConfig());
         $this->setDocumentBaseObject(new EntryDocument());
     }
 
