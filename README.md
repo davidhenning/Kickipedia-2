@@ -22,7 +22,7 @@ Kickipedia 2 features a RESTful API with HTTP digest authentication. Data is pro
 1. Install Composer
    `curl -s http://getcomposer.org/installer | php` (skip to the next step if it's already installed on your server)
 
-2. Clone the repository in a directory inside the htdocs directory of your web server
+2. Clone the repository
 
 3. Run `php composer.phar install` to resolve all dependencies
 
