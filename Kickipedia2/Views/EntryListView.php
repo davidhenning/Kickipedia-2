@@ -77,6 +77,8 @@ class EntryListView extends BaseView {
     public function getDocuments() {
         if($this->_oDocuments === null) {
             $oEntryDocumentList = new EntryDocumentList();
+            $oEntryDocumentList->setConfig($this->getConfig());
+            $oEntryDocumentList->setConfig($this->getStorage());
             $iDocumentLimit = $this->getDocumentLimit();
 
             if(!empty($this->_sCustomSortField)) {

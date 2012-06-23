@@ -8,7 +8,6 @@ class EntryDocumentList extends DocumentList {
     protected $_sCollectionName = 'entry';
 
     public function __construct() {
-        parent::__construct();
         $this->setDocumentBaseObject(new EntryDocument());
     }
 

@@ -8,8 +8,6 @@ use \Phpass\Hash,
 class UserDocument extends BaseDocument {
     
     public function __construct() {
-        parent::__construct();
-
         $this->setCollectionName('user');
     }
 
