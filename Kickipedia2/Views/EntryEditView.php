@@ -13,7 +13,7 @@ class EntryEditView extends BaseView {
     protected $_bShowEditTools = true;
 
     public function render($oApp) {
-        $this->_oDocument = new EntryDocument();
+        $this->_oDocument = new EntryDocument($this->_oConfig);
         $sId = $this->getId();
 
         if(!empty($sId)) {
@@ -31,7 +31,7 @@ class EntryEditView extends BaseView {
 
     public function getDocument() {
         if($this->_oDocument === null) {
-            $this->_oDocument = new EntryDocument();
+            $this->_oDocument = new EntryDocument($this->_oConfig);
             $sId = $this->getId();
 
             if(!is_null($sId)) {
@@ -56,7 +56,7 @@ class EntryEditView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'DELETE',
-                'url' => $this->getRequest()->getPathInfo()
+                'url' => $oApp['request']->getPathInfo()
             ),
             'response' => array(    
                 'action' => 'delete',   
@@ -75,7 +75,7 @@ class EntryEditView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => $_SERVER['REQUEST_METHOD'],
-                'url' => $this->getRequest()->getPathInfo()
+                'url' => $oApp['request']->getPathInfo()
             ),
             'response' => array(
                 'action' => (!is_null($this->getId())) ? 'update' : 'create',     

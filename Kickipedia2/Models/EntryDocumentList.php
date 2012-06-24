@@ -2,15 +2,15 @@
 
 namespace Kickipedia2\Models;
 
-use MongoAppKit\Documents\DocumentList;
+use MongoAppKit\Config,
+    MongoAppKit\Documents\DocumentList;
 
 class EntryDocumentList extends DocumentList {
     protected $_sCollectionName = 'entry';
 
-    public function __construct() {
-        $this->setDatabase($this->getStorage()->getDatabase());
-        $this->setConfig($this->getConfig());
-        $this->setDocumentBaseObject(new EntryDocument());
+    public function __construct(Config $oConfig) {
+        parent::__construct($oConfig);
+        $this->setDocumentBaseObject(new EntryDocument($oConfig));
     }
 
     public function findByType($iType, $iLimit = 100, $iSkip = 0) {

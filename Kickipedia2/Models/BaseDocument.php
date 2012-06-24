@@ -10,5 +10,4 @@ class BaseDocument extends Document {
 
         return parent::getPreparedProperties();
     }
-
 }

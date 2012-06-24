@@ -72,7 +72,7 @@ class EntryActions extends BaseActions {
         $sDirection = $this->_oConfig->sanitize($oRequest->query->get('direction'));
         $sFormat = $this->_oConfig->sanitize($sFormat);
 
-        $oView = new EntryListView();
+        $oView = new EntryListView($this->_oConfig, $oRequest);
         
         if(!empty($sTerm)) {
             $oView->setListType('search');
@@ -107,7 +107,7 @@ class EntryActions extends BaseActions {
         $sId = $this->_oConfig->sanitize($sId);
         $sFormat = $this->_oConfig->sanitize($sFormat);
         
-        $oView = new EntryView($sId);
+        $oView = new EntryView($this->_oConfig, $oRequest, $sId);
 
         if(!empty($sFormat)) {
             $oView->setOutputFormat($sFormat);
@@ -117,7 +117,7 @@ class EntryActions extends BaseActions {
     }
 
     public function newEntry(Request $oRequest) {
-        $oView = new EntryNewView();
+        $oView = new EntryNewView($this->_oConfig, $oRequest);
         
         return $oView->render($this->_oApp); 
     }
@@ -125,7 +125,7 @@ class EntryActions extends BaseActions {
     public function editEntry(Request $oRequest, $sId) {
         $sId = $this->_oConfig->sanitize($sId);
 
-        $oView = new EntryEditView($sId);
+        $oView = new EntryEditView($this->_oConfig, $oRequest, $sId);
         return $oView->render($this->_oApp);        
     }
 
@@ -133,7 +133,7 @@ class EntryActions extends BaseActions {
         $sId = $this->_oConfig->sanitize($sId);       
         $aEntryData = $this->_oConfig->sanitize($oRequest->request->get('data'));
         
-        $oView = new EntryEditView($sId);
+        $oView = new EntryEditView($this->_oConfig, $oRequest, $sId);
         $oDocument = $oView->getDocument();
         $oDocument->updateProperties($aEntryData);
         $oDocument->save();
@@ -154,7 +154,7 @@ class EntryActions extends BaseActions {
     public function deleteEntry(Request $oRequest, $sId) {
         $sId =  $this->_oConfig->sanitize($sId);
         
-        $oView = new EntryEditView($sId);
+        $oView = new EntryEditView($this->_oConfig, $oRequest, $sId);
         $oView->getDocument()->delete();
 
         if($oRequest->headers->get('content_type') === 'application/json' || $oRequest->getMethod() === 'DELETE') {

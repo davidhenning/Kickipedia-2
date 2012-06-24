@@ -2,17 +2,20 @@
 
 namespace Kickipedia2\Views;
 
-use MongoAppKit\View;
+use MongoAppKit\Config,
+    MongoAppKit\View;
+
+use Symfony\Component\HttpFoundation\Request;
 
 class BaseView extends View {
     protected $_aTypes = null;
     protected $_iDocumentType = null;
     protected $_aNavigation = null;
 
-    public function __construct($sId = null) {
-        parent::__construct($sId);
+    public function __construct(Config $oConfig, Request $oRequest, $sId = null) {
+        parent::__construct($oConfig, $oRequest, $sId);
 
-        $this->_setAppName($this->getConfig()->getProperty('AppName'));
+        $this->_setAppName($this->_oConfig->getProperty('AppName'));
     }
 
     public function redirect($oApp, $sUrl, $aParams = null) {
@@ -25,7 +28,7 @@ class BaseView extends View {
 
     public function getTypes() {
         if($this->_aTypes === null) {
-            $aRawTypes = $this->getConfig()->getProperty('EntryTypes');
+            $aRawTypes = $this->_oConfig->getProperty('EntryTypes');
             $aTypes = array();
 
             foreach($aRawTypes as $sId => $sName) {
@@ -52,14 +55,13 @@ class BaseView extends View {
     
     public function getNavigation() {
         if($this->_aNavigation === null) {
-            $aRawNav = $this->getConfig()->getProperty('NavItems');
+            $aRawNav = $this->_oConfig->getProperty('NavItems');
             $aNav = array();
-            $oRequest = $this->getRequest();
 
             foreach($aRawNav as $aItem) {
                 $aNewItem = $aItem;
 
-                if($oRequest->getPathInfo() == $aNewItem['route']) {
+                if($this->_oRequest->getPathInfo() == $aNewItem['route']) {
                     $aNewItem['active'] = true;
                 } else {
                     $aNewItem['active'] = false;

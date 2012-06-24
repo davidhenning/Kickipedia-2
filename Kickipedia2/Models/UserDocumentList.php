@@ -2,15 +2,15 @@
 
 namespace Kickipedia2\Models;
 
-use MongoAppKit\Documents\DocumentList;
+use MongoAppKit\Config,
+    MongoAppKit\Documents\DocumentList;
 
 class UserDocumentList extends DocumentList {
     protected $_sCollectionName = 'user';
 
-    public function __construct() {
-        $this->setDatabase($this->getStorage()->getDatabase());
-        $this->setConfig($this->getConfig());
-        $this->setDocumentBaseObject(new UserDocument());
+    public function __construct(Config $oConfig) {
+        parent::__construct($oConfig);
+        $this->setDocumentBaseObject(new UserDocument($this->_oDatabase, $oConfig));
     }
 
     public function findByName($sName) {

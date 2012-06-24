@@ -5,6 +5,7 @@ session_start();
 require_once(__DIR__ . '/../bootstrap.php');
 
 use MongoAppKit\Config,
+    MongoAppKit\Storage,
     MongoAppKit\HttpAuthDigest, 
     MongoAppKit\Exceptions\HttpException;
 
@@ -16,23 +17,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Silex\Application; 
 
 try {
-    $oConfig = Config::getInstance();
+    $oApp = new Application();
+    $oConfig = new Config();
     $oConfig->addConfigFile('mongoappkit.json');
     $oConfig->addConfigFile('kickipedia2.json');
-    $oRequest = $oConfig->getRequest();
-
-    $oApp = new Application();
+    $oStorage = new Storage($oConfig);
+    $oConfig->setProperty('storage', $oStorage);
+    
     $oApp['debug'] = $oConfig->getProperty('DebugMode');
 
-    $oApp->before(function(Request $oRequest) {
+    $oApp->before(function(Request $oRequest) use($oConfig) {
         if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
             $aData = json_decode($oRequest->getContent(), true);
             $oRequest->request->replace(is_array($aData) ? $aData : array());
         }
     });
     
-    $sDigest = $oRequest->server->get('PHP_AUTH_DIGEST');
-    $sHttpAuth = $oRequest->server->get('REDIRECT_HTTP_AUTHORIZATION');
+    $sDigest = $_SERVER['PHP_AUTH_DIGEST'];
+    $sHttpAuth = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
     
     if(empty($sDigest) && !empty($sHttpAuth)) {
         $sDigest = $sHttpAuth;
@@ -40,7 +42,7 @@ try {
         
     $oAuth = new HttpAuthDigest('Kickipedia2', $sDigest);
     $oAuth->sendAuthenticationHeader();
-    $oUserList = new UserDocumentList();
+    $oUserList = new UserDocumentList($oConfig);
     $sUserName = $oConfig->sanitize($oAuth->getUserName());
     $aUserDocument = $oUserList->getUser($sUserName);
     $_SESSION['user'] = $aUserDocument;

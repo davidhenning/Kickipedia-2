@@ -76,9 +76,7 @@ class EntryListView extends BaseView {
 
     public function getDocuments() {
         if($this->_oDocuments === null) {
-            $oEntryDocumentList = new EntryDocumentList();
-            $oEntryDocumentList->setConfig($this->getConfig());
-            $oEntryDocumentList->setDatabase($this->getStorage()->getDatabase());
+            $oEntryDocumentList = new EntryDocumentList($this->_oConfig);
             $iDocumentLimit = $this->getDocumentLimit();
 
             if(!empty($this->_sCustomSortField)) {
@@ -123,7 +121,7 @@ class EntryListView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'GET',
-                'url' => $this->getRequest()->getPathInfo()
+                'url' => $oApp['request']->getPathInfo()
             ),
             'response' => array(        
                 'total' => $this->_iTotalDocuments,
@@ -158,7 +156,7 @@ class EntryListView extends BaseView {
         
         $oRequest = $oKickipedia->addChild('request');
         $oRequest->addChild('method', 'GET');
-        $oRequest->addChild('url', $this->getRequest()->getPathInfo());
+        $oRequest->addChild('url', $oApp['request']->getPathInfo());
 
         foreach($this->_aPossibleParams as $aParam) {
             $value = (isset($this->{$aParam['property']})) ? $this->{$aParam['property']} : null;

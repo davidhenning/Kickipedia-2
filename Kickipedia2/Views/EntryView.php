@@ -11,7 +11,7 @@ class EntryView extends BaseView {
     protected $_sTemplateName = 'entry.twig';
 
     public function render($oApp) {
-        $oEntry = new EntryDocument();
+        $oEntry = new EntryDocument($this->_oConfig);
         $oEntry->load($this->getId());  
         $this->_aTemplateData['entry'] = $oEntry;
 
@@ -19,7 +19,7 @@ class EntryView extends BaseView {
     }
 
     protected function _renderJSON($oApp) {
-        $oEntry = new EntryDocument();
+        $oEntry = new EntryDocument($this->_oConfig);
         $oEntry->load($this->getId());
 
         $aOutput = array(
@@ -27,7 +27,7 @@ class EntryView extends BaseView {
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'GET',
-                'url' => $this->getRequest()->getPathInfo()
+                'url' => $oApp['request']->getPathInfo()
             ),
             'response' => array(        
                 'total' => 1,
@@ -42,7 +42,7 @@ class EntryView extends BaseView {
     }
 
     protected function _renderXML() {
-        $oEntry = new EntryDocument();
+        $oEntry = new EntryDocument($this->_oConfig);
         $oEntry->load($this->getId());
         $oKickipedia = new \SimpleXMLElement('<kickipedia></kickipedia>');
         
@@ -51,7 +51,7 @@ class EntryView extends BaseView {
         
         $oRequest = $oKickipedia->addChild('request');
         $oRequest->addChild('method', 'GET');
-        $oRequest->addChild('url', $this->getRequest()->getPathInfo());
+        $oRequest->addChild('url', $oApp['request']->getPathInfo());
 
         $oResponse = $oKickipedia->addChild('response');
         $oResponse->addChild('total', 1);
