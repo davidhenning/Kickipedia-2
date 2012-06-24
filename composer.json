@@ -5,5 +5,10 @@
 		"rych/phpass": "2.0.*",
 		"phpseclib/phpseclib": "*",
 		"mongoappkit/mongoappkit": "*"
-	}
+	},
+    "autoload": {
+        "psr-0": {
+            "Kickipedia2": "src"
+        }
+    }
 }

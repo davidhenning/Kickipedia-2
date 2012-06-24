@@ -7,6 +7,3 @@ if(!function_exists('getBasePath')) {
 }
 
 require_once(__DIR__ . '/vendor/autoload.php');
-require_once(__DIR__ . '/Kickipedia2/Loader.php');
-
-\Kickipedia2\Loader::registerAutoloader();
