@@ -12,57 +12,76 @@ use MongoAppKit\Config,
 use Kickipedia2\Controllers\EntryActions,
     Kickipedia2\Models\UserDocumentList;
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\Response;
 
 use Silex\Application; 
 
-try {
-    $oApp = new Application();
-    $oConfig = new Config();
-    $oConfig->addConfigFile('mongoappkit.json');
-    $oConfig->addConfigFile('kickipedia2.json');
-    $oStorage = new Storage($oConfig);
-    $oConfig->setProperty('storage', $oStorage);
-    
-    $oApp['debug'] = $oConfig->getProperty('DebugMode');
-    $oApp['config'] = $oConfig;
 
-    $oApp->before(function(Request $oRequest) use($oConfig) {
-        if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
-            $aData = json_decode($oRequest->getContent(), true);
-            $oRequest->request->replace(is_array($aData) ? $aData : array());
-        }
-    });
-    
-    $sDigest = $_SERVER['PHP_AUTH_DIGEST'];
-    $sHttpAuth = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
-    
-    if(empty($sDigest) && !empty($sHttpAuth)) {
-        $sDigest = $sHttpAuth;
+$oApp = new Application();
+$oConfig = new Config();
+$oConfig->addConfigFile('mongoappkit.json');
+$oConfig->addConfigFile('kickipedia2.json');
+$oStorage = new Storage($oConfig);
+$oConfig->setProperty('storage', $oStorage);
+Request::trustProxyData();
+
+$oApp['debug'] = $oConfig->getProperty('DebugMode');
+$oApp['config'] = $oConfig;
+
+$oApp->before(function(Request $oRequest) use($oConfig) {
+    if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
+        $aData = json_decode($oRequest->getContent(), true);
+        $oRequest->request->replace(is_array($aData) ? $aData : array());
     }
-        
-    $oAuth = new HttpAuthDigest('Kickipedia2', $sDigest);
-    $oAuth->sendAuthenticationHeader();
+});
+
+$oApp->before(function(Request $oRequest) use($oConfig) {      
+    $oAuth = new HttpAuthDigest($oRequest, 'Kickipedia2'); 
+    $oResponse = $oAuth->sendAuthenticationHeader();
+
+    if($oResponse instanceof Response) {
+        return $oResponse;
+    }
+
     $oUserList = new UserDocumentList($oConfig);
     $sUserName = $oConfig->sanitize($oAuth->getUserName());
     $aUserDocument = $oUserList->getUser($sUserName);
     $_SESSION['user'] = $aUserDocument;
 
     $oAuth->authenticate($aUserDocument->getProperty('token'));
+});
 
-    $entryActions = new EntryActions($oApp);
-    $oApp->run();
-} catch(HttpException $e) {
+$oApp->error(function(HttpException $e, $code) use($oApp) {
     if($e->getCode() === 401) {
-        $oAuth->sendAuthenticationHeader(true);
+        return $e->getCallingObject()->sendAuthenticationHeader(true);
     }
 
-    include_once('./error.php');
-    exit();
-} catch(\InvalidArgumentException $e) {
-    include_once('./error.php');
-    exit();
-} catch(\Exception $e) {
-    include_once('./error.php');
-    exit();
-}
+    return new Response('Kickipedia error: '.$e->getMessage(), $e->getCode());
+});
+
+$oApp->error(function(Exception $e, $code) use($oApp) {
+    $oRequest = $oApp['request'];
+
+    if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
+        $aError = array(
+            'status' => $e->getCode(),
+            'time' => date('Y-m-d H:i:s'),
+            'request' => array(
+                'method' => $oRequest->getMethod(),
+                'url' => $oRequest->getPathInfo()
+            ),
+            'response' => array(
+                'error' => str_ireplace('exception', '', get_class($e)),
+                'message' => $e->getMessage(),
+                'backtrace' => $e->getTrace(),
+                'server' => $_SERVER
+            )
+        );
+
+        return $oApp->json($aError, 400);
+    }
+});
+
+$entryActions = new EntryActions($oApp);
+$oApp->run();
