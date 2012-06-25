@@ -13,7 +13,7 @@ class EntryEditView extends BaseView {
     protected $_bShowEditTools = true;
 
     public function render($oApp) {
-        $this->_oDocument = new EntryDocument($this->_oConfig);
+        $this->_oDocument = new EntryDocument($this->_oConfig->getProperty('storage')->getDatabase(), $this->_oConfig);
         $sId = $this->getId();
 
         if(!empty($sId)) {
@@ -31,7 +31,7 @@ class EntryEditView extends BaseView {
 
     public function getDocument() {
         if($this->_oDocument === null) {
-            $this->_oDocument = new EntryDocument($this->_oConfig);
+            $this->_oDocument = new EntryDocument($this->_oConfig->getProperty('storage')->getDatabase(), $this->_oConfig);
             $sId = $this->getId();
 
             if(!is_null($sId)) {
@@ -52,7 +52,7 @@ class EntryEditView extends BaseView {
 
     public function renderJsonDeleteResponse($oApp) {
         $aOutput = array(
-            'status' => 200,
+            'status' => 202,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'DELETE',
@@ -64,14 +64,16 @@ class EntryEditView extends BaseView {
             )
         );
 
-        return $oApp->json($aOutput);
+        return $oApp->json($aOutput, 202);
     }
 
     public function renderJsonUpdateResponse($oApp) {
         $sId = $this->_oDocument->getProperty('_id');
 
+        $iHttpReponseCode = (!is_null($this->getId())) ? 202 : 201;
+
         $aOutput = array(
-            'status' => 200,
+            'status' => $iHttpReponseCode,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => $_SERVER['REQUEST_METHOD'],
@@ -84,6 +86,6 @@ class EntryEditView extends BaseView {
             )
         );
 
-        return $oApp->json($aOutput);
+        return $oApp->json($aOutput, $iHttpReponseCode);
     }
 }
