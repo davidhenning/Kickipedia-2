@@ -64,15 +64,16 @@ class EntryActions extends BaseActions {
     }
 
     public function showList(Request $oRequest, $sFormat) {
-        $iSkip = (int) $this->_oConfig->sanitize($oRequest->query->get('skip'));
-        $iLimit = (int) $this->_oConfig->sanitize($oRequest->query->get('limit'));
-        $iType = (int) $this->_oConfig->sanitize($oRequest->query->get('type'));
-        $sTerm = $this->_oConfig->sanitize($oRequest->query->get('term'));
-        $sSort = $this->_oConfig->sanitize($oRequest->query->get('sort'));
-        $sDirection = $this->_oConfig->sanitize($oRequest->query->get('direction'));
-        $sFormat = $this->_oConfig->sanitize($sFormat);
+        $oConfig = $this->_oApp['config'];
+        $iSkip = (int) $oConfig->sanitize($oRequest->query->get('skip'));
+        $iLimit = (int) $oConfig->sanitize($oRequest->query->get('limit'));
+        $iType = (int) $oConfig->sanitize($oRequest->query->get('type'));
+        $sTerm = $oConfig->sanitize($oRequest->query->get('term'));
+        $sSort = $oConfig->sanitize($oRequest->query->get('sort'));
+        $sDirection = $oConfig->sanitize($oRequest->query->get('direction'));
+        $sFormat = $oConfig->sanitize($sFormat);
 
-        $oView = new EntryListView($this->_oConfig, $oRequest);
+        $oView = new EntryListView($oConfig, $oRequest);
         
         if(!empty($sTerm)) {
             $oView->setListType('search');
@@ -104,10 +105,11 @@ class EntryActions extends BaseActions {
     }
 
     public function showEntry(Request $oRequest, $sId, $sFormat) {
-        $sId = $this->_oConfig->sanitize($sId);
-        $sFormat = $this->_oConfig->sanitize($sFormat);
+        $oConfig = $this->_oApp['config'];
+        $sId = $oConfig->sanitize($sId);
+        $sFormat = $oConfig->sanitize($sFormat);
         
-        $oView = new EntryView($this->_oConfig, $oRequest, $sId);
+        $oView = new EntryView($oConfig, $oRequest, $sId);
 
         if(!empty($sFormat)) {
             $oView->setOutputFormat($sFormat);
@@ -117,23 +119,25 @@ class EntryActions extends BaseActions {
     }
 
     public function newEntry(Request $oRequest) {
-        $oView = new EntryNewView($this->_oConfig, $oRequest);
+        $oView = new EntryNewView($this->_oApp['config'], $oRequest);
         
         return $oView->render($this->_oApp); 
     }
 
     public function editEntry(Request $oRequest, $sId) {
-        $sId = $this->_oConfig->sanitize($sId);
+        $oConfig = $this->_oApp['config'];
+        $sId = $oConfig->sanitize($sId);
 
-        $oView = new EntryEditView($this->_oConfig, $oRequest, $sId);
+        $oView = new EntryEditView($oConfig, $oRequest, $sId);
         return $oView->render($this->_oApp);        
     }
 
     public function updateEntry(Request $oRequest, $sId) {
-        $sId = $this->_oConfig->sanitize($sId);       
-        $aEntryData = $this->_oConfig->sanitize($oRequest->request->get('data'));
+        $oConfig = $this->_oApp['config'];
+        $sId = $oConfig->sanitize($sId);       
+        $aEntryData = $oConfig->sanitize($oRequest->request->get('data'));
         
-        $oView = new EntryEditView($this->_oConfig, $oRequest, $sId);
+        $oView = new EntryEditView($oConfig, $oRequest, $sId);
         $oDocument = $oView->getDocument();
         $oDocument->updateProperties($aEntryData);
         $oDocument->save();
@@ -152,9 +156,10 @@ class EntryActions extends BaseActions {
     }
 
     public function deleteEntry(Request $oRequest, $sId) {
-        $sId =  $this->_oConfig->sanitize($sId);
+        $oConfig = $this->_oApp['config'];
+        $sId =  $oConfig->sanitize($sId);
         
-        $oView = new EntryEditView($this->_oConfig, $oRequest, $sId);
+        $oView = new EntryEditView($oConfig, $oRequest, $sId);
         $oView->getDocument()->delete();
 
         if($oRequest->headers->get('content_type') === 'application/json' || $oRequest->getMethod() === 'DELETE') {

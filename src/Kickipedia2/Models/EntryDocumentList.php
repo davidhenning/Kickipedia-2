@@ -10,7 +10,7 @@ class EntryDocumentList extends DocumentList {
 
     public function __construct(Config $oConfig) {
         parent::__construct($oConfig);
-        $this->setDocumentBaseObject(new EntryDocument($oConfig));
+        $this->setDocumentBaseObject(new EntryDocument($this->_oDatabase, $oConfig));
     }
 
     public function findByType($iType, $iLimit = 100, $iSkip = 0) {

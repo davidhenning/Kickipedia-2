@@ -6,10 +6,8 @@ use MongoAppKit\Config;
 
 class EntryDocument extends BaseDocument {
 
-    public function __construct(Config $oConfig) {
-        $oDatabase = $oConfig->getProperty('storage')->getDatabase();
-
-        $this->setDatabase($oConfig->getProperty('storage')->getDatabase());
+    public function __construct(\MongoDB $oDatabase, Config $oConfig) {
+        $this->setDatabase($oDatabase);
         $this->setConfig($oConfig);
         $this->setCollectionName('entry');
     }

@@ -25,6 +25,7 @@ try {
     $oConfig->setProperty('storage', $oStorage);
     
     $oApp['debug'] = $oConfig->getProperty('DebugMode');
+    $oApp['config'] = $oConfig;
 
     $oApp->before(function(Request $oRequest) use($oConfig) {
         if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
@@ -49,7 +50,7 @@ try {
 
     $oAuth->authenticate($aUserDocument->getProperty('token'));
 
-    $entryActions = new EntryActions($oConfig, $oApp);
+    $entryActions = new EntryActions($oApp);
     $oApp->run();
 } catch(HttpException $e) {
     if($e->getCode() === 401) {
