@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request,
 
 use Silex\Application; 
 
+use Monolog\Logger,
+    Monolog\Handler\StreamHandler;
 
 $oApp = new Application();
 $oConfig = new Config();
@@ -63,24 +65,31 @@ $oApp->error(function(HttpException $e, $code) use($oApp) {
 $oApp->error(function(Exception $e, $code) use($oApp) {
     $oRequest = $oApp['request'];
 
-    if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
-        $aError = array(
-            'status' => $e->getCode(),
-            'time' => date('Y-m-d H:i:s'),
-            'request' => array(
-                'method' => $oRequest->getMethod(),
-                'url' => $oRequest->getPathInfo()
-            ),
-            'response' => array(
-                'error' => str_ireplace('exception', '', get_class($e)),
-                'message' => $e->getMessage(),
-                'backtrace' => $e->getTrace(),
-                'server' => $_SERVER
-            )
-        );
+    $oLog = new Logger('name');
+    $oLog->pushHandler(new StreamHandler(getBasePath() . 'logs/error.log', Logger::WARNING));
 
+    $aError = array(
+        'status' => $e->getCode(),
+        'time' => date('Y-m-d H:i:s'),
+        'request' => array(
+            'method' => $oRequest->getMethod(),
+            'url' => $oRequest->getPathInfo()
+        ),
+        'response' => array(
+            'error' => str_ireplace('exception', '', get_class($e)),
+            'message' => $e->getMessage(),
+            'backtrace' => $e->getTrace(),
+            'server' => $_SERVER
+        )
+    );
+
+    $oLog->addError("{$oRequest->getMethod()} {$oRequest->getPathInfo()} - HTTP response {$e->getCode()}: {$e->getMessage()}");
+
+    if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
         return $oApp->json($aError, 400);
     }
+
+    return new Response('Kickipedia error: '.$e->getMessage(), $e->getCode());
 });
 
 $entryActions = new EntryActions($oApp);
