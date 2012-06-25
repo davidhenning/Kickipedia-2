@@ -19,22 +19,22 @@ Kickipedia 2 features a RESTful API with HTTP digest authentication. Data is pro
 
 # Installation #
 
-1. Install Composer
-   `curl -s http://getcomposer.org/installer | php` (skip to the next step if it's already installed on your server)
 
-2. Clone the repository
+1. Clone the repository
+
+2. Install Composer (skip to the next step if you already installed composer)
+
+   Run `curl -s http://getcomposer.org/installer | php`
 
 3. Run `php composer.phar install` to resolve all dependencies
 
-4. Configure a virtual host or place a .htaccess file inside your document root (for both see below)
+4. Configure a virtual host (strongly recommended) or place a .htaccess file inside your document root (for both see below)
 
 5. Open yourdomain.com/setup.php and follow the instructions
 
 6. You're finished. Have fun!
 
 ## Apache configuration ##
-
-In order to function properly and for improved security you need to create an virtual host in your Apache configuration.
 
 The following example is suited for a local installation on the host kickipedia.name on your localhost IP address. To document root points to the public directory. Feel free to add any other configuration options you may need.
 
@@ -50,6 +50,7 @@ The following example is suited for a local installation on the host kickipedia.
     </directory>
 </VirtualHost>
 ```
+
 ## Fallback Apache configuration ##
 
 Create an .htaccess file inside your document root with following content:
@@ -75,6 +76,7 @@ Create an .htaccess file inside your document root with following content:
     # substitution string to the existing string, instead of replacing it.
 </IfModule>
 ```
+
 If necessary, adjust the RewriteBase path and the asset path.
 
 # Technology #
@@ -85,4 +87,5 @@ If necessary, adjust the RewriteBase path and the asset path.
 - [Twig](https://github.com/fabpot/Twig) (template engine)
 - [Gibberish AES for PHP](https://github.com/ivantcholakov/gibberish-aes-php) (AES encryption) Symfony components)
 - [Phpass](https://github.com/rchouinard/phpass) (secure password encryption with salting and key streching)
+- [Monlog](https://github.com/Seldaek/monolog) (logging)
 - [MongoAppKit](https://github.com/MadCatme/mongoappkit) (MongoDB abstraction layer)
