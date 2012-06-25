@@ -136,6 +136,10 @@ class EntryActions extends BaseActions {
         $oConfig = $this->_oApp['config'];
         $sId = $oConfig->sanitize($sId);       
         $aEntryData = $oConfig->sanitize($oRequest->request->get('data'));
+
+        if(empty($aEntryData)) {
+            throw new \InvalidArgumentException("The attribute 'data' is missing or it is empty. Please check your request data.", 400);
+        }
         
         $oView = new EntryEditView($oConfig, $oRequest, $sId);
         $oDocument = $oView->getDocument();
