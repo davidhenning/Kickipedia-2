@@ -29,7 +29,7 @@
 	}
 }
 ```
-The data attribute is required. It stores the object, that will be insert into the database. You can use all fields described in the kickipedia2.json configuration file.
+The data attribute is required. It stores the object, that will be inserted into the database. You can use all fields described in the kickipedia2.json configuration file.
 
 ### Response body ###
 
@@ -66,8 +66,16 @@ Replace `:id` with the ID of the entry provided in the response of an insert or 
 
 ### Request body ###
 
-Not necessary.
-
+```json
+{
+	"data": {
+		"type": 1,
+		"name": "REST-Test",
+		"reason": "REST-Test",
+		"ip": "127.0.0.1"	
+	}
+}
+```
 ### Response body ###
 
 ```json
@@ -88,7 +96,7 @@ Not necessary.
 
 Except the action in the response attribute, it is all the same an the insert response body.
 
-## View a single entry ##
+## Get a single entry ##
 
 ### Supported methods
 
