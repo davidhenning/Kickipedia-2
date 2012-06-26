@@ -2,15 +2,19 @@
 
 require_once(__DIR__ . '/bootstrap.php');
 
-use MongoAppKit\Config;
+use MongoAppKit\Config,
+	MongoAppKit\Storage;
 
 use Kickipedia2\Models\EntryDocument;
 
-Config::getInstance()->addConfigFile('mongoappkit.json');
-Config::getInstance()->addConfigFile('kickipedia2.json');
+$oConfig = new Config();
+$oConfig->addConfigFile('mongoappkit.json');
+$oConfig->addConfigFile('kickipedia2.json');
+$oStorage = new Storage($oConfig);
+$oDatabase = $oStorage->getDatabase();
 
 for($i = 0; $i < 10000; $i++) {
-	$entry = new EntryDocument();
+	$entry = new EntryDocument($oDatabase, $oConfig);
 	$ip = rand(1, 255).'.'.rand(1, 255).'.'.rand(1,255).'.'.rand(1,255);
 
 	$entry->setProperty('type', rand(1,4));
