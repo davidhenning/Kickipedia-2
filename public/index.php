@@ -13,7 +13,8 @@ use Kickipedia2\Controllers\EntryActions,
     Kickipedia2\Models\UserDocumentList;
 
 use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 
 use Silex\Application; 
 
@@ -59,7 +60,9 @@ $oApp->error(function(HttpException $e, $code) use($oApp) {
         return $e->getCallingObject()->sendAuthenticationHeader(true);
     }
 
-    return new Response('Kickipedia error: '.$e->getMessage(), $e->getCode());
+    $oExceptionHandler = new ExceptionHandler($oApp['config']);
+    
+    return $oExceptionHandler->createResponse($e);
 });
 
 $oApp->error(function(Exception $e, $code) use($oApp) {
@@ -89,7 +92,9 @@ $oApp->error(function(Exception $e, $code) use($oApp) {
         return $oApp->json($aError, 400);
     }
 
-    return new Response('Kickipedia error: '.$e->getMessage(), $e->getCode());
+    $oExceptionHandler = new ExceptionHandler($oApp['config']);
+
+    return $oExceptionHandler->createResponse($e);
 });
 
 $entryActions = new EntryActions($oApp);
