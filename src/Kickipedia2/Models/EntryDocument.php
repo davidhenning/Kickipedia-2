@@ -4,11 +4,12 @@ namespace Kickipedia2\Models;
 
 use MongoAppKit\Config;
 
+use Silex\Application;
+
 class EntryDocument extends BaseDocument {
 
-    public function __construct(\MongoDB $oDatabase, Config $oConfig) {
-        $this->setDatabase($oDatabase);
-        $this->setConfig($oConfig);
+    public function __construct(Application $oApp) {
+        parent::__construct($oApp);
         $this->setCollectionName('entry');
     }
 

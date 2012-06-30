@@ -7,13 +7,15 @@ use MongoAppKit\Config,
 
 use Symfony\Component\HttpFoundation\Request;
 
+use Silex\Application;
+
 class BaseView extends View {
     protected $_aTypes = null;
     protected $_iDocumentType = null;
     protected $_aNavigation = null;
 
-    public function __construct(Config $oConfig, Request $oRequest, $sId = null) {
-        parent::__construct($oConfig, $oRequest, $sId);
+    public function __construct(Application $oApp, $sId = null) {
+        parent::__construct($oApp, $sId);
 
         $this->_setAppName($this->_oConfig->getProperty('AppName'));
     }

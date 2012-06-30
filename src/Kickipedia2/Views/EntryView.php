@@ -11,7 +11,7 @@ class EntryView extends BaseView {
     protected $_sTemplateName = 'entry.twig';
 
     public function render($oApp) {
-        $oEntry = new EntryDocument($this->_oConfig);
+        $oEntry = new EntryDocument($oApp);
         $oEntry->load($this->getId());  
         $this->_aTemplateData['entry'] = $oEntry;
 
@@ -19,7 +19,7 @@ class EntryView extends BaseView {
     }
 
     protected function _renderJSON($oApp) {
-        $oEntry = new EntryDocument($this->_oConfig);
+        $oEntry = new EntryDocument($oApp);
         $oEntry->load($this->getId());
 
         $aOutput = array(

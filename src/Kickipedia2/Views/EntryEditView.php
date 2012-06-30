@@ -13,7 +13,7 @@ class EntryEditView extends BaseView {
     protected $_bShowEditTools = true;
 
     public function render($oApp) {
-        $this->_oDocument = new EntryDocument($this->_oConfig->getProperty('storage')->getDatabase(), $this->_oConfig);
+        $this->_oDocument = new EntryDocument($oApp);
         $sId = $this->getId();
 
         if(!empty($sId)) {
@@ -31,7 +31,7 @@ class EntryEditView extends BaseView {
 
     public function getDocument() {
         if($this->_oDocument === null) {
-            $this->_oDocument = new EntryDocument($this->_oConfig->getProperty('storage')->getDatabase(), $this->_oConfig);
+            $this->_oDocument = new EntryDocument($this->_oApp);
             $sId = $this->getId();
 
             if(!is_null($sId)) {

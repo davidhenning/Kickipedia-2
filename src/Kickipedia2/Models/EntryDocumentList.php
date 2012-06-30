@@ -5,12 +5,14 @@ namespace Kickipedia2\Models;
 use MongoAppKit\Config,
     MongoAppKit\Documents\DocumentList;
 
+use Silex\Application;
+
 class EntryDocumentList extends DocumentList {
     protected $_sCollectionName = 'entry';
 
-    public function __construct(Config $oConfig) {
-        parent::__construct($oConfig);
-        $this->setDocumentBaseObject(new EntryDocument($this->_oDatabase, $oConfig));
+    public function __construct(Application $oApp) {
+        parent::__construct($oApp);
+        $this->setDocumentBaseObject(new EntryDocument($oApp));
     }
 
     public function findByType($iType, $iLimit = 100, $iSkip = 0) {

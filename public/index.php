@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 
-use Silex\Application; 
+use Silex\Application;
 
 use Monolog\Logger,
     Monolog\Handler\StreamHandler;
@@ -26,11 +26,11 @@ $oConfig = new Config();
 $oConfig->addConfigFile('mongoappkit.json');
 $oConfig->addConfigFile('kickipedia2.json');
 $oStorage = new Storage($oConfig);
-$oConfig->setProperty('storage', $oStorage);
 Request::trustProxyData();
 
 $oApp['debug'] = $oConfig->getProperty('DebugMode');
 $oApp['config'] = $oConfig;
+$oApp['storage'] = $oStorage;
 
 $oApp->before(function(Request $oRequest) use($oConfig) {
     if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
@@ -39,7 +39,7 @@ $oApp->before(function(Request $oRequest) use($oConfig) {
     }
 });
 
-$oApp->before(function(Request $oRequest) use($oConfig) {      
+$oApp->before(function(Request $oRequest) use($oApp, $oConfig) {      
     $oAuth = new HttpAuthDigest($oRequest, 'Kickipedia2'); 
     $oResponse = $oAuth->sendAuthenticationHeader();
 
@@ -47,7 +47,7 @@ $oApp->before(function(Request $oRequest) use($oConfig) {
         return $oResponse;
     }
 
-    $oUserList = new UserDocumentList($oConfig);
+    $oUserList = new UserDocumentList($oApp);
     $sUserName = $oConfig->sanitize($oAuth->getUserName());
     $aUserDocument = $oUserList->getUser($sUserName);
     $_SESSION['user'] = $aUserDocument;

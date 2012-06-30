@@ -7,11 +7,12 @@ use MongoAppKit\Config;
 use \Phpass\Hash,
     \Phpass\Hash\Adapter\Pbkdf2;
 
+use Silex\Application;
+
 class UserDocument extends BaseDocument {
     
-    public function __construct(\MongoDB $oDatabase, Config $oConfig) {
-        $this->setDatabase($oDatabase);
-        $this->setConfig($oConfig);
+    public function __construct(Application $oApp) {
+        parent::__construct($oApp);
         $this->setCollectionName('user');
     }
 

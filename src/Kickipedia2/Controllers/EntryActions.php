@@ -7,64 +7,67 @@ use Kickipedia2\Views\EntryListView,
     Kickipedia2\Views\EntryEditView,
     Kickipedia2\Views\EntryNewView;
 
+use Silex\Application;
+
 use Symfony\Component\HttpFoundation\Request;
 
 class EntryActions extends BaseActions {
 
-    protected function _initRoutes() {
+    protected function _initRoutes(Application $oApp) {
         $oActions = $this;
-        
+
         /* GET actions */
 
-        $this->_oApp->get('/entry/list.{format}', function(Request $oRequest, $format) use($oActions) {
-            return $oActions->showList($oRequest, $format);
+        $oApp->get('/entry/list.{format}', function($format) use($oApp, $oActions) {
+            return $oActions->showList($oApp, $format);
         })->bind('list_get');
 
-        $this->_oApp->get('/entry/{id}.{format}', function(Request $oRequest, $id, $format) use($oActions) {
-            return $oActions->showEntry($oRequest, $id, $format);
+        $oApp->get('/entry/{id}.{format}', function($id, $format) use($oApp, $oActions) {
+            return $oActions->showEntry($oApp, $id, $format);
         })->bind('view_get');
 
-        $this->_oApp->get('/entry/new', function(Request $oRequest) use ($oActions) {
-            return $oActions->newEntry($oRequest);
+        $oApp->get('/entry/new', function() use ($oApp, $oActions) {
+            return $oActions->newEntry($oApp);
         })->bind('new_get');
 
-        $this->_oApp->get('/entry/{id}/edit', function(Request $oRequest, $id) use ($oActions) {
-            return $oActions->editEntry($oRequest, $id);
+        $oApp->get('/entry/{id}/edit', function($id) use ($oApp, $oActions) {
+            return $oActions->editEntry($oApp, $id);
         })->bind('edit_get');
 
         /* PUT actions */
 
-        $this->_oApp->put('/entry', function(Request $oRequest) use ($oActions) {
-            return $oActions->updateEntry($oRequest, null);
+        $oApp->put('/entry', function() use ($oApp, $oActions) {
+            return $oActions->updateEntry($oApp, null);
         })->bind('insert_put');
 
-        $this->_oApp->put('/entry/{id}', function(Request $oRequest, $id) use ($oActions) {
-            return $oActions->updateEntry($oRequest, $id);
+        $oApp->put('/entry/{id}', function($id) use ($oApp, $oActions) {
+            return $oActions->updateEntry($oApp, $id);
         })->bind('update_put');
 
         /* DELETE actions */
 
-        $this->_oApp->delete('/entry/{id}', function(Request $oRequest, $id) use ($oActions) {
-            return $oActions->deleteEntry($oRequest, $id);
+        $oApp->delete('/entry/{id}', function($id) use ($oApp, $oActions) {
+            return $oActions->deleteEntry($oApp, $id);
         })->bind('delete_delete');
 
         /* POST actions */
 
-        $this->_oApp->post('/entry/insert', function(Request $oRequest) use ($oActions) {
-            return $oActions->updateEntry($oRequest);
+        $oApp->post('/entry/insert', function() use ($oApp, $oActions) {
+            return $oActions->updateEntry($oApp);
         })->bind('insert_post');        
 
-        $this->_oApp->post('/entry/{id}/update', function(Request $oRequest, $id) use ($oActions) {
-            return $oActions->updateEntry($oRequest, $id);
+        $oApp->post('/entry/{id}/update', function($id) use ($oApp, $oActions) {
+            return $oActions->updateEntry($oApp, $id);
         })->bind('update_post');
 
-        $this->_oApp->post('/entry/{id}/delete', function(Request $oRequest, $id) use ($oActions) {
-            return $oActions->deleteEntry($oRequest, $id);
+        $oApp->post('/entry/{id}/delete', function($id) use ($oApp, $oActions) {
+            return $oActions->deleteEntry($oApp, $id);
         })->bind('delete_post');
     }
 
-    public function showList(Request $oRequest, $sFormat) {
-        $oConfig = $this->_oApp['config'];
+    public function showList(Application $oApp, $sFormat) {
+        $oConfig = $oApp['config'];
+        $oRequest = $oApp['request'];
         $iSkip = (int) $oConfig->sanitize($oRequest->query->get('skip'));
         $iLimit = (int) $oConfig->sanitize($oRequest->query->get('limit'));
         $iType = (int) $oConfig->sanitize($oRequest->query->get('type'));
@@ -73,7 +76,7 @@ class EntryActions extends BaseActions {
         $sDirection = $oConfig->sanitize($oRequest->query->get('direction'));
         $sFormat = $oConfig->sanitize($sFormat);
 
-        $oView = new EntryListView($oConfig, $oRequest);
+        $oView = new EntryListView($oApp);
         
         if(!empty($sTerm)) {
             $oView->setListType('search');
@@ -101,39 +104,40 @@ class EntryActions extends BaseActions {
             $oView->setOutputFormat($sFormat);
         }
 
-        return $oView->render($this->_oApp);    
+        return $oView->render($oApp);    
     }
 
-    public function showEntry(Request $oRequest, $sId, $sFormat) {
-        $oConfig = $this->_oApp['config'];
+    public function showEntry(Application $oApp, $sId, $sFormat) {
+        $oConfig = $oApp['config'];
         $sId = $oConfig->sanitize($sId);
         $sFormat = $oConfig->sanitize($sFormat);
         
-        $oView = new EntryView($oConfig, $oRequest, $sId);
+        $oView = new EntryView($oApp, $sId);
 
         if(!empty($sFormat)) {
             $oView->setOutputFormat($sFormat);
         }
 
-        return $oView->render($this->_oApp);
+        return $oView->render($oApp);
     }
 
-    public function newEntry(Request $oRequest) {
-        $oView = new EntryNewView($this->_oApp['config'], $oRequest);
+    public function newEntry(Application $oApp) {
+        $oView = new EntryNewView($oApp);
         
-        return $oView->render($this->_oApp); 
+        return $oView->render($oApp); 
     }
 
-    public function editEntry(Request $oRequest, $sId) {
-        $oConfig = $this->_oApp['config'];
+    public function editEntry(Application $oApp, $sId) {
+        $oConfig = $oApp['config'];
         $sId = $oConfig->sanitize($sId);
 
-        $oView = new EntryEditView($oConfig, $oRequest, $sId);
-        return $oView->render($this->_oApp);        
+        $oView = new EntryEditView($oApp, $sId);
+        return $oView->render($oApp);        
     }
 
-    public function updateEntry(Request $oRequest, $sId) {
-        $oConfig = $this->_oApp['config'];
+    public function updateEntry(Application $oApp, $sId) {
+        $oConfig = $oApp['config'];
+        $oRequest = $oApp['request'];
         $sId = $oConfig->sanitize($sId);       
         $aEntryData = $oConfig->sanitize($oRequest->request->get('data'));
 
@@ -141,7 +145,7 @@ class EntryActions extends BaseActions {
             throw new \InvalidArgumentException("The attribute 'data' is missing or it is empty. Please check your request data.", 400);
         }
         
-        $oView = new EntryEditView($oConfig, $oRequest, $sId);
+        $oView = new EntryEditView($oApp, $sId);
         $oDocument = $oView->getDocument();
         $oDocument->updateProperties($aEntryData);
         $oDocument->save();
@@ -153,23 +157,24 @@ class EntryActions extends BaseActions {
         }
 
         if($oRequest->headers->get('content_type') === 'application/json' || $oRequest->getMethod() === 'PUT') {
-            return $oView->renderJsonUpdateResponse($this->_oApp);
+            return $oView->renderJsonUpdateResponse($oApp);
         } else {
-            return $oView->redirect($this->_oApp, '/entry/list.html', array('type' => $iTypeId));
+            return $oView->redirect($oApp, '/entry/list.html', array('type' => $iTypeId));
         }          
     }
 
-    public function deleteEntry(Request $oRequest, $sId) {
-        $oConfig = $this->_oApp['config'];
+    public function deleteEntry(Application $oApp, $sId) {
+        $oConfig = $oApp['config'];
+        $oRequest = $oApp['request'];
         $sId =  $oConfig->sanitize($sId);
         
-        $oView = new EntryEditView($oConfig, $oRequest, $sId);
+        $oView = new EntryEditView($oApp, $sId);
         $oView->getDocument()->delete();
 
         if($oRequest->headers->get('content_type') === 'application/json' || $oRequest->getMethod() === 'DELETE') {
-            return $oView->renderJsonDeleteResponse($this->_oApp);
+            return $oView->renderJsonDeleteResponse($oApp);
         } else {            
-            return $oView->redirect($this->_oApp, '/entry/list.html', array('type' => $iTypeId));
+            return $oView->redirect($oApp, '/entry/list.html', array('type' => $iTypeId));
         }
     }
 }
