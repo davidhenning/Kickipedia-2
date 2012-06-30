@@ -6,6 +6,7 @@
 @import "compass";
 @import "compass/reset";
 @import "compass/utilities/general/clearfix";
+@import "fancy-buttons";
 
 $centeredWidth: 1150px;
 $contentPadding: 30px;
@@ -260,6 +261,11 @@ body {
     width: $centeredWidth - $contentPadding * 2;
     background: #FEFEFE;
     @include pie-clearfix;
+
+    input[type="submit"] { 
+        @include fancy-button(#F7F7F7, 14px);
+        font-weight: normal;
+    }
 }
 
 .pagination {
