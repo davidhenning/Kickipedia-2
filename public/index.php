@@ -23,8 +23,9 @@ use Monolog\Logger,
 
 $oApp = new Application();
 $oConfig = new Config();
-$oConfig->addConfigFile('mongoappkit.json');
-$oConfig->addConfigFile('kickipedia2.json');
+$oConfig->setBaseDir(realpath(__DIR__ . '/../'));
+$oConfig->addConfigFile($oConfig->getConfDir() . '/mongoappkit.json');
+$oConfig->addConfigFile($oConfig->getConfDir() . '/kickipedia2.json');
 $oStorage = new Storage($oConfig);
 Request::trustProxyData();
 
