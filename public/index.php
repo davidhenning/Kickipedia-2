@@ -2,7 +2,7 @@
 
 session_start();
 
-require_once(__DIR__ . '/../bootstrap.php');
+require_once(realpath(__DIR__ . '/../bootstrap.php'));
 
 use MongoAppKit\Config,
     MongoAppKit\Storage,
