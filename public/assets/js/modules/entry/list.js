@@ -1,6 +1,6 @@
 "use strict";
 
-define(['jquery', 'tablesorter'], function($) {
+define(['jquery', 'tablesorter', 'jqhttp'], function($) {
     var exports = {};
 
     exports.init = function(element) {
