@@ -3,10 +3,10 @@
 
     var requireConfig = {
             paths: {
-                'jquery': 'vendor/jquery/jquery-1.7.2',
+                'jquery': 'vendor/jquery/1.7.2',
                 'moduleloader': 'core/moduleloader',
-                'jqhttp': 'vendor/jquery-plugins/jquery-http-1.0.0',
-                'tablesorter': 'vendor/jquery-plugins/jquery.tablesorter'
+                'jqhttp': 'vendor/jquery-plugins/http-1.0.0',
+                'tablesorter': 'vendor/jquery-plugins/tablesorter-2.0.5'
             }
         };
 
