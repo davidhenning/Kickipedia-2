@@ -1,9 +1,7 @@
 "use strict";
 
 define(['jquery', 'tablesorter', 'jqhttp'], function($) {
-    var exports = {};
-
-    exports.init = function(element) {
+    var _loadTableSorter = function(element) {
         $(element).tablesorter({
             headers: {
                 0: {
@@ -12,7 +10,9 @@ define(['jquery', 'tablesorter', 'jqhttp'], function($) {
             },
             sortList: [[1,1]]
         });
+    }
 
+    var _bindDeleteEvent = function(element) {
         $('.tools a.delete', element).click(function(e) {
             e.preventDefault();
             var row = $(this).parents('tr');
@@ -29,5 +29,10 @@ define(['jquery', 'tablesorter', 'jqhttp'], function($) {
         });
     }
 
-    return exports;
+    return {
+        init: function(element) {
+            _loadTableSorter(element);
+            _bindDeleteEvent(element);
+        }
+    };
 });

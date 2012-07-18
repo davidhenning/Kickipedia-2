@@ -1,7 +1,5 @@
 define(["jquery"], function ($){
-    var exports = {};
-
-    exports.load = function (context) {
+    var _initModuleLoader = function (context) {
         $('[data-module]', context).each(function(index) {
             var module = $(this).data('module');
             var parameters = $(this).data('module-parameters') || '';
@@ -12,7 +10,11 @@ define(["jquery"], function ($){
               module.init.apply(module, parameters);
             });
         });
-  };
+    };
 
-  return exports;
+    return {
+        load: function(context) {
+            _initModuleLoader(context);
+        }
+    };
 });

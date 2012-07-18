@@ -1,14 +1,16 @@
 "use strict";
 
 define(['jquery'], function($) {
-    var exports = {};
-
-    exports.init = function(element) {
+    var _bindSearchEvent = function(element) {
         $('a', element).click(function(e) {
             e.preventDefault();
             element.submit();
-        })
+        });
     }
 
-    return exports;
+    return {
+    	init: function(element) {
+    		_bindSearchEvent(element);
+    	}
+    };
 });
