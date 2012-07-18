@@ -17,7 +17,7 @@ class BaseView extends View {
     public function __construct(Application $oApp, $sId = null) {
         parent::__construct($oApp, $sId);
 
-        $this->_setAppName($this->_oConfig->getProperty('AppName'));
+        $this->setAppName($this->_oConfig->getProperty('AppName'));
     }
 
     public function redirect($oApp, $sUrl, $aParams = null) {
