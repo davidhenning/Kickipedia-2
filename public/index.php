@@ -2,7 +2,10 @@
 
 session_start();
 
-require_once(realpath(__DIR__ . '/../bootstrap.php'));
+// modify if your public files are in an other place than default
+$sMainPath = realpath(__DIR__ . '/../');
+
+require_once(realpath($sMainPath . '/bootstrap.php'));
 
 use MongoAppKit\Config,
     MongoAppKit\Storage,
@@ -23,7 +26,7 @@ use Monolog\Logger,
 
 $oApp = new Application();
 $oConfig = new Config();
-$oConfig->setBaseDir(realpath(__DIR__ . '/../'));
+$oConfig->setBaseDir(realpath($sMainPath));
 $oConfig->addConfigFile($oConfig->getConfDir() . '/mongoappkit.json');
 $oConfig->addConfigFile($oConfig->getConfDir() . '/kickipedia2.json');
 $oStorage = new Storage($oConfig);
