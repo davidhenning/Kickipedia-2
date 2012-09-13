@@ -7,62 +7,67 @@ use Kickipedia2\Views\EntryListView,
     Kickipedia2\Views\EntryEditView,
     Kickipedia2\Views\EntryNewView;
 
-use Silex\Application;
+use Silex\Application,
+    Silex\ControllerProviderInterface,
+    Silex\ControllerCollection;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class EntryActions extends BaseActions {
+class EntryActions implements ControllerProviderInterface {
 
-    protected function _initRoutes(Application $oApp) {
+    public function connect(Application $oApp) {
+        $oRouter = $oApp['controllers_factory'];
         $oActions = $this;
 
         /* GET actions */
 
-        $oApp->get('/entry/list.{format}', function($format) use($oApp, $oActions) {
+        $oRouter->get('/entry/list.{format}', function($format) use($oApp, $oActions) {
             return $oActions->showList($oApp, $format);
         })->bind('list_get');
 
-        $oApp->get('/entry/{id}.{format}', function($id, $format) use($oApp, $oActions) {
+        $oRouter->get('/entry/{id}.{format}', function($id, $format) use($oApp, $oActions) {
             return $oActions->showEntry($oApp, $id, $format);
         })->bind('view_get');
 
-        $oApp->get('/entry/new', function() use ($oApp, $oActions) {
+        $oRouter->get('/entry/new', function() use ($oApp, $oActions) {
             return $oActions->newEntry($oApp);
         })->bind('new_get');
 
-        $oApp->get('/entry/{id}/edit', function($id) use ($oApp, $oActions) {
+        $oRouter->get('/entry/{id}/edit', function($id) use ($oApp, $oActions) {
             return $oActions->editEntry($oApp, $id);
         })->bind('edit_get');
 
         /* PUT actions */
 
-        $oApp->put('/entry', function() use ($oApp, $oActions) {
+        $oRouter->put('/entry', function() use ($oApp, $oActions) {
             return $oActions->updateEntry($oApp, null);
         })->bind('insert_put');
 
-        $oApp->put('/entry/{id}', function($id) use ($oApp, $oActions) {
+        $oRouter->put('/entry/{id}', function($id) use ($oApp, $oActions) {
             return $oActions->updateEntry($oApp, $id);
         })->bind('update_put');
 
         /* DELETE actions */
 
-        $oApp->delete('/entry/{id}', function($id) use ($oApp, $oActions) {
+        $oRouter->delete('/entry/{id}', function($id) use ($oApp, $oActions) {
             return $oActions->deleteEntry($oApp, $id);
         })->bind('delete_delete');
 
         /* POST actions */
 
-        $oApp->post('/entry/insert', function() use ($oApp, $oActions) {
+        $oRouter->post('/entry/insert', function() use ($oApp, $oActions) {
             return $oActions->updateEntry($oApp);
         })->bind('insert_post');        
 
-        $oApp->post('/entry/{id}/update', function($id) use ($oApp, $oActions) {
+        $oRouter->post('/entry/{id}/update', function($id) use ($oApp, $oActions) {
             return $oActions->updateEntry($oApp, $id);
         })->bind('update_post');
 
-        $oApp->post('/entry/{id}/delete', function($id) use ($oApp, $oActions) {
+        $oRouter->post('/entry/{id}/delete', function($id) use ($oApp, $oActions) {
             return $oActions->deleteEntry($oApp, $id);
         })->bind('delete_post');
+
+        return $oRouter;
     }
 
     public function showList(Application $oApp, $sFormat) {
