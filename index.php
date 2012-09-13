@@ -3,7 +3,7 @@
 session_start();
 
 // modify if your public files are in an other place than default
-$sMainPath = realpath(__DIR__ . '/../');
+$sMainPath = realpath(__DIR__);
 
 require_once(realpath($sMainPath . '/bootstrap.php'));
 
