@@ -19,12 +19,11 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 
-use Silex\Application;
+use Kickipedia2\Application;
 
 use Monolog\Logger,
     Monolog\Handler\StreamHandler;
 
-$oApp = new Application();
 $oConfig = new Config();
 $oConfig->setBaseDir(realpath($sMainPath));
 $oConfig->addConfigFile($oConfig->getConfDir() . '/mongoappkit.json');
@@ -32,9 +31,7 @@ $oConfig->addConfigFile($oConfig->getConfDir() . '/kickipedia2.json');
 $oStorage = new Storage($oConfig);
 Request::trustProxyData();
 
-$oApp['debug'] = $oConfig->getProperty('DebugMode');
-$oApp['config'] = $oConfig;
-$oApp['storage'] = $oStorage;
+$oApp = new Application($oConfig, $oStorage);
 
 $oApp->before(function(Request $oRequest) use($oConfig) {
     if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
