@@ -2,9 +2,9 @@
 *.sublime-project
 /test.php
 cache/*
-public/assets/.sass-cache/*
+web/.sass-cache/*
 MongoAppKit/tests/report/*
-/mongoappkit.json
+config/mongoappkit.json
 composer.phar
 composer.lock
 /vendor/*
