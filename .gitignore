@@ -1,6 +1,6 @@
 *.sublime-workspace
 *.sublime-project
-idea/*
+.idea/*
 /test.php
 cache/*
 web/.sass-cache/*
