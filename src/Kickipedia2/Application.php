@@ -2,13 +2,12 @@
 
 namespace Kickipedia2;
 
-use Silex\Application as SilexApplication;
-
 use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 
-use MongoAppKit\Config,
+use MongoAppKit\Application as MongoAppKitApplication,
+    MongoAppKit\Config,
     MongoAppKit\Storage,
     MongoAppKit\HttpAuthDigest, 
     MongoAppKit\Exceptions\HttpException;
@@ -18,10 +17,10 @@ use Kickipedia2\Models\UserDocumentList;
 use Monolog\Logger,
     Monolog\Handler\StreamHandler;
 
-class Application extends SilexApplication {
+class Application extends MongoAppKitApplication {
 	
 	public function __construct(Config $oConfig, Storage $oStorage) {
-		parent::__construct();
+		parent::__construct($oConfig);
 
 		$oApp = $this;
 
