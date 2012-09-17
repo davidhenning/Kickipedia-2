@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 // modify if your public files are in an other place than default
 $sMainPath = realpath(__DIR__);
 

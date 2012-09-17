@@ -56,7 +56,7 @@ class EntryActions implements ControllerProviderInterface {
         /* POST actions */
 
         $oRouter->post('/entry/insert', function() use ($oApp, $oActions) {
-            return $oActions->updateEntry($oApp);
+            return $oActions->updateEntry($oApp, null);
         })->bind('insert_post');        
 
         $oRouter->post('/entry/{id}/update', function($id) use ($oApp, $oActions) {

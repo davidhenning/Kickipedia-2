@@ -79,6 +79,6 @@ class BaseView extends View {
     }
 
     public function getSession() {
-        return $_SESSION;
+        return $this->_oApp['session'];
     }
 }

@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 
+use Silex\Provider\SessionServiceProvider;
+
 use MongoAppKit\Application as MongoAppKitApplication,
     MongoAppKit\Config,
     MongoAppKit\Storage,
@@ -26,6 +28,8 @@ class Application extends MongoAppKitApplication {
 
 		$this['debug'] = $oConfig->getProperty('DebugMode');
 
+        $this->register(new SessionServiceProvider());
+
 		$this->before(function(Request $oRequest) use($oConfig) {
 		    if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
 		        $aData = json_decode($oRequest->getContent(), true);
@@ -33,8 +37,8 @@ class Application extends MongoAppKitApplication {
 		    }
 		});
 
-		$this->before(function(Request $oRequest) use($oApp, $oConfig) {      
-		    $oAuth = new HttpAuthDigest($oRequest, 'Kickipedia2'); 
+		$this->before(function(Request $oRequest) use($oApp, $oConfig) {
+		    $oAuth = new HttpAuthDigest($oRequest, 'Kickipedia2');
 		    $oResponse = $oAuth->sendAuthenticationHeader();
 
 		    if($oResponse instanceof Response) {
@@ -44,18 +48,19 @@ class Application extends MongoAppKitApplication {
 		    $oUserList = new UserDocumentList($oApp);
 		    $sUserName = $oConfig->sanitize($oAuth->getUserName());
 		    $aUserDocument = $oUserList->getUser($sUserName);
-		    $_SESSION['user'] = $aUserDocument;
+            $oApp['session']->set('user', $aUserDocument);
+		    #$_SESSION['user'] = $aUserDocument;
 
 		    $oAuth->authenticate($aUserDocument->getProperty('token'));
 		});
 
-		$this->error(function(HttpException $e, $code) use($oApp) {
+		$this->error(function(HttpException $e) use($oApp) {
 		    if($e->getCode() === 401) {
 		        return $e->getCallingObject()->sendAuthenticationHeader(true);
 		    }
 
 		    $oExceptionHandler = new ExceptionHandler($oApp['config']);
-		    
+
 		    return $oExceptionHandler->createResponse($e);
 		});
 

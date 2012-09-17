@@ -39,7 +39,7 @@
                         {% endspaceless %}
                     </nav>
                     <div class="user">
-                        Willkommen, {{ view.getSession().user.name }}!
+                        Willkommen, {{ view.getSession().get('user').name }}!
                     </div>
                 </div>              
             </div>
