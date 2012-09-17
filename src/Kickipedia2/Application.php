@@ -47,8 +47,7 @@ class Application extends MongoAppKitApplication {
 		    $oUserList = new UserDocumentList($oApp);
 		    $sUserName = $oConfig->sanitize($oAuth->getUserName());
 		    $aUserDocument = $oUserList->getUser($sUserName);
-            $oApp['session']->set('user', $aUserDocument);
-		    #$_SESSION['user'] = $aUserDocument;
+            $oApp['session']->set('user', $aUserDocument->getProperties());
 
 		    $oAuth->authenticate($aUserDocument->getProperty('token'));
 		});
