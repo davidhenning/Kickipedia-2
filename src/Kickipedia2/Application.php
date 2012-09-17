@@ -25,8 +25,6 @@ class Application extends MongoAppKitApplication {
 		$oApp = $this;
 
 		$this['debug'] = $oConfig->getProperty('DebugMode');
-		$this['config'] = $oConfig;
-		$this['storage'] = $oStorage;
 
 		$this->before(function(Request $oRequest) use($oConfig) {
 		    if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
