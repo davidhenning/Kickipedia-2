@@ -10,7 +10,6 @@ use Silex\Provider\SessionServiceProvider;
 
 use MongoAppKit\Application as MongoAppKitApplication,
     MongoAppKit\Config,
-    MongoAppKit\Storage,
     MongoAppKit\HttpAuthDigest, 
     MongoAppKit\Exceptions\HttpException;
 
@@ -21,7 +20,7 @@ use Monolog\Logger,
 
 class Application extends MongoAppKitApplication {
 	
-	public function __construct(Config $oConfig, Storage $oStorage) {
+	public function __construct(Config $oConfig) {
 		parent::__construct($oConfig);
 
 		$oApp = $this;
@@ -64,7 +63,7 @@ class Application extends MongoAppKitApplication {
 		    return $oExceptionHandler->createResponse($e);
 		});
 
-		$this->error(function(\Exception $e, $code) use($oApp) {
+		$this->error(function(\Exception $e) use($oApp) {
 		    $oRequest = $oApp['request'];
 
 		    $oLog = new Logger('name');

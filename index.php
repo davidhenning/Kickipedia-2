@@ -7,8 +7,7 @@ require_once(realpath($sMainPath . '/bootstrap.php'));
 
 use Symfony\Component\HttpFoundation\Request;
 
-use MongoAppKit\Config,
-    MongoAppKit\Storage;
+use MongoAppKit\Config;
 
 use Kickipedia2\Application,
     Kickipedia2\Controllers\EntryActions;
@@ -19,8 +18,7 @@ $oConfig = new Config();
 $oConfig->setBaseDir(realpath($sMainPath));
 $oConfig->addConfigFile($oConfig->getConfDir() . '/mongoappkit.json');
 $oConfig->addConfigFile($oConfig->getConfDir() . '/kickipedia2.json');
-$oStorage = new Storage($oConfig);
 
-$oApp = new Application($oConfig, $oStorage);
+$oApp = new Application($oConfig);
 $oApp->mount('', new EntryActions());
 $oApp->run();
