@@ -11,20 +11,20 @@ use Silex\Application;
 
 class UserDocument extends BaseDocument {
     
-    public function __construct(Application $oApp) {
-        parent::__construct($oApp);
+    public function __construct(Application $app) {
+        parent::__construct($app);
         $this->setCollectionName('user');
     }
 
-    public function setPassword($sPassword) {
+    public function setPassword($password) {
         try {
-            $oAdapter = new Pbkdf2(array (
+            $adapter = new Pbkdf2(array (
                 'iterationCountLog2' => 16
             ));
 
-            $oHash = new Hash($oAdapter);
-            $sHash = $oHash->hashPassword($sPassword);
-            $this->setProperty('password', $sHash);
+            $hash = new Hash($adapter);
+            $passwordHash = $hash->hashPassword($password);
+            $this->setProperty('password', $passwordHash);
         } catch(\Exception $e) {
 
         }

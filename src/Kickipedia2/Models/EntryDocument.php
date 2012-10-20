@@ -8,8 +8,8 @@ use Silex\Application;
 
 class EntryDocument extends BaseDocument {
 
-    public function __construct(Application $oApp) {
-        parent::__construct($oApp);
+    public function __construct(Application $app) {
+        parent::__construct($app);
         $this->setCollectionName('entry');
     }
 

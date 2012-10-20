@@ -7,27 +7,27 @@ use MongoAppKit\View,
 
 class EntryView extends BaseView {
     
-    protected $_sAppName = 'Kickipedia2';
-    protected $_sTemplateName = 'entry.twig';
+    protected $_appName = 'Kickipedia2';
+    protected $_templateName = 'entry.twig';
 
-    public function render($oApp) {
-        $oEntry = new EntryDocument($oApp);
-        $oEntry->load($this->getId());  
-        $this->_aTemplateData['entry'] = $oEntry;
+    public function render($app) {
+        $entry = new EntryDocument($app);
+        $entry->load($this->getId());
+        $this->_aTemplateData['entry'] = $entry;
 
-        return parent::render($oApp);
+        return parent::render($app);
     }
 
-    protected function _renderJSON($oApp) {
-        $oEntry = new EntryDocument($oApp);
-        $oEntry->load($this->getId());
+    protected function _renderJSON($app) {
+        $entry = new EntryDocument($app);
+        $entry->load($this->getId());
 
-        $aOutput = array(
+        $output = array(
             'status' => 200,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'GET',
-                'url' => $oApp['request']->getPathInfo()
+                'url' => $app['request']->getPathInfo()
             ),
             'response' => array(        
                 'total' => 1,
@@ -35,36 +35,36 @@ class EntryView extends BaseView {
             )
         );
 
-        $aOutput['response']['documents'] = array();
-		$aOutput['response']['documents'][] = $oEntry->getProperties();
+        $output['response']['documents'] = array();
+		$output['response']['documents'][] = $entry->getProperties();
 
-        return $oApp->json($aOutput);
+        return $app->json($output);
     }
 
-    protected function _renderXML() {
-        $oEntry = new EntryDocument($this->_oConfig);
-        $oEntry->load($this->getId());
-        $oKickipedia = new \SimpleXMLElement('<kickipedia></kickipedia>');
+    protected function _renderXML($app) {
+        $entry = new EntryDocument($app);
+        $entry->load($this->getId());
+        $kickipedia = new \SimpleXMLElement('<kickipedia></kickipedia>');
         
-        $oKickipedia->addChild('status', 200);
-        $oKickipedia->addChild('date', date('Y-m-d H:i:s'));
+        $kickipedia->addChild('status', 200);
+        $kickipedia->addChild('date', date('Y-m-d H:i:s'));
         
-        $oRequest = $oKickipedia->addChild('request');
-        $oRequest->addChild('method', 'GET');
-        $oRequest->addChild('url', $oApp['request']->getPathInfo());
+        $request = $kickipedia->addChild('request');
+        $request->addChild('method', 'GET');
+        $request->addChild('url', $app['request']->getPathInfo());
 
-        $oResponse = $oKickipedia->addChild('response');
-        $oResponse->addChild('total', 1);
-        $oResponse->addChild('found', 1);
+        $response = $kickipedia->addChild('response');
+        $response->addChild('total', 1);
+        $response->addChild('found', 1);
 
-        $oDocuments = $oResponse->addChild('documents');
+        $documents = $response->addChild('documents');
 
 
-        $oDocument = $oDocuments->addChild('document');
-        foreach($oEntry->getProperties() as $key => $value) {
-            $oDocument->addChild($key, $oEntry->getProperty($key));
+        $document = $documents->addChild('document');
+        foreach($entry->getProperties() as $key => $value) {
+            $document->addChild($key, $entry->getProperty($key));
         }
 
-        echo $oKickipedia->asXML();
+        echo $kickipedia->asXML();
     }
 }

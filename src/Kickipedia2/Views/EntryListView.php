@@ -7,15 +7,15 @@ use MongoAppKit\View,
 
 class EntryListView extends BaseView {
     
-    protected $_sAppName = 'Kickipedia2';
-    protected $_sTemplateName = 'entry_list.twig';
-    protected $_sBaseUrl = '/entry/list';
-    protected $_oDocuments = null;
-    protected $_sSeachTerm = null;
-    protected $_sListType = 'list';
-    protected $_sCustomSorting = array();
-    protected $_sCustomSortOrder = null;
-    protected $_aPossibleParams = array(
+    protected $_appName = 'Kickipedia2';
+    protected $_templateName = 'entry_list.twig';
+    protected $_baseUrl = '/entry/list';
+    protected $_documents = null;
+    protected $_searchTerm = null;
+    protected $_listType = 'list';
+    protected $_customSorting = array();
+    protected $_customSortOrder = null;
+    protected $_possibleParams = array(
         array(
             'property' => '_iSkippedDocuments',
             'param' => 'skip'
@@ -42,145 +42,145 @@ class EntryListView extends BaseView {
         )
     );
 
-    public function setDocumentType($iType) {
-        $this->_iDocumentType = $iType;
+    public function setDocumentType($type) {
+        $this->_documentType = $type;
     }
 
-    public function setListType($sType) {
-        $this->_sListType = $sType;
+    public function setListType($type) {
+        $this->_listType = $type;
     }
 
     public function getSearchTerm() {
-        return $this->_sSeachTerm;
+        return $this->_searchTerm;
     }
 
-    public function setSearchTerm($sTerm) {
-        $this->_sTemplateName = 'entry_search.twig';
-        $this->_sSeachTerm = $sTerm;
+    public function setSearchTerm($term) {
+        $this->_templateName = 'entry_search.twig';
+        $this->_searchTerm = $term;
     }
 
     public function getTotalDocuments() {
-        return $this->_iTotalDocuments;
+        return $this->_totalDocuments;
     }
 
     public function getFoundDocuments() {
-        return $this->_iFoundDocuments;
+        return $this->_foundDocuments;
     }
 
-    public function setCustomSorting($sField, $sOrder) {
-        $this->_sCustomSortField = $sField;
-        $this->_sCustomSortOrder = $sOrder;
-        $this->addAdditionalUrlParameter('sort', $sField);
-        $this->addAdditionalUrlParameter('direction', $sOrder);
+    public function setCustomSorting($field, $order) {
+        $this->_customSortField = $field;
+        $this->_customSortOrder = $order;
+        $this->addAdditionalUrlParameter('sort', $field);
+        $this->addAdditionalUrlParameter('direction', $order);
     }
 
     public function getDocuments() {
-        if($this->_oDocuments === null) {
-            $oEntryDocumentList = new EntryDocumentList($this->_oApp);
-            $iDocumentLimit = $this->getDocumentLimit();
+        if($this->_documents === null) {
+            $entryDocumentList = new EntryDocumentList($this->_app);
+            $documentLimit = $this->getDocumentLimit();
 
-            if(!empty($this->_sCustomSortField)) {
-                $oEntryDocumentList->setCustomSorting($this->_sCustomSortField, $this->_sCustomSortOrder);
+            if(!empty($this->_customSortField)) {
+                $entryDocumentList->setCustomSorting($this->_customSortField, $this->_customSortOrder);
             }
 
-            if($this->_sListType === 'search') {
-                $this->addAdditionalUrlParameter('term', $this->_sSeachTerm);
-                $oEntryDocumentList->findByTerm($this->_sSeachTerm, $iDocumentLimit, $this->_iSkippedDocuments);
+            if($this->_listType === 'search') {
+                $this->addAdditionalUrlParameter('term', $this->_searchTerm);
+                $entryDocumentList->findByTerm($this->_searchTerm, $documentLimit, $this->_skippedDocuments);
 
-            } elseif($this->_sListType === 'list') {
-                if($this->_iDocumentType === null && $this->_sOutputFormat === 'html') {
-                    $this->_iDocumentType = 1;
+            } elseif($this->_listType === 'list') {
+                if($this->_documentType === null && $this->_outputFormat === 'html') {
+                    $this->_documentType = 1;
                 }
 
-                if($this->_iDocumentType !== null) {
-                    $this->addAdditionalUrlParameter('type', $this->_iDocumentType);
-                    $oEntryDocumentList->findByType($this->_iDocumentType, $iDocumentLimit, $this->_iSkippedDocuments);
+                if($this->_documentType !== null) {
+                    $this->addAdditionalUrlParameter('type', $this->_documentType);
+                    $entryDocumentList->findByType($this->_documentType, $documentLimit, $this->_skippedDocuments);
                 } else {
-                    $oEntryDocumentList->find($iDocumentLimit, $this->_iSkippedDocuments);
+                    $entryDocumentList->find($documentLimit, $this->_skippedDocuments);
                 }
 
             }
 
-            $this->_oDocuments = $oEntryDocumentList;
+            $this->_documents = $entryDocumentList;
         }
 
-        return $this->_oDocuments;
+        return $this->_documents;
     }
 
-    public function render($oApp) {
-        $this->_iFoundDocuments = $this->getDocuments()->getFoundDocuments(); 
-        $this->_iTotalDocuments = $this->getDocuments()->getTotalDocuments(); 
-        $this->_aTemplateData['view'] = $this;
+    public function render($app) {
+        $this->_foundDocuments = $this->getDocuments()->getFoundDocuments();
+        $this->_totalDocuments = $this->getDocuments()->getTotalDocuments();
+        $this->_templateData['view'] = $this;
 
-        return parent::render($oApp);
+        return parent::render($app);
     }
 
-    protected function _renderJSON($oApp) {
-        $aOutput = array(
+    protected function _renderJSON($app) {
+        $output = array(
             'status' => 200,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'GET',
-                'url' => $oApp['request']->getPathInfo()
+                'url' => $app['request']->getPathInfo()
             ),
             'response' => array(        
-                'total' => $this->_iTotalDocuments,
-                'found' => $this->_iFoundDocuments                    
+                'total' => $this->_totalDocuments,
+                'found' => $this->_foundDocuments
             )
         );
 
-        foreach($this->_aPossibleParams as $aParam) {
-            $value = (isset($this->{$aParam['property']})) ? $this->{$aParam['property']} : null;
+        foreach($this->_possibleParams as $param) {
+            $value = (isset($this->{$param['property']})) ? $this->{$param['property']} : null;
             
             if(!empty($value)) {
-                $aOutput['request']['params'][$aParam['param']] = $value;
+                $output['request']['params'][$param['param']] = $value;
             }
         }
 
-        $aOutput['response']['documents'] = array();
+        $output['response']['documents'] = array();
 
         if(count($this->getDocuments()) > 0) {
-            foreach($this->getDocuments() as $oDocument) {
-                $aOutput['response']['documents'][] = $oDocument->getProperties();
+            foreach($this->getDocuments() as $document) {
+                $output['response']['documents'][] = $document->getProperties();
             }
         }
 
-        return $oApp->json($aOutput);
+        return $app->json($output);
     }
 
-    protected function _renderXML() {
-        $oKickipedia = new \SimpleXMLElement('<kickipedia></kickipedia>');
+    protected function _renderXML($app) {
+        $kickipedia = new \SimpleXMLElement('<kickipedia></kickipedia>');
         
-        $oKickipedia->addChild('status', 200);
-        $oKickipedia->addChild('date', date('Y-m-d H:i:s'));
+        $kickipedia->addChild('status', 200);
+        $kickipedia->addChild('date', date('Y-m-d H:i:s'));
         
-        $oRequest = $oKickipedia->addChild('request');
-        $oRequest->addChild('method', 'GET');
-        $oRequest->addChild('url', $oApp['request']->getPathInfo());
+        $request = $kickipedia->addChild('request');
+        $request->addChild('method', 'GET');
+        $request->addChild('url', $app['request']->getPathInfo());
 
-        foreach($this->_aPossibleParams as $aParam) {
-            $value = (isset($this->{$aParam['property']})) ? $this->{$aParam['property']} : null;
+        foreach($this->_possibleParams as $param) {
+            $value = (isset($this->{$param['property']})) ? $this->{$param['property']} : null;
             
             if(!empty($value)) {
-                $oRequest->addChild($aParam['param'], $value);
+                $request->addChild($param['param'], $value);
             }
         }
 
-        $oResponse = $oKickipedia->addChild('response');
-        $oResponse->addChild('total', $this->_iTotalDocuments);
-        $oResponse->addChild('found', $this->_iFoundDocuments);
+        $response = $kickipedia->addChild('response');
+        $response->addChild('total', $this->_totalDocuments);
+        $response->addChild('found', $this->_foundDocuments);
 
-        $oDocuments = $oResponse->addChild('documents');
+        $documents = $response->addChild('documents');
 
         if(count($this->getDocuments()) > 0) {
-            foreach($this->getDocuments() as $oDocumentData) {
-                $oDocument = $oDocuments->addChild('document');
-                foreach($oDocumentData as $key => $value) {
-                    $oDocument->addChild($key, $oDocumentData->getProperty($key));
+            foreach($this->getDocuments() as $documentData) {
+                $oDocument = $documents->addChild('document');
+                foreach($documentData as $key => $value) {
+                    $oDocument->addChild($key, $documentData->getProperty($key));
                 }
             }
         }
 
-        echo $oKickipedia->asXML();
+        echo $kickipedia->asXML();
     }
 }

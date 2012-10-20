@@ -8,26 +8,26 @@ use MongoAppKit\Config,
 use Silex\Application;
 
 class EntryDocumentList extends DocumentList {
-    protected $_sCollectionName = 'entry';
+    protected $_collectionName = 'entry';
 
-    public function __construct(Application $oApp) {
-        parent::__construct($oApp);
-        $this->setDocumentBaseObject(new EntryDocument($oApp));
+    public function __construct(Application $app) {
+        parent::__construct($app);
+        $this->setDocumentBaseObject(new EntryDocument($app));
     }
 
-    public function findByType($iType, $iLimit = 100, $iSkip = 0) {
-        $oCursor = $this->_getDefaultCursor(array('type' => $iType));
-        $this->find($iLimit, $iSkip, $oCursor);
+    public function findByType($type, $limit = 100, $skip = 0) {
+        $cursor = $this->_getDefaultCursor(array('type' => $type));
+        $this->find($limit, $skip, $cursor);
     }
 
-    public function findByTerm($sTerm, $iLimit = 100, $iSkip = 0) {
-        $aWhere = array('$or' => array(
-            array('name' => new \MongoRegex("/{$sTerm}/i")),
-            array('reason' => new \MongoRegex("/{$sTerm}/i")),
-            array('comment' => new \MongoRegex("/{$sTerm}/i"))
+    public function findByTerm($term, $limit = 100, $skip = 0) {
+        $where = array('$or' => array(
+            array('name' => new \MongoRegex("/{$term}/i")),
+            array('reason' => new \MongoRegex("/{$term}/i")),
+            array('comment' => new \MongoRegex("/{$term}/i"))
         ));
 
-        $oCursor = $this->_getDefaultCursor($aWhere);
-        $this->find($iLimit, $iSkip, $oCursor);
+        $cursor = $this->_getDefaultCursor($where);
+        $this->find($limit, $skip, $cursor);
     }
 }

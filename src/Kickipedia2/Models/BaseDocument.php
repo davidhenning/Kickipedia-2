@@ -6,7 +6,7 @@ use MongoAppKit\Documents\Document;
 
 class BaseDocument extends Document {
     public function getPreparedProperties() {
-        $this->_aProperties['updatedOn'] = new \MongoDate();
+        $this->_properties['updatedOn'] = new \MongoDate();
 
         return parent::getPreparedProperties();
     }

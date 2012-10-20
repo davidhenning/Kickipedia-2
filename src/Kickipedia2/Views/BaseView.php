@@ -10,75 +10,75 @@ use Symfony\Component\HttpFoundation\Request;
 use Silex\Application;
 
 class BaseView extends View {
-    protected $_aTypes = null;
-    protected $_iDocumentType = null;
-    protected $_aNavigation = null;
+    protected $_types = null;
+    protected $_documentType = null;
+    protected $_navigation = null;
 
-    public function __construct(Application $oApp, $sId = null) {
-        parent::__construct($oApp, $sId);
+    public function __construct(Application $app, $id = null) {
+        parent::__construct($app, $id);
 
-        $this->setAppName($this->_oConfig->getProperty('AppName'));
+        $this->setAppName($this->_config->getProperty('AppName'));
     }
 
-    public function redirect($oApp, $sUrl, $aParams = null) {
-        if(!empty($aParams) && is_array($aParams)) {
-            $sUrl .= '?' . http_build_query($aParams);
+    public function redirect($app, $url, $params = null) {
+        if(!empty($params) && is_array($params)) {
+            $url .= '?' . http_build_query($params);
         }
 
-        return $oApp->redirect($sUrl);
+        return $app->redirect($url);
     }
 
     public function getTypes() {
-        if($this->_aTypes === null) {
-            $aRawTypes = $this->_oConfig->getProperty('EntryTypes');
-            $aTypes = array();
+        if($this->_types === null) {
+            $rawTypes = $this->_config->getProperty('EntryTypes');
+            $types = array();
 
-            foreach($aRawTypes as $sId => $sName) {
-                $aType = array(
-                    'id' => $sId,
-                    'name' => $sName,
-                    'url' => $this->_createUrl(array('type' => $sId))
+            foreach($rawTypes as $id => $name) {
+                $type = array(
+                    'id' => $id,
+                    'name' => $name,
+                    'url' => $this->_createUrl(array('type' => $id))
                 );
 
-                if($this->_iDocumentType == $sId) {
-                    $aType['active'] = true;
+                if($this->_documentType == $id) {
+                    $type['active'] = true;
                 } else {
-                    $aType['active'] = false;
+                    $type['active'] = false;
                 }
 
-                $aTypes[] = $aType;
+                $types[] = $type;
             }
 
-            $this->_aTypes = $aTypes;          
+            $this->_types = $types;
         }
 
-        return $this->_aTypes;
+        return $this->_types;
     }
     
     public function getNavigation() {
-        if($this->_aNavigation === null) {
-            $aRawNav = $this->_oConfig->getProperty('NavItems');
-            $aNav = array();
+        if($this->_navigation === null) {
+            $rawNav = $this->_config->getProperty('NavItems');
+            $nav = array();
 
-            foreach($aRawNav as $aItem) {
-                $aNewItem = $aItem;
+            foreach($rawNav as $item) {
+                $newItem = $item;
 
-                if($this->_oRequest->getPathInfo() == $aNewItem['route']) {
-                    $aNewItem['active'] = true;
+                if($this->_request->getPathInfo() == $newItem['route']) {
+                    $newItem['active'] = true;
                 } else {
-                    $aNewItem['active'] = false;
+                    $newItem['active'] = false;
                 }
 
-                $aNav[] = $aNewItem;
+                $nav[] = $newItem;
             }
 
-            $this->_aNavigation = $aNav;
+            $this->_navigation = $nav;
         }
 
-        return $this->_aNavigation;        
+        return $this->_navigation;
     }
 
     public function getSession() {
-        return $this->_oApp['session'];
+        return $this->_app['session'];
     }
 }

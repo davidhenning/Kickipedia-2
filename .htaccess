@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
-  Options -MultiViews
-  RewriteEngine on
-  RewriteCond %{SCRIPT_FILENAME} !-f
-  RewriteRule ^ index.php [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},NC,L,QSA]
+    Options -MultiViews
+    RewriteEngine on
+    RewriteCond %{SCRIPT_FILENAME} !-f
+    RewriteRule ^ index.php [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},NC,L,QSA]
 </IfModule>

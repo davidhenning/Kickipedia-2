@@ -1,9 +1,9 @@
 <?php
 
 // modify if your public files are in an other place than default
-$sMainPath = realpath(__DIR__);
+$mainPath = realpath(__DIR__);
 
-require_once(realpath($sMainPath . '/bootstrap.php'));
+require_once(realpath($mainPath . '/bootstrap.php'));
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,11 +14,11 @@ use Kickipedia2\Application,
 
 Request::trustProxyData();
 
-$oConfig = new Config();
-$oConfig->setBaseDir(realpath($sMainPath));
-$oConfig->addConfigFile($oConfig->getConfDir() . '/mongoappkit.json');
-$oConfig->addConfigFile($oConfig->getConfDir() . '/kickipedia2.json');
+$config = new Config();
+$config->setBaseDir(realpath($mainPath));
+$config->addConfigFile($config->getConfDir() . '/mongoappkit.json');
+$config->addConfigFile($config->getConfDir() . '/kickipedia2.json');
 
-$oApp = new Application($oConfig);
-$oApp->mount('', new EntryActions());
-$oApp->run();
+$app = new Application($config);
+$app->mount('', new EntryActions());
+$app->run();

@@ -20,60 +20,60 @@ use Monolog\Logger,
 
 class Application extends MongoAppKitApplication {
 	
-	public function __construct(Config $oConfig) {
-		parent::__construct($oConfig);
+	public function __construct(Config $config) {
+		parent::__construct($config);
 
-		$oApp = $this;
+		$app = $this;
 
-		$this['debug'] = $oConfig->getProperty('DebugMode');
+		$this['debug'] = $config->getProperty('DebugMode');
 
         $this->register(new SessionServiceProvider());
 
-		$this->before(function(Request $oRequest) use($oConfig) {
-		    if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
-		        $aData = json_decode($oRequest->getContent(), true);
-		        $oRequest->request->replace(is_array($aData) ? $aData : array());
+		$this->before(function(Request $request) use($config) {
+		    if(strpos($request->headers->get('Content-Type'), 'application/json') === 0) {
+		        $data = json_decode($request->getContent(), true);
+		        $request->request->replace(is_array($data) ? $data : array());
 		    }
 		});
 
-		$this->before(function(Request $oRequest) use($oApp, $oConfig) {
-		    $oAuth = new HttpAuthDigest($oRequest, 'Kickipedia2');
-		    $oResponse = $oAuth->sendAuthenticationHeader();
+		$this->before(function(Request $request) use($app, $config) {
+		    $auth = new HttpAuthDigest($request, 'Kickipedia2');
+		    $response = $auth->sendAuthenticationHeader();
 
-		    if($oResponse instanceof Response) {
-		        return $oResponse;
+		    if($response instanceof Response) {
+		        return $response;
 		    }
 
-		    $oUserList = new UserDocumentList($oApp);
-		    $sUserName = $oConfig->sanitize($oAuth->getUserName());
-		    $aUserDocument = $oUserList->getUser($sUserName);
-            $oApp['session']->set('user', $aUserDocument->getProperties());
+		    $userList = new UserDocumentList($app);
+		    $userName = $config->sanitize($auth->getUserName());
+		    $userDocument = $userList->getUser($userName);
+            $app['session']->set('user', $userDocument->getProperties());
 
-		    $oAuth->authenticate($aUserDocument->getProperty('token'));
+		    $auth->authenticate($userDocument->getProperty('token'));
 		});
 
-		$this->error(function(HttpException $e) use($oApp) {
+		$this->error(function(HttpException $e) use($app) {
 		    if($e->getCode() === 401) {
 		        return $e->getCallingObject()->sendAuthenticationHeader(true);
 		    }
 
-		    $oExceptionHandler = new ExceptionHandler($oApp['config']);
+		    $exceptionHandler = new ExceptionHandler($app['config']);
 
-		    return $oExceptionHandler->createResponse($e);
+		    return $exceptionHandler->createResponse($e);
 		});
 
-		$this->error(function(\Exception $e) use($oApp) {
-		    $oRequest = $oApp['request'];
+		$this->error(function(\Exception $e) use($app) {
+		    $request = $app['request'];
 
-		    $oLog = new Logger('name');
-		    $oLog->pushHandler(new StreamHandler(getBasePath() . 'logs/error.log', Logger::WARNING));
+		    $log = new Logger('name');
+		    $log->pushHandler(new StreamHandler(getBasePath() . 'logs/error.log', Logger::WARNING));
 
-		    $aError = array(
+		    $error = array(
 		        'status' => $e->getCode(),
 		        'time' => date('Y-m-d H:i:s'),
 		        'request' => array(
-		            'method' => $oRequest->getMethod(),
-		            'url' => $oRequest->getPathInfo()
+		            'method' => $request->getMethod(),
+		            'url' => $request->getPathInfo()
 		        ),
 		        'response' => array(
 		            'error' => str_ireplace('exception', '', get_class($e)),
@@ -83,15 +83,15 @@ class Application extends MongoAppKitApplication {
 		        )
 		    );
 
-		    $oLog->addError("{$oRequest->getMethod()} {$oRequest->getPathInfo()} - HTTP response {$e->getCode()}: {$e->getMessage()}");
+		    $log->addError("{$request->getMethod()} {$request->getPathInfo()} - HTTP response {$e->getCode()}: {$e->getMessage()}");
 
-		    if(strpos($oRequest->headers->get('Content-Type'), 'application/json') === 0) {
-		        return $oApp->json($aError, 400);
+		    if(strpos($request->headers->get('Content-Type'), 'application/json') === 0) {
+		        return $app->json($error, 400);
 		    }
 
-		    $oExceptionHandler = new ExceptionHandler($oApp['config']);
+		    $exceptionHandler = new ExceptionHandler($app['config']);
 
-		    return $oExceptionHandler->createResponse($e);
+		    return $exceptionHandler->createResponse($e);
 		});
 	}
 }

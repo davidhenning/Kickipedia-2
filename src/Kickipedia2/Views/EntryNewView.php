@@ -4,8 +4,8 @@ namespace Kickipedia2\Views;
 
 class EntryNewView extends EntryEditView {
 
-    protected $_sTemplateName = 'entry_new.twig';
-    protected $_bShowEditTools = false;
+    protected $_templateName = 'entry_new.twig';
+    protected $_showEditTools = false;
 
     public function getInsertUrl() {
         return '/entry/insert';

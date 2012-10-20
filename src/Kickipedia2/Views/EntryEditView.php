@@ -7,39 +7,39 @@ use MongoAppKit\View,
 
 class EntryEditView extends BaseView {
     
-    protected $_sAppName = 'Kickipedia2';
-    protected $_sTemplateName = 'entry_edit.twig';
-    protected $_oDocument = null;
-    protected $_bShowEditTools = true;
+    protected $_appName = 'Kickipedia2';
+    protected $_templateName = 'entry_edit.twig';
+    protected $_document = null;
+    protected $_showEditTools = true;
 
-    public function render($oApp) {
-        $this->_oDocument = new EntryDocument($oApp);
-        $sId = $this->getId();
+    public function render($app) {
+        $this->_document = new EntryDocument($app);
+        $id = $this->getId();
 
-        if(!empty($sId)) {
-            $this->_oDocument->load($sId);
+        if(!empty($id)) {
+            $this->_document->load($id);
         }
 
-        $this->_aTemplateData['view'] = $this;
+        $this->_templateData['view'] = $this;
 
-        return parent::render($oApp);
+        return parent::render($app);
     }
 
     public function showEditTools() {
-        return $this->_bShowEditTools;
+        return $this->_showEditTools;
     }
 
     public function getDocument() {
-        if($this->_oDocument === null) {
-            $this->_oDocument = new EntryDocument($this->_oApp);
-            $sId = $this->getId();
+        if($this->_document === null) {
+            $this->_document = new EntryDocument($this->_app);
+            $id = $this->getId();
 
-            if(!is_null($sId)) {
-                $this->_oDocument->load($sId);
+            if(!is_null($id)) {
+                $this->_document->load($id);
             }
         }
 
-        return $this->_oDocument;
+        return $this->_document;
     }
 
     public function getUpdateUrl() {
@@ -47,16 +47,16 @@ class EntryEditView extends BaseView {
     }
 
     public function getTypeId() {
-        return $this->_oDocument->getProperty('type');
+        return $this->_document->getProperty('type');
     }
 
-    public function renderJsonDeleteResponse($oApp) {
-        $aOutput = array(
+    public function renderJsonDeleteResponse($app) {
+        $output = array(
             'status' => 202,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => 'DELETE',
-                'url' => $oApp['request']->getPathInfo()
+                'url' => $app['request']->getPathInfo()
             ),
             'response' => array(    
                 'action' => 'delete',   
@@ -64,28 +64,28 @@ class EntryEditView extends BaseView {
             )
         );
 
-        return $oApp->json($aOutput, 202);
+        return $app->json($output, 202);
     }
 
-    public function renderJsonUpdateResponse($oApp) {
-        $sId = $this->_oDocument->getProperty('_id');
+    public function renderJsonUpdateResponse($app) {
+        $id = $this->_document->getProperty('_id');
 
-        $iHttpReponseCode = (!is_null($this->getId())) ? 202 : 201;
+        $httpReponseCode = (!is_null($this->getId())) ? 202 : 201;
 
-        $aOutput = array(
-            'status' => $iHttpReponseCode,
+        $output = array(
+            'status' => $httpReponseCode,
             'time' => date('Y-m-d H:i:s'),
             'request' => array(
                 'method' => $_SERVER['REQUEST_METHOD'],
-                'url' => $oApp['request']->getPathInfo()
+                'url' => $app['request']->getPathInfo()
             ),
             'response' => array(
                 'action' => (!is_null($this->getId())) ? 'update' : 'create',     
-                'documentId' => $sId,
-                'documentUri' => "/entry/{$sId}"              
+                'documentId' => $id,
+                'documentUri' => "/entry/{$id}"
             )
         );
 
-        return $oApp->json($aOutput, $iHttpReponseCode);
+        return $app->json($output, $httpReponseCode);
     }
 }

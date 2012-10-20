@@ -8,33 +8,33 @@ use MongoAppKit\Config,
 use Silex\Application;
 
 class UserDocumentList extends DocumentList {
-    protected $_sCollectionName = 'user';
+    protected $_collectionName = 'user';
 
-    public function __construct(Application $oApp) {
-        parent::__construct($oApp);
-        $this->setDocumentBaseObject(new UserDocument($oApp));
+    public function __construct(Application $app) {
+        parent::__construct($app);
+        $this->setDocumentBaseObject(new UserDocument($app));
     }
 
-    public function findByName($sName) {
-        $oCursor = $this->_getDefaultCursor(array('name' => $sName));
-        $this->_setDocumentsFromCursor($oCursor);
+    public function findByName($name) {
+        $cursor = $this->_getDefaultCursor(array('name' => $name));
+        $this->_setDocumentsFromCursor($cursor);
     }
 
-    protected function _isValidUser($sName) {
-        $this->findByName($sName);
+    protected function _isValidUser($name) {
+        $this->findByName($name);
 
-        if($this->_iFoundDocuments === 1) {
+        if($this->_foundDocuments === 1) {
             return true;
         }
 
         return false;
     }
 
-    public function getUser($sName) {
-        if($this->_isValidUser($sName) === true) {
-            return $this->_aProperties[0];
+    public function getUser($name) {
+        if($this->_isValidUser($name) === true) {
+            return $this->_properties[0];
         }
 
-        throw new \InvalidArgumentException("Could not find user: {$sName}");
+        throw new \InvalidArgumentException("Could not find user: {$name}");
     }
 }
